@@ -2,11 +2,11 @@ Package: sbShinyModules
 Title: Reusable Shiny Modules for Easy Integration on Seven Bridges Platforms
 Version: 0.0.0.9000
 Authors@R: c(
-    person("Marko", "Trifunovic", "marko.trifunovic@velsera.com", role = c("cre", "aut"))
+    person("Marko", "Trifunovic", "marko.trifunovic@velsera.com", role = c("cre", "aut")),
     person("Marija", "Gacic", "marija.jovanovic@velsera.com", role = "aut")
   )
 Description: sbShinyModules is a package designed to simplify the development
-  of Shiny applications specifically for hosting on Seven Bridges platforms. 
+  of Shiny applications specifically for hosting on Seven Bridges platforms.
   This package aims to assist both internal and external developers by
   providing pre-built, reusable Shiny modules tailored to fit Seven Bridges
   hosting infrastructure. These modules handle some common tasks such as file
@@ -14,7 +14,7 @@ Description: sbShinyModules is a package designed to simplify the development
   aspects of their applications without needing to research and implement these
   functionalities themselves.
 License: Apache License (>= 2)
-Imports: 
+Imports:
     config (>= 0.3.2),
     golem (>= 0.4.1),
     shiny (>= 1.8.1.1)
