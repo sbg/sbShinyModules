@@ -13,7 +13,7 @@ Description: sbShinyModules is a package designed to simplify the development
   selection and plot exporting, enabling developers to focus on the unique
   aspects of their applications without needing to research and implement these
   functionalities themselves.
-License: Apache License 2.0
+License: Apache License (>= 2)
 Imports: 
     config (>= 0.3.2),
     golem (>= 0.4.1),
