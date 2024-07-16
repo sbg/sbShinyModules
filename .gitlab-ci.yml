@@ -1,0 +1,53 @@
+image: rocker/r-ver:4.4.0
+
+stages:
+  - build
+  - document
+  - check
+
+variables:
+  APT_DEPS: "git qpdf libxml2-dev libcurl4-openssl-dev libssl-dev"
+  IMAGE: dockerhub.sbgenomics.com/$CI_PROJECT_NAME
+  RENV_PATHS_CACHE: ${CI_PROJECT_DIR}/cache
+  RENV_PATHS_LIBRARY: ${CI_PROJECT_DIR}/renv/library
+  RENV_CONFIG_REPOS_OVERRIDE: http://cran.r-project.org
+  LIBRARY_NAME: sbShinyModules
+
+cache:
+  key: $CI_JOB_NAME
+  paths:
+    - ${RENV_PATHS_CACHE}
+    - ${RENV_PATHS_LIBRARY}
+
+before_script:
+  - mkdir -p ${RENV_PATHS_CACHE} ${RENV_PATHS_LIBRARY}
+  - apt-get -qq update;
+  - apt-get -y install ${APT_DEPS}
+  - apt-get install -y nodejs
+  - apt-get install -y npm
+  - R -e "install.packages(c('remotes', 'devtools', 'golem'), repos='http://cran.us.r-project.org')"
+  - R -e "if (!requireNamespace('renv', quietly = TRUE)) remotes::install_version('renv')"
+  - R -e "renv::restore(lockfile = 'renv.lock')"
+
+buildbinary:
+  stage: build
+  script:
+    - R -e 'devtools::build(binary = TRUE, vignettes = FALSE)'
+
+documentation:
+  stage: document
+  script:
+    - R -e 'devtools::document()'
+
+lintr:
+  stage: check
+  script:
+    # redirect lintr stdout and stderr to file
+    - R -e "install.packages('lintr')"
+    - CI="" Rscript -e "lintr::lint_package()" &> lint_output.txt
+    # fail if file is not empty
+    - if [ -s "lint_output.txt" ]; then exit 1; fi
+  artifacts:
+    when: on_failure
+    paths:
+      - lint_output.txt
