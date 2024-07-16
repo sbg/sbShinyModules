@@ -2,9 +2,9 @@ Package: sbShinyModules
 Title: Reusable Shiny Modules for Easy Integration on Seven Bridges Platforms
 Version: 0.0.0.9000
 Authors@R: c(
-  person("Marko", "Trifunovic", "marko.trifunovic@velsera.com", role = c("cre", "aut"))
-  person("Marija", "Gacic", "marija.jovanovic@velsera.com", role = "aut"),
-)
+    person("Marko", "Trifunovic", "marko.trifunovic@velsera.com", role = c("cre", "aut"))
+    person("Marija", "Gacic", "marija.jovanovic@velsera.com", role = "aut")
+  )
 Description: sbShinyModules is a package designed to simplify the development
   of Shiny applications specifically for hosting on Seven Bridges platforms. 
   This package aims to assist both internal and external developers by
