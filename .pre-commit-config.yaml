@@ -9,6 +9,13 @@ repos:
     -   id: roxygenize
     # codemeta must be above use-tidy-description when both are used
     # -   id: codemeta-description-updated
+        additional_dependencies:
+        -    config
+        -    golem
+        -    shiny
+        -    lifecycle
+        -    precommit
+        -    docopt
     -   id: use-tidy-description
     -   id: spell-check
         exclude: >
