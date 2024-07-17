@@ -5,8 +5,11 @@ $run_dev.*
 ^\.Rproj\.user$
 ^\.gitlab-ci\.yml$
 ^\.pre-commit-config\.yaml$
+^_pkgdown\.yml$
 ^data-raw$
 ^dev$
+^docs$
+^pkgdown$
 ^renv$
 ^renv\.lock$
 dev_history.R

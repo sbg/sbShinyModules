@@ -4,7 +4,6 @@ stages:
   - build
   - document
   - check
-  - deploy
 
 variables:
   APT_DEPS: "git libssl-dev libcurl4-openssl-dev libfreetype6-dev libfribidi-dev libharfbuzz-dev libxml2-dev libfontconfig1-dev libgit2-dev pandoc libicu-dev libz-dev libcurl4-openssl-dev libjpeg-dev libpng-dev libtiff-dev make zlib1g-dev libbz2-dev liblzma-dev"
@@ -52,14 +51,3 @@ lintr:
     when: on_failure
     paths:
       - lint_output.txt
-
-pages:
-  stage: deploy
-  script:
-  - apt-get update && apt-get install -y pandoc
-  - R -e 'devtools::build(binary = TRUE, vignettes = FALSE)'
-  - R -e "install.packages('pkgdown')"
-  - R -e "pkgdown::build_site()"
-  artifacts:
-    paths:
-    - public
