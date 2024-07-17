@@ -15,6 +15,10 @@ repos:
         -   lifecycle
         -   precommit
         -   docopt
+        -   magrittr
+        -   dplyr
+        -   tidyr
+        -   xattrs
     -   id: use-tidy-description
     -   id: spell-check
         exclude: >

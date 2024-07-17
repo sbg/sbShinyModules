@@ -6,7 +6,7 @@ stages:
   - check
 
 variables:
-  APT_DEPS: "git libssl-dev libcurl4-openssl-dev libfreetype6-dev libfribidi-dev libharfbuzz-dev libxml2-dev libfontconfig1-dev libgit2-dev pandoc libicu-dev libz-dev libcurl4-openssl-dev libjpeg-dev libpng-dev libtiff-dev make zlib1g-dev libbz2-dev liblzma-dev"
+  APT_DEPS: "git libssl-dev libcurl4-openssl-dev libfreetype6-dev libfribidi-dev libharfbuzz-dev libxml2-dev libfontconfig1-dev libgit2-dev pandoc libicu-dev libz-dev libcurl4-openssl-dev libjpeg-dev libpng-dev libtiff-dev make zlib1g-dev libbz2-dev liblzma-dev libattr1-dev"
   IMAGE: dockerhub.sbgenomics.com/$CI_PROJECT_NAME
   RENV_PATHS_CACHE: ${CI_PROJECT_DIR}/cache
   RENV_PATHS_LIBRARY: ${CI_PROJECT_DIR}/renv/library

@@ -1,0 +1,56 @@
+#' Get all project's files
+#'
+#' @description
+#'  Utility function for fetching all project files recursively from SB File
+#'  system within Data Studio.
+#'
+#'
+#' @param path Project files directory path.
+#'
+#' @importFrom xattrs get_xattr_df
+#' @importFrom tidyr pivot_wider
+#' @importFrom dplyr select left_join join_by
+#' @importFrom magrittr %>%
+#' @importFrom checkmate assert_string
+#'
+#' @export
+get_all_files_recursive <- function(path) {
+  checkmate::assert_string(path, null.ok = FALSE)
+
+  files <- list.files(path = path, recursive = TRUE, full.names = TRUE)
+  f_info <- file.info(files)
+  rownames(f_info) <- NULL
+
+  df <- data.frame(name = basename(files), path = files)
+
+  files_info_df <- cbind.data.frame(df, f_info)
+
+  metadata <- data.frame()
+
+  for (file in files_info_df[["path"]]) {
+    file_df <- xattrs::get_xattr_df(file)
+    file_df$file_path <- file
+    file_df$raw <- sapply(file_df$contents, function(x) {
+      hex <- subset(x, !x == "00")
+      rawToChar(as.raw(strtoi(hex, 16L)))
+    })
+    metadata <- rbind(metadata, file_df)
+  }
+  trans <- metadata %>%
+    dplyr::select(-contents, -size) %>%
+    dplyr::mutate(name = gsub(
+      x = .data[["name"]],
+      pattern = "sbg.",
+      replacement = ""
+    )) %>%
+    tidyr::pivot_wider(.,
+      names_from = "name",
+      values_from = c("raw"),
+      values_fill = NA
+    )
+
+  merged <- dplyr::left_join(files_info_df, trans,
+    by = dplyr::join_by("path" == "file_path")
+  )
+  return(merged)
+}
