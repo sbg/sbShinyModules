@@ -2,8 +2,9 @@
 #'
 #' @description
 #'  Utility function for fetching all project files recursively from SB File
-#'  system within Data Studio.
-#'
+#'  system within Data Studio along side with their metadata associated if
+#'  available. The expected output is the data.frame containing all files
+#'  information available, ready to be used and displayed within file pickers.
 #'
 #' @param path Project files directory path.
 #'
@@ -12,12 +13,24 @@
 #' @importFrom dplyr select left_join join_by
 #' @importFrom magrittr %>%
 #' @importFrom checkmate assert_string
+#' @importFrom rlang abort
+#'
+#' @return Data.frame containing all project files with their names, paths,
+#'  sizes and associated metadata fields if available.
 #'
 #' @export
-get_all_files_recursive <- function(path) {
+get_all_project_files <- function(path) {
   checkmate::assert_string(path, null.ok = FALSE)
+  if (!dir.exists(paths = path)) {
+    rlang::abort("Directory not found on the provided path.")
+  }
 
   files <- list.files(path = path, recursive = TRUE, full.names = TRUE)
+
+  if (length(files) == 0) {
+    rlang::abort("Empty directory. Files not found on the provided directory path.") # nolint
+  }
+
   f_info <- file.info(files)
   rownames(f_info) <- NULL
 
@@ -30,6 +43,7 @@ get_all_files_recursive <- function(path) {
   for (file in files_info_df[["path"]]) {
     file_df <- xattrs::get_xattr_df(file)
     file_df$file_path <- file
+    # In case of error that nul is present in the hex string, remove those nuls
     file_df$raw <- sapply(file_df$contents, function(x) {
       hex <- subset(x, !x == "00")
       rawToChar(as.raw(strtoi(hex, 16L)))

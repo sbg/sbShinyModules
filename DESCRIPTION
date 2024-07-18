@@ -17,10 +17,12 @@ Description: sbShinyModules is a package designed to simplify the development
   functionalities themselves.
 License: Apache License (>= 2)
 Imports:
+    checkmate,
     config,
     dplyr,
     golem,
     magrittr,
+    rlang,
     shiny,
     tidyr,
     xattrs

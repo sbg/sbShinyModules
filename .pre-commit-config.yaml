@@ -18,7 +18,9 @@ repos:
         -   magrittr
         -   dplyr
         -   tidyr
-        -   xattrs
+        -   hrbrmstr/xattrs
+        -   checkmate
+        -   rlang
     -   id: use-tidy-description
     -   id: spell-check
         exclude: >
