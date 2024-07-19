@@ -38,5 +38,6 @@ Example of usage is presented below:
 ```{r}
 # Create mock directory on path sbgenomics/project-files to test
 all_files_df <- sbShinyModules::get_all_project_files(path = "/sbgenomics/project-files")
-print()
+
+head(all_files_df)
 ```
