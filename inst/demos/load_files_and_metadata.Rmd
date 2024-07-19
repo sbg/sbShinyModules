@@ -7,6 +7,7 @@ output: html_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+# library(sbShinyModules)
 ```
 
 ## File loading via SBGFS in Data Studio infrastructure
@@ -36,6 +37,6 @@ Example of usage is presented below:
 
 ```{r}
 # Create mock directory on path sbgenomics/project-files to test
-all_files_df <- get_all_project_files(path = "/sbgenomics/project-files")
+all_files_df <- sbShinyModules::get_all_project_files(path = "/sbgenomics/project-files")
 print()
 ```
