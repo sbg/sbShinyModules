@@ -15,6 +15,14 @@ repos:
         -   lifecycle
         -   precommit
         -   docopt
+        -   magrittr
+        -   dplyr
+        -   tidyr
+        -   hrbrmstr/xattrs
+        -   checkmate
+        -   rlang
+        -   glue
+        -   purrr
     -   id: use-tidy-description
     -   id: spell-check
         exclude: >
@@ -48,13 +56,13 @@ repos:
           data/.*|
           (.*/|)dev/.*|
           (.*/|)docker/.*|
-          (.*/|)inst/.*|
+          (.*/|)inst/app/.*|
           )$
     -   id: lintr
         exclude: >
               (?x)^(
               (.*/|)dev/.*|
-              (.*/|)inst/.*|
+              (.*/|)inst/app/.*|
               (.*/|)docker/.*|
               (.*/|)renv/activate\.R|
               )$

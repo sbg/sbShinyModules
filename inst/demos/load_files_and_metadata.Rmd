@@ -1,0 +1,45 @@
+---
+title: "Load project files and their metadata"
+author: "Marija Gacic"
+date: "2024-07-19"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+# library(sbShinyModules)
+```
+
+## File loading via SBGFS in Data Studio infrastructure
+
+This utility function for loading project files and their metadata `get_all_project_files()` is intended to be used when developing Shiny apps 
+within Data Studio, or to be deployed as on-demand Shiny apps using Data Studio infrastructure.
+
+Data Studio - [placeholder for more details about the files organization on the
+instance] 
+
+This means that developers should assume the existence of 
+`/sbgenomics/project-files` directory which represents the mounted directory on 
+the reserved instance for running Data Studio analysis (in our case - Shiny 
+app). This directory contains all project files that can be accessed and used 
+within the app. 
+
+The function itself accepts the project files directory path and fetches the 
+files and their associated metadata recursively. 
+The output of this helper function is a data.frame containing all files details
+ready to be passed to a file picker [a link to the file picker chapter could be
+added here]. 
+
+The developers could manipulate with the data.frame and transform its columns 
+before passing it to the file picker.
+
+Example of usage is presented below:
+
+```{r}
+# Create mock directory on path sbgenomics/project-files to test
+all_files_df <- sbShinyModules::get_all_project_files(
+  path = "/sbgenomics/project-files"
+)
+
+head(all_files_df)
+```
