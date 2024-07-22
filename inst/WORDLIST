@@ -21,6 +21,7 @@ MERCHANTABILITY
 pre
 rlang
 RoxygenNote
+SBGFS
 sbShinyModules
 sublicense
 testthat

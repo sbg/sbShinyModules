@@ -54,13 +54,13 @@ repos:
           data/.*|
           (.*/|)dev/.*|
           (.*/|)docker/.*|
-          (.*/|)inst/.*|
+          (.*/|)inst/app/.*|
           )$
     -   id: lintr
         exclude: >
               (?x)^(
               (.*/|)dev/.*|
-              (.*/|)inst/.*|
+              (.*/|)inst/app/.*|
               (.*/|)docker/.*|
               (.*/|)renv/activate\.R|
               )$
