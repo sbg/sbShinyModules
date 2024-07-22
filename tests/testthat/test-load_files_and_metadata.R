@@ -14,7 +14,7 @@ test_that("Utility fucntion get_all_project_files() throws error when expected",
   project_path <- "non-existing-folder"
   testthat::expect_error(
     get_all_project_files(path = project_path),
-    regexp = "Directory not found on the provided path.",
+    regexp = paste0("Directory not found on the provided path ", project_path, "."), # nolint
     fixed = TRUE
   )
 
@@ -22,7 +22,7 @@ test_that("Utility fucntion get_all_project_files() throws error when expected",
   project_path <- testthat::test_path("empty_folder")
   testthat::expect_error(
     get_all_project_files(path = project_path),
-    regexp = "Empty directory. Files not found on the provided directory path.",
+    regexp = paste0("Empty directory. Files not found on the provided directory path ", project_path, "."), # nolint
     fixed = TRUE
   )
 })

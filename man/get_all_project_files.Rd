@@ -4,10 +4,14 @@
 \alias{get_all_project_files}
 \title{Get all project's files}
 \usage{
-get_all_project_files(path)
+get_all_project_files(path, ...)
 }
 \arguments{
 \item{path}{Project files directory path.}
+
+\item{...}{Additional parameters that can be passed to a function
+`list.files()` that this function is relying on, like `pattern`,
+`include.dirs` etc. See more details on `?list.files`.}
 }
 \value{
 Data.frame containing all project files with their names, paths,

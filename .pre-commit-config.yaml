@@ -21,6 +21,8 @@ repos:
         -   hrbrmstr/xattrs
         -   checkmate
         -   rlang
+        -   glue
+        -   purrr
     -   id: use-tidy-description
     -   id: spell-check
         exclude: >

@@ -3,6 +3,7 @@ config
 Config
 cph
 cre
+dirs
 dplyr
 fnd
 Gacic
@@ -19,6 +20,7 @@ marko
 Marko
 MERCHANTABILITY
 pre
+purrr
 rlang
 RoxygenNote
 SBGFS
