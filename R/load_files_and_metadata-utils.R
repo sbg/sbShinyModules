@@ -11,7 +11,6 @@
 #'  `list.files()` that this function is relying on, like `pattern`,
 #'  `include.dirs` etc. See more details on `?list.files`.
 #'
-#' @importFrom purrr map list_rbind
 #' @importFrom xattrs get_xattr_df
 #' @importFrom tidyr pivot_wider
 #' @importFrom dplyr select left_join join_by mutate
@@ -52,21 +51,18 @@ get_all_project_files <- function(path, ...) {
 
   files_info_df <- cbind.data.frame(df, f_info)
 
-  files_list <- purrr::map(
-    .x = files_info_df[["path"]],
-    .f = function(file) {
-      file_df <- xattrs::get_xattr_df(file)
-      file_df$file_path <- file
-      # In case of error that nul is present in the hex string,
-      # remove those nuls
-      file_df$raw <- sapply(file_df$contents, function(x) {
-        hex <- subset(x, !x == "00")
-        rawToChar(as.raw(strtoi(hex, 16L)))
-      })
-      file_df
-    }
-  )
-  metadata <- purrr::list_rbind(files_list)
+  metadata <- data.frame()
+
+  for (file in files_info_df[["path"]]) {
+    file_df <- xattrs::get_xattr_df(file)
+    file_df$file_path <- file
+    # In case of error that nul is present in the hex string, remove those nuls
+    file_df$raw <- sapply(file_df$contents, function(x) {
+      hex <- subset(x, !x == "00")
+      rawToChar(as.raw(strtoi(hex, 16L)))
+    })
+    metadata <- rbind(metadata, file_df)
+  }
 
   # Transform data frame
   trans <- metadata %>%
