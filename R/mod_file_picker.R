@@ -17,13 +17,11 @@
 #'     to the server part of your Shiny app. Make sure to replace `files_df`
 #'     with your actual data frame containing file information.
 #'  }
-# nolint end.
 #'
 #' @param id,input,output,session Internal parameters for {shiny}.
-#' @param button_icon An optional icon() to appear on the button. Defaults to
-#'  `icon("circle-plus")`.
-#' @param button_width The width of the button, e.g. '400px', or '100%';
-#'  see validateCssUnit(). Defaults to `"100%"`.
+#' @param button_icon An optional icon to appear on the button. Defaults to `icon('circle-plus')`.
+#' @param button_width The width of the button. Defaults to `'100\%'`.
+# nolint end
 #'
 #' @importFrom shiny NS tagList
 #'
@@ -66,14 +64,21 @@ mod_file_picker_ui <- function(id,
 #'
 #' @param id A unique identifier for the module instance.
 #' @param files_df A data frame containing file information. This data frame
-#'  should have a column for file paths and any other relevant metadata.
+#'  should have a column for file paths and any other relevant metadata. You
+#'  can use the \code{\link{get_all_project_files}} function to fetch all
+#'  project files along with their metadata from the SB File system
+#'  within Data Studio.This function returns a data frame containing
+#'  comprehensive file information, making it an ideal input for the
+#'  `mod_file_picker_server()` function.
+#'
 #' @param selection A string specifying the selection mode. Can be either
 #'  'single' for single file selection or 'multiple' for multiple file
 #'   selection. Defaults to 'single'.
 #' @param file_identifier_column A string specifying the column name in
 #'  `files_df` from which the values of selected files will be returned.
-#'   Defaults to path'.
-#' @param ... Additional parameters to be passed to the reactable function.
+#'   Defaults to `'path'`.
+#' @param ... Additional parameters to be passed to the `reactable()` function
+#'  this module relies on
 #'
 #' @return A reactive expression containing information about the selected
 #'  files based on the specified `file_identifier_column`.
@@ -88,12 +93,6 @@ mod_file_picker_ui <- function(id,
 #'
 #' @seealso \code{\link{mod_file_picker_ui}} for the corresponding server
 #'  part of the module.
-#'
-#' @seealso \code{\link{get_all_project_files}} function that helps you to
-#'  fetch all project files along with their metadata from the SB File system
-#'  within Data Studio.This function returns a data frame containing
-#'  comprehensive file information, making it an ideal input for the
-#'  `mod_file_picker_server` function.
 #'
 #' @example inst/examples/file_pickers_demo_app.R
 #'
@@ -111,7 +110,7 @@ mod_file_picker_server <- function(id,
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
 
-    selected_files <- reactiveVal(NULL)
+    module_output_files <- reactiveVal(NULL)
 
     observeEvent(input$select_file, {
       showModal(
@@ -130,26 +129,19 @@ mod_file_picker_server <- function(id,
                 tags$div(
                   tags$p("To efficiently manage files, follow these steps:"),
                   if (selection == "single") {
-                    tags$ol(
-                      tags$li("Review file details."),
-                      tags$li(HTML("To select a file, click the radio button in the leftmost column of the desired file's row.")),
-                      tags$li(HTML("Use the search bar above the table to quickly locate a file by its name or metadata.")),
-                      tags$li(HTML("Utilize the filter options to narrow down the file list based on specific criteria.")),
-                      tags$li(HTML("Click on column headers to sort files in ascending or descending order.")),
-                      tags$li(HTML("Use pagination controls at the bottom of the table to navigate through multiple pages of files.")),
-                      tags$li(HTML("Once a file is selected, click <b>Submit</b> located below the table."))
-                    )
-                  } else if (selection == "multiple") {
-                    tags$ol(
-                      tags$li("Review file details."),
-                      tags$li(HTML("Use the checkboxes in each row to select multiple files simultaneously.")),
-                      tags$li(HTML("Use the search bar above the table to quickly locate files by their name or metadata.")),
-                      tags$li(HTML("Utilize the filter options to narrow down the file list based on specific criteria.")),
-                      tags$li(HTML("Click on column headers to sort files in ascending or descending order.")),
-                      tags$li(HTML("Use pagination controls at the bottom of the table to navigate through multiple pages of files.")),
-                      tags$li(HTML("Once files are selected, click <b>Submit</b> located below the table."))
-                    )
-                  }
+                    diff_text <- "To select a file, click the radio button in the leftmost column of the desired file's row."
+                  } else {
+                    diff_text <- "Use the checkboxes in each row to select multiple files simultaneously."
+                  },
+                  tags$ol(
+                    tags$li("Review file details."),
+                    tags$li(HTML(diff_text)),
+                    tags$li(HTML("Use the search bar above the table to quickly locate a file by its name or metadata.")),
+                    tags$li(HTML("Utilize the filter options to narrow down the file list based on specific criteria.")),
+                    tags$li(HTML("Click on column headers to sort files in ascending or descending order.")),
+                    tags$li(HTML("Use pagination controls at the bottom of the table to navigate through multiple pages of files.")),
+                    tags$li(HTML("Once you're ready with your choice, click <b>Submit</b> located below the table."))
+                  )
                 )
               )
             )
@@ -238,7 +230,7 @@ mod_file_picker_server <- function(id,
     # Add logic that will be triggered by clicking on the Submit button
     observeEvent(input$submit_selection, {
       req(selected())
-      selected_files(selected())
+      module_output_files(selected())
       removeModal()
     })
 
@@ -247,7 +239,7 @@ mod_file_picker_server <- function(id,
       removeModal()
     })
 
-    return(selected_files)
+    return(module_output_files)
   })
 }
 

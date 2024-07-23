@@ -12,7 +12,7 @@ ui <- fluidPage(
         br(),
         sbShinyModules::mod_file_picker_ui("single_file_picker"),
         br(),
-        h5("Selected Files"),
+        h5("Selected File"),
         verbatimTextOutput("single_file_picker_selection")
       ),
       hr(),

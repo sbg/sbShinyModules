@@ -13,11 +13,9 @@ mod_file_picker_ui(
 \arguments{
 \item{id, input, output, session}{Internal parameters for {shiny}.}
 
-\item{button_icon}{An optional icon() to appear on the button. Defaults to
-`icon("circle-plus")`.}
+\item{button_icon}{An optional icon to appear on the button. Defaults to `icon('circle-plus')`.}
 
-\item{button_width}{The width of the button, e.g. '400px', or '100%';
-see validateCssUnit(). Defaults to `"100%"`.}
+\item{button_width}{The width of the button. Defaults to `'100\%'`.}
 }
 \description{
 UI function of the file picker Shiny module. The function adds
@@ -53,7 +51,7 @@ ui <- fluidPage(
         br(),
         sbShinyModules::mod_file_picker_ui("single_file_picker"),
         br(),
-        h5("Selected Files"),
+        h5("Selected File"),
         verbatimTextOutput("single_file_picker_selection")
       ),
       hr(),

@@ -16,7 +16,12 @@ mod_file_picker_server(
 \item{id}{A unique identifier for the module instance.}
 
 \item{files_df}{A data frame containing file information. This data frame
-should have a column for file paths and any other relevant metadata.}
+should have a column for file paths and any other relevant metadata. You
+can use the \code{\link{get_all_project_files}} function to fetch all
+project files along with their metadata from the SB File system
+within Data Studio.This function returns a data frame containing
+comprehensive file information, making it an ideal input for the
+`mod_file_picker_server()` function.}
 
 \item{selection}{A string specifying the selection mode. Can be either
 'single' for single file selection or 'multiple' for multiple file
@@ -24,9 +29,10 @@ should have a column for file paths and any other relevant metadata.}
 
 \item{file_identifier_column}{A string specifying the column name in
 `files_df` from which the values of selected files will be returned.
- Defaults to path'.}
+ Defaults to `'path'`.}
 
-\item{...}{Additional parameters to be passed to the reactable function.}
+\item{...}{Additional parameters to be passed to the `reactable()` function
+this module relies on}
 }
 \value{
 A reactive expression containing information about the selected
@@ -65,7 +71,7 @@ ui <- fluidPage(
         br(),
         sbShinyModules::mod_file_picker_ui("single_file_picker"),
         br(),
-        h5("Selected Files"),
+        h5("Selected File"),
         verbatimTextOutput("single_file_picker_selection")
       ),
       hr(),
@@ -143,10 +149,4 @@ shinyApp(ui, server)
 \seealso{
 \code{\link{mod_file_picker_ui}} for the corresponding server
  part of the module.
-
-\code{\link{get_all_project_files}} function that helps you to
- fetch all project files along with their metadata from the SB File system
- within Data Studio.This function returns a data frame containing
- comprehensive file information, making it an ideal input for the
- `mod_file_picker_server` function.
 }
