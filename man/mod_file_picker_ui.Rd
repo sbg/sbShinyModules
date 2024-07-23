@@ -4,10 +4,20 @@
 \alias{mod_file_picker_ui}
 \title{file_picker UI Function}
 \usage{
-mod_file_picker_ui(id)
+mod_file_picker_ui(
+  id,
+  button_icon = icon("circle-plus"),
+  button_width = "100\%"
+)
 }
 \arguments{
 \item{id, input, output, session}{Internal parameters for {shiny}.}
+
+\item{button_icon}{An optional icon() to appear on the button. Defaults to
+`icon("circle-plus")`.}
+
+\item{button_width}{The width of the button, e.g. '400px', or '100%';
+see validateCssUnit(). Defaults to `"100%"`.}
 }
 \description{
 UI function of the file picker Shiny module. The function adds

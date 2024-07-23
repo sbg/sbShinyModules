@@ -20,6 +20,10 @@
 # nolint end.
 #'
 #' @param id,input,output,session Internal parameters for {shiny}.
+#' @param button_icon An optional icon() to appear on the button. Defaults to
+#'  `icon("circle-plus")`.
+#' @param button_width The width of the button, e.g. '400px', or '100%';
+#'  see validateCssUnit(). Defaults to `"100%"`.
 #'
 #' @importFrom shiny NS tagList
 #'
@@ -29,10 +33,14 @@
 #' @example inst/examples/file_pickers_demo_app.R
 #'
 #' @export
-mod_file_picker_ui <- function(id) {
+mod_file_picker_ui <- function(id,
+                               button_icon = icon("circle-plus"),
+                               button_width = "100%") {
   ns <- NS(id)
   actionButton(ns("select_file"),
-    label = "Add files"
+    label = "Add files",
+    icon = button_icon,
+    width = button_width
   )
 }
 
