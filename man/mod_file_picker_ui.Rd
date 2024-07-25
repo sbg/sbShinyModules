@@ -15,7 +15,7 @@ mod_file_picker_ui(
 
 \item{button_icon}{An optional icon to appear on the button. Defaults to `icon('circle-plus')`.}
 
-\item{button_width}{The width of the button. Defaults to `'100\%'`.}
+\item{button_width}{The width of the button. Defaults to `100\%`.}
 }
 \description{
 UI function of the file picker Shiny module. The function adds

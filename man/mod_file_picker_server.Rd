@@ -29,10 +29,10 @@ comprehensive file information, making it an ideal input for the
 
 \item{file_identifier_column}{A string specifying the column name in
 `files_df` from which the values of selected files will be returned.
- Defaults to `'path'`.}
+ Defaults to `path`.}
 
 \item{...}{Additional parameters to be passed to the `reactable()` function
-this module relies on}
+this module relies on.}
 }
 \value{
 A reactive expression containing information about the selected

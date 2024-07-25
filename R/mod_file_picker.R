@@ -20,7 +20,7 @@
 #'
 #' @param id,input,output,session Internal parameters for {shiny}.
 #' @param button_icon An optional icon to appear on the button. Defaults to `icon('circle-plus')`.
-#' @param button_width The width of the button. Defaults to `'100\%'`.
+#' @param button_width The width of the button. Defaults to `100\%`.
 # nolint end
 #'
 #' @importFrom shiny NS tagList
@@ -76,20 +76,15 @@ mod_file_picker_ui <- function(id,
 #'   selection. Defaults to 'single'.
 #' @param file_identifier_column A string specifying the column name in
 #'  `files_df` from which the values of selected files will be returned.
-#'   Defaults to `'path'`.
+#'   Defaults to `path`.
 #' @param ... Additional parameters to be passed to the `reactable()` function
-#'  this module relies on
+#'  this module relies on.
 #'
 #' @return A reactive expression containing information about the selected
 #'  files based on the specified `file_identifier_column`.
 #'
 #' @importFrom checkmate assert_data_frame assert_choice assert_character
-#' @importFrom shinyWidgets useShinydashboard
-#' @importFrom shinydashboard box
-#' @importFrom reactable.extras reactable_extras_dependency
-#' @importFrom reactable reactableOutput getReactableState renderReactable
-#'  reactable colDef
-#' @importFrom bslib input_task_button
+#' @importFrom reactable getReactableState renderReactable reactable colDef
 #'
 #' @seealso \code{\link{mod_file_picker_ui}} for the corresponding server
 #'  part of the module.
@@ -114,73 +109,7 @@ mod_file_picker_server <- function(id,
 
     observeEvent(input$select_file, {
       showModal(
-        # nolint start
-        modalDialog(
-          title = "File Selection",
-          size = "l",
-          shinyWidgets::useShinydashboard(),
-          fluidRow(
-            div(
-              shinydashboard::box(
-                title = "File Selection Guides",
-                width = 12,
-                collapsible = TRUE,
-                collapsed = TRUE,
-                tags$div(
-                  tags$p("To efficiently manage files, follow these steps:"),
-                  if (selection == "single") {
-                    diff_text <- "To select a file, click the radio button in the leftmost column of the desired file's row."
-                  } else {
-                    diff_text <- "Use the checkboxes in each row to select multiple files simultaneously."
-                  },
-                  tags$ol(
-                    tags$li("Review file details."),
-                    tags$li(HTML(diff_text)),
-                    tags$li(HTML("Use the search bar above the table to quickly locate a file by its name or metadata.")),
-                    tags$li(HTML("Utilize the filter options to narrow down the file list based on specific criteria.")),
-                    tags$li(HTML("Click on column headers to sort files in ascending or descending order.")),
-                    tags$li(HTML("Use pagination controls at the bottom of the table to navigate through multiple pages of files.")),
-                    tags$li(HTML("Once you're ready with your choice, click <b>Submit</b> located below the table."))
-                  )
-                )
-              )
-            )
-          ),
-          # nolint end
-          fluidRow(
-            div(
-              class = "file-selection-table",
-              shinydashboard::box(
-                title = "Files Table Preview",
-                width = 12,
-                collapsible = FALSE,
-                tags$div(
-                  id = ns("file_picker_selection"),
-                  reactable.extras::reactable_extras_dependency(),
-                  reactable::reactableOutput(ns("table"))
-                ),
-                br(),
-                h5("Selected file"),
-                verbatimTextOutput(ns("selected_files"),
-                  placeholder = TRUE
-                ),
-                br()
-              )
-            )
-          ),
-          footer = tagList(
-            actionButton(ns("dismiss"),
-              label = "Dismiss",
-              icon = icon("xmark")
-            ),
-            bslib::input_task_button(
-              id = ns("submit_selection"),
-              label = "Submit",
-              icon = icon("check"),
-              type = "default"
-            )
-          )
-        )
+        ui = file_picker_modal_ui(ns = ns, selection_type = selection)
       )
     })
 
