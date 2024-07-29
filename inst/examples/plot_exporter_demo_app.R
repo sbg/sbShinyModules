@@ -1,4 +1,5 @@
 library(shiny)
+library(magrittr)
 library(sbShinyModules)
 
 # App's  UI
@@ -18,7 +19,7 @@ ui <- fluidPage(
       fluidRow(
         h3("Export Plot to Platform"),
         br(),
-        sbShinyModules::mod_save_plot_for_export_ui("plot_exporter")
+        sbShinyModules::mod_save_plot_to_export_ui("plot_exporter")
       )
     )
   )
@@ -53,7 +54,7 @@ server <- function(input, output, session) {
   })
 
   # Call the plot exporter module
-  sbShinyModules::mod_save_plot_for_export_server(
+  sbShinyModules::mod_save_plot_to_export_server(
     id = "plot_exporter",
     plot_rv = helper_reactive,
     sbg_directory_path = "tests/testthat/sbgenomics_test/"
