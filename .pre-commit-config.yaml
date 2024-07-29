@@ -67,6 +67,7 @@ repos:
           (.*/|)dev/.*|
           (.*/|)docker/.*|
           (.*/|)inst/app/.*|
+          (.*/|)tests/testthat/sbgenomics_test/.*|
           )$
     -   id: lintr
         exclude: >

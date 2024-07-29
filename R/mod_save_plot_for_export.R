@@ -92,12 +92,12 @@ save_plot_modalDialog_ui <- function(id,
             display = "grid",
             gridTemplateColumns = sprintf(
               "repeat(%s, 1fr)",
-              length(output_format)
+              length(output_formats)
             ),
             gridColumnGap = "10px"
           ),
           lapply(
-            X = output_format,
+            X = output_formats,
             FUN = function(x) {
               actionButton(
                 class = "save_plot_to_project_btns",
@@ -136,7 +136,7 @@ save_plot_modalDialog_ui <- function(id,
 #' @importFrom htmltools tagList tags
 #'
 #' @export
-save_plot_for_export_ui <- function(id, save_button_title = "Save plot") {
+mod_save_plot_to_export_ui <- function(id, save_button_title = "Save plot") {
   ns <- NS(id)
 
   tagList(
@@ -173,22 +173,22 @@ save_plot_for_export_ui <- function(id, save_button_title = "Save plot") {
 #' @importFrom shiny moduleServer observeEvent req renderPlot isTruthy
 #' @importFrom shinyWidgets updateNumericInputIcon
 #' @importFrom shinyFeedback hideFeedback
-#' @importFrom checkmate assert_true assert_choice assert_character
+#' @importFrom checkmate assert_true assert_subset assert_character
 #'
 #' @export
-save_plot_for_export_server <- function(id,
-                                        plot_rv,
-                                        output_formats = c(
-                                          "png", "pdf", "svg",
-                                          "jpeg", "bmp", "tiff"
-                                        ),
-                                        module_title = NULL,
-                                        sbg_directory_path = "/sbgenomics") {
+mod_save_plot_to_export_server <- function(id,
+                                           plot_rv,
+                                           output_formats = c(
+                                             "png", "pdf", "svg",
+                                             "jpeg", "bmp", "tiff"
+                                           ),
+                                           module_title = NULL,
+                                           sbg_directory_path = "/sbgenomics") {
   checkmate::assert_true(isTruthy(plot_rv))
-  checkmate::assert_choice(
+  checkmate::assert_subset(
     x = output_formats,
     choices = c("png", "pdf", "svg", "jpeg", "bmp", "tiff"),
-    null.ok = FALSE
+    empty.ok = FALSE
   )
   checkmate::assert_character(module_title, null.ok = TRUE)
   if (endsWith(x = sbg_directory_path, suffix = "/")) {
