@@ -67,6 +67,7 @@ repos:
           (.*/|)dev/.*|
           (.*/|)docker/.*|
           (.*/|)inst/app/.*|
+          (.*/|)inst/demos/.*|
           (.*/|)tests/testthat/sbgenomics_test/.*|
           )$
     -   id: lintr
