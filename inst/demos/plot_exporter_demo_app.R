@@ -4,7 +4,7 @@ library(sbShinyModules)
 
 # App's  UI
 ui <- fluidPage(
-  titlePanel("Plot Exporter Module Example"),
+  titlePanel("Save plots for export to Platform - Module Demo"),
   sidebarLayout(
     sidebarPanel(
       sliderInput("bins",
@@ -19,7 +19,9 @@ ui <- fluidPage(
       fluidRow(
         h3("Export Plot to Platform"),
         br(),
-        sbShinyModules::mod_save_plot_to_export_ui("plot_exporter")
+        sbShinyModules::mod_save_plot_to_export_ui(
+          id = "plot_exporter"
+        )
       )
     )
   )
@@ -56,8 +58,10 @@ server <- function(input, output, session) {
   # Call the plot exporter module
   sbShinyModules::mod_save_plot_to_export_server(
     id = "plot_exporter",
-    plot_rv = helper_reactive,
-    sbg_directory_path = "tests/testthat/sbgenomics_test/"
+    plot_reactVals = helper_reactive,
+    module_title = "Save plot to Platform",
+    sbg_directory_path = "tests/testthat/sbgenomics_test/",
+    btns_div_width = 12
   )
 }
 

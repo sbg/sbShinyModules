@@ -160,6 +160,7 @@ customClipPath
 customStyledMap
 da
 Da
+darkgray
 datas
 daum
 daybrush
@@ -179,10 +180,12 @@ deltaRotate
 deltaWidth
 deltaX
 deltaY
+dev
 df
 di
 dirs
 distOrigin
+distPlot
 distX
 distY
 dn
@@ -240,8 +243,10 @@ Eo
 et
 Et
 eventName
+eventReactive
 eventType
 ew
+expr
 externalBounds
 externalPoses
 fe
@@ -691,6 +696,7 @@ renderEnd
 renderGroup
 renderGroupEnd
 renderGroupStart
+renderPlot
 renderPos
 renderPoses
 renderPrint
@@ -946,6 +952,7 @@ warpable
 warpEnd
 warpStart
 warpTargetMatrix
+wd
 webkit
 webos
 webview

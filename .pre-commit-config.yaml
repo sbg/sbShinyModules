@@ -84,7 +84,7 @@ repos:
         exclude: >
               (?x)^(
               (.*/|)renv/activate\.R|
-              (.*/|)R/mod_save_plot_for_export-utils\.R|
+              (.*/|)R/mod_save_plot_to_export-utils\.R|
               )$
     -   id: no-debug-statement
     -   id: deps-in-desc
