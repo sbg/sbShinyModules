@@ -28,7 +28,7 @@
 #' @seealso \code{\link{mod_file_picker_server}} for the corresponding server
 #'  part of the module.
 #'
-#' @example inst/examples/file_pickers_demo_app.R
+#' @example inst/demos/file_pickers_demo_app.R
 #'
 #' @export
 mod_file_picker_ui <- function(id,
@@ -89,7 +89,7 @@ mod_file_picker_ui <- function(id,
 #' @seealso \code{\link{mod_file_picker_ui}} for the corresponding server
 #'  part of the module.
 #'
-#' @example inst/examples/file_pickers_demo_app.R
+#' @example inst/demos/file_pickers_demo_app.R
 #'
 #' @export
 mod_file_picker_server <- function(id,

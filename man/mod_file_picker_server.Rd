@@ -106,10 +106,14 @@ server <- function(input, output, session) {
 
   # ---------------------------------------------------------------------------
 
-  ## -------------------- Single File Picker - Server Code ---------------------
+  ## -------------------- Single File Picker - Server Code --------------------
 
   # Call the file picker module
-  selected_files_single_picker <- sbShinyModules::mod_file_picker_server("single_file_picker", files_df, selection = "single") # nolint
+  selected_files_single_picker <- sbShinyModules::mod_file_picker_server(
+    id = "single_file_picker",
+    files_df = files_df,
+    selection = "single"
+  )
 
   # Display selected files
   output$single_file_picker_selection <- renderPrint({
@@ -128,7 +132,11 @@ server <- function(input, output, session) {
   ## ----------------- Multiple Files Picker - Server Code --------------------
 
   # Call the file picker module
-  selected_files_mult_picker <- sbShinyModules::mod_file_picker_server("multiple_files_picker", files_df, selection = "multiple") # nolint
+  selected_files_mult_picker <- sbShinyModules::mod_file_picker_server(
+    id = "multiple_files_picker",
+    files_df = files_df,
+    selection = "multiple"
+  )
 
   # Display selected files
   output$mult_files_picker_selection <- renderPrint({
