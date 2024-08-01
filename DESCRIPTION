@@ -25,6 +25,7 @@ Imports:
     golem,
     htmltools,
     htmlwidgets,
+    grDevices,
     magrittr,
     purrr,
     reactable,
@@ -32,7 +33,10 @@ Imports:
     reactR,
     rlang,
     shiny,
+    shinyalert,
     shinydashboard,
+    shinyFeedback,
+    shinyjs,
     shinyWidgets,
     tidyr,
     xattrs

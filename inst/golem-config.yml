@@ -2,10 +2,9 @@ default:
   golem_name: sbShinyModules
   golem_version: 0.0.0.9000
   app_prod: no
-
+  PLOT_EXPORT_SUPPORTED_EXT: ["png", "pdf", "tiff", "jpeg", "svg", "bmp"]
 production:
   app_prod: yes
-
+  PLOT_EXPORT_SUPPORTED_EXT: ["png", "pdf", "tiff", "jpeg", "svg", "bmp"]
 dev:
   golem_wd: !expr golem::pkg_path()
-
