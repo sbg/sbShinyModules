@@ -9,6 +9,8 @@ mod_file_picker_server(
   files_df,
   selection = "single",
   file_identifier_column = "path",
+  defaultPageSize = 10,
+  use_bslib_theme = FALSE,
   ...
 )
 }
@@ -31,6 +33,16 @@ comprehensive file information, making it an ideal input for the
 `files_df` from which the values of selected files will be returned.
  Defaults to `path`.}
 
+\item{defaultPageSize}{Default page size for the table. Defaults to 10.}
+
+\item{use_bslib_theme}{A logical value indicating whether to generate the
+modal's UI using the \code{bslib} package. If \code{FALSE} (the default),
+the regular UI will be generated. If \code{TRUE}, the UI will be generated
+using the \code{bslib} package and its functions. Note that to use this
+option, the main UI of the app must include the line
+\code{theme = bslib::bs_theme()}. This requirement ensures the correct
+ application of the \code{bslib} theme throughout the app.}
+
 \item{...}{Additional parameters to be passed to the `reactable()` function
 this module relies on.}
 }
@@ -42,7 +54,17 @@ A reactive expression containing information about the selected
 Server function of a Shiny module for selecting either a single
  file or multiple files to be used within the app. This module displays a
  modal dialog with a preview table of files and allows users to select files
- based on the specified `selection` mode ('single' or 'multiple').
+ based on the specified `selection` mode ('single' or 'multiple'). Table
+ columns are filterable, and different types of filters are available
+ depending on the type of data in each column:
+ \itemize{
+   \item For numeric columns: a range slider filter allows users to filter
+    the table by selecting a range of values.
+   \item For factor columns: a drop down filter allows users to filter the
+    table by selecting specific factor levels.
+    \item For other data types: a basic filter using a case-insensitive text
+     match is available.
+  }
 }
 \details{
 To incorporate this module into your Shiny app, you need to include
@@ -59,10 +81,12 @@ To incorporate this module into your Shiny app, you need to include
 \examples{
 library(shiny)
 library(sbShinyModules)
+# library(bslib) # uncomment if you want to use a Bootstrap theme
 
 # App's  UI
 ui <- fluidPage(
   titlePanel("File Picker Module Examples"),
+  # theme = bslib::bs_theme(), # uncomment if you want to use a Bootstrap theme
   sidebarLayout(
     sidebarPanel(
       # Single File Picker - UI
@@ -97,6 +121,10 @@ server <- function(input, output, session) {
   # Load a built-in data frame for files
   files_df <- sbShinyModules::file_picker_example_data
 
+  # Remove units (bytes) from size column and make it numeric so that it has
+  # a range filter
+  files_df$size <- as.numeric(gsub(" bytes", "", files_df$size))
+
   # Or fetch files from a provided directory (path) using the
   # get_all_project_files() utility function
 
@@ -106,10 +134,15 @@ server <- function(input, output, session) {
 
   # ---------------------------------------------------------------------------
 
-  ## -------------------- Single File Picker - Server Code ---------------------
+  ## -------------------- Single File Picker - Server Code --------------------
 
   # Call the file picker module
-  selected_files_single_picker <- sbShinyModules::mod_file_picker_server("single_file_picker", files_df, selection = "single") # nolint
+  selected_files_single_picker <- sbShinyModules::mod_file_picker_server(
+    id = "single_file_picker",
+    files_df = files_df,
+    # use_bslib_theme = TRUE, # uncomment if you want to use a Bootstrap theme
+    selection = "single"
+  )
 
   # Display selected files
   output$single_file_picker_selection <- renderPrint({
@@ -128,7 +161,12 @@ server <- function(input, output, session) {
   ## ----------------- Multiple Files Picker - Server Code --------------------
 
   # Call the file picker module
-  selected_files_mult_picker <- sbShinyModules::mod_file_picker_server("multiple_files_picker", files_df, selection = "multiple") # nolint
+  selected_files_mult_picker <- sbShinyModules::mod_file_picker_server(
+    id = "multiple_files_picker",
+    files_df = files_df,
+    # use_bslib_theme = TRUE, # uncomment if you want to use a Bootstrap theme
+    selection = "multiple"
+  )
 
   # Display selected files
   output$mult_files_picker_selection <- renderPrint({
@@ -142,6 +180,13 @@ server <- function(input, output, session) {
   })
   # ---------------------------------------------------------------------------
 }
+
+# Note: To use a Bootstrap theme, ensure you have the 'bslib' package
+# installed and loaded in your app.
+# 1. Uncomment `library(bslib)` at the beginning of the script.
+# 2. Uncomment the `theme = bslib::bs_theme()` line in the UI section.
+# 3. In the server logic, set `use_bslib_theme = TRUE` in the
+# `mod_file_picker_server()` function calls.
 
 # Run the Shiny app
 shinyApp(ui, server)

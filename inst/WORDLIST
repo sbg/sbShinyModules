@@ -9,12 +9,15 @@ cre
 df
 dirs
 dplyr
+dropdown
 fluidPage
 fluidRow
 fnd
 Gacic
 golem
 GRCh
+htmltools
+htmlwidgets
 Illumina
 jovanovic
 knitr
@@ -31,8 +34,10 @@ MERCHANTABILITY
 mult
 nolint
 pre
+purrr
 px
 reactable
+reactR
 renderPrint
 rlang
 RoxygenNote
