@@ -1,4 +1,4 @@
-#' `save_plot_for_export` module UI function
+#' `save_plot_to_export` module UI function
 #'
 #' @description UI function of the module for saving plots for export to the
 #'  Seven Bridges Platform. The function adds an action button that triggers
@@ -19,11 +19,9 @@
 #'
 #' @return No value. Use in UI & server of shiny application
 #'
-#' @importFrom htmltools tagList tags css includeCSS
-#' @importFrom shinyWidgets textInputIcon numericInputIcon
 #' @importFrom shinyFeedback useShinyFeedback
-#' @importFrom shinyWidgets numericInputIcon radioGroupButtons
 #' @importFrom shinyjs useShinyjs
+#' @importFrom htmltools css
 #'
 #' @noRd
 save_plot_modalDialog_ui <- function(output_formats,
@@ -46,7 +44,7 @@ save_plot_modalDialog_ui <- function(output_formats,
       ),
       column(
         width = 4,
-        shiny::numericInput(
+        numericInput(
           inputId = ns("width"),
           label = "Width:",
           value = 868,
@@ -55,7 +53,7 @@ save_plot_modalDialog_ui <- function(output_formats,
       ),
       column(
         width = 4,
-        shiny::numericInput(
+        numericInput(
           inputId = ns("height"),
           label = "Height:",
           value = 400,
@@ -71,10 +69,7 @@ save_plot_modalDialog_ui <- function(output_formats,
           inputId = ns("update_preview"),
           label = "Update preview",
           icon = icon("eye"),
-          width = "100%",
-          style = "color: #fff;
-                     background-color: #337ab7;
-                     border-color: #2e6da4"
+          width = "100%"
         )
       )
     ),
@@ -204,8 +199,6 @@ mod_save_plot_to_export_ui <- function(id, save_button_title = "Save plot") {
 #'
 #' @return No value. Use in UI & server of shiny application.
 #'
-#' @importFrom shiny moduleServer observeEvent req renderPlot isTruthy
-#' @importFrom shinyWidgets updateNumericInputIcon
 #' @importFrom shinyFeedback hideFeedback
 #' @importFrom checkmate assert_true assert_subset assert_character
 #' @importFrom shinyalert shinyalert
@@ -216,7 +209,7 @@ mod_save_plot_to_export_ui <- function(id, save_button_title = "Save plot") {
 mod_save_plot_to_export_server <- function(id,
                                            plot_reactVals,
                                            output_formats = get_golem_config("PLOT_EXPORT_SUPPORTED_EXT"), # nolint
-                                           module_title = NULL,
+                                           module_title = "Save plot for export", # nolint
                                            sbg_directory_path = "/sbgenomics",
                                            btns_div_width = 12) {
   checkmate::assert_true(isTruthy(plot_reactVals))

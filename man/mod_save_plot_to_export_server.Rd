@@ -8,7 +8,7 @@ mod_save_plot_to_export_server(
   id,
   plot_reactVals,
   output_formats = get_golem_config("PLOT_EXPORT_SUPPORTED_EXT"),
-  module_title = NULL,
+  module_title = "Save plot for export",
   sbg_directory_path = "/sbgenomics",
   btns_div_width = 12
 )
@@ -140,7 +140,10 @@ server <- function(input, output, session) {
     id = "plot_exporter",
     plot_reactVals = helper_reactive,
     module_title = "Save plot to Platform",
-    sbg_directory_path = "tests/testthat/sbgenomics_test/",
+    sbg_directory_path = system.file(
+      "tests", "testthat", "sbgenomics_test",
+      package = "sbShinyModules"
+    ),
     btns_div_width = 12
   )
 }

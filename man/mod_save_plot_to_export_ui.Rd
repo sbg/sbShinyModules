@@ -82,7 +82,10 @@ server <- function(input, output, session) {
     id = "plot_exporter",
     plot_reactVals = helper_reactive,
     module_title = "Save plot to Platform",
-    sbg_directory_path = "tests/testthat/sbgenomics_test/",
+    sbg_directory_path = system.file(
+      "tests", "testthat", "sbgenomics_test",
+      package = "sbShinyModules"
+    ),
     btns_div_width = 12
   )
 }
