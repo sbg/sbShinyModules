@@ -88,8 +88,9 @@ muiDependency <- function() {
     htmltools::htmlDependency(
       name = "mui",
       version = "5.6.3",
-      src = c(href = "https://unpkg.com/@mui/material@5.6.3/umd/"),
-      script = "material-ui.production.min.js"
+      src = system.file("assets/material-ui", package = "sbShinyModules"),
+      script = "material-ui.production.min.js",
+      all_files = FALSE
     )
   )
 }

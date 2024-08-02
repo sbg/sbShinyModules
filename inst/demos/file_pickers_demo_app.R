@@ -60,7 +60,8 @@ server <- function(input, output, session) {
     id = "single_file_picker",
     files_df = files_df,
     # use_bslib_theme = TRUE, # uncomment if you want to use a Bootstrap theme
-    selection = "single"
+    selection = "single",
+    defaultPageSize = 5
   )
 
   # Display selected files
@@ -84,7 +85,8 @@ server <- function(input, output, session) {
     id = "multiple_files_picker",
     files_df = files_df,
     # use_bslib_theme = TRUE, # uncomment if you want to use a Bootstrap theme
-    selection = "multiple"
+    selection = "multiple",
+    defaultPageSize = 5
   )
 
   # Display selected files
