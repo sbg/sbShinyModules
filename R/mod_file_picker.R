@@ -153,7 +153,7 @@ mod_file_picker_server <- function(id,
 
     output$table <- reactable::renderReactable({
       reactable::reactable(files_df,
-        selection = "single",
+        selection = selection,
         onClick = "select",
         filterable = TRUE,
         searchable = TRUE,
