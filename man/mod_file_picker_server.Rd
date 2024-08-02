@@ -9,7 +9,7 @@ mod_file_picker_server(
   files_df,
   selection = "single",
   file_identifier_column = "path",
-  defaultPageSize = 10,
+  default_page_size = 10,
   use_bslib_theme = FALSE,
   ...
 )
@@ -33,7 +33,8 @@ comprehensive file information, making it an ideal input for the
 `files_df` from which the values of selected files will be returned.
  Defaults to `path`.}
 
-\item{defaultPageSize}{Default page size for the table. Defaults to 10.}
+\item{default_page_size}{Number of rows per page to display in the table.
+Defaults to 10.}
 
 \item{use_bslib_theme}{A logical value indicating whether to generate the
 modal's UI using the \code{bslib} package. If \code{FALSE} (the default),
@@ -142,7 +143,7 @@ server <- function(input, output, session) {
     files_df = files_df,
     # use_bslib_theme = TRUE, # uncomment if you want to use a Bootstrap theme
     selection = "single",
-    defaultPageSize = 5
+    default_page_size = 5
   )
 
   # Display selected files
@@ -167,7 +168,7 @@ server <- function(input, output, session) {
     files_df = files_df,
     # use_bslib_theme = TRUE, # uncomment if you want to use a Bootstrap theme
     selection = "multiple",
-    defaultPageSize = 5
+    default_page_size = 5
   )
 
   # Display selected files

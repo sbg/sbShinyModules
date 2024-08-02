@@ -85,7 +85,8 @@ mod_file_picker_ui <- function(id,
 #' @param file_identifier_column A string specifying the column name in
 #'  `files_df` from which the values of selected files will be returned.
 #'   Defaults to `path`.
-#' @param defaultPageSize Default page size for the table. Defaults to 10.
+#' @param default_page_size Number of rows per page to display in the table.
+#'  Defaults to 10.
 #' @param use_bslib_theme A logical value indicating whether to generate the
 #'  modal's UI using the \code{bslib} package. If \code{FALSE} (the default),
 #'  the regular UI will be generated. If \code{TRUE}, the UI will be generated
@@ -113,7 +114,7 @@ mod_file_picker_server <- function(id,
                                    files_df,
                                    selection = "single",
                                    file_identifier_column = "path",
-                                   defaultPageSize = 10,
+                                   default_page_size = 10,
                                    use_bslib_theme = FALSE,
                                    ...) {
   # Checks function arguments using checkmate
@@ -158,7 +159,7 @@ mod_file_picker_server <- function(id,
         filterable = TRUE,
         searchable = TRUE,
         resizable = TRUE,
-        defaultPageSize = defaultPageSize,
+        defaultPageSize = default_page_size,
         # Limit the number of displayed characters in a cell to 40
         defaultColDef = reactable::colDef(
           # nolint start

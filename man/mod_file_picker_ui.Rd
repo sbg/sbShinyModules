@@ -100,7 +100,7 @@ server <- function(input, output, session) {
     files_df = files_df,
     # use_bslib_theme = TRUE, # uncomment if you want to use a Bootstrap theme
     selection = "single",
-    defaultPageSize = 5
+    default_page_size = 5
   )
 
   # Display selected files
@@ -125,7 +125,7 @@ server <- function(input, output, session) {
     files_df = files_df,
     # use_bslib_theme = TRUE, # uncomment if you want to use a Bootstrap theme
     selection = "multiple",
-    defaultPageSize = 5
+    default_page_size = 5
   )
 
   # Display selected files
