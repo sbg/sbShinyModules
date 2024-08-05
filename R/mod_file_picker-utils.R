@@ -11,6 +11,13 @@
 #' @param selection_type A string specifying the selection mode. Can be either
 #'  `single` for single file selection or `multiple` for multiple file
 #'   selection. Defaults to `single`.
+#' @param use_bslib_theme A logical value indicating whether to generate the
+#'  modal's UI using the \code{bslib} package. If \code{FALSE} (the default),
+#'  the regular UI will be generated. If \code{TRUE}, the UI will be generated
+#'  using the \code{bslib} package and its functions. Note that to use this
+#'  option, the main UI of the app must include the line
+#'  \code{theme = bslib::bs_theme()}. This requirement ensures the correct
+#'   application of the \code{bslib} theme throughout the app.
 #'
 #' @return A Shiny modal dialog UI object.
 #'
@@ -21,16 +28,217 @@
 #' @importFrom bslib input_task_button
 #'
 #' @noRd
-file_picker_modal_ui <- function(ns, selection_type) {
-  # nolint start
+generate_file_picker_modal_ui <- function(ns,
+                                          selection_type,
+                                          use_bslib_theme = FALSE) {
   modalDialog(
     title = "File Selection",
-    size = "l",
+    size = ifelse(use_bslib_theme, "xl", "l"),
+    if (use_bslib_theme) {
+      generate_bslib_modal_ui(
+        ns = ns,
+        selection_type = selection_type
+      )
+    } else {
+      generate_regular_modal_ui(
+        ns = ns,
+        selection_type = selection_type
+      )
+    },
+    br(),
+    footer = tagList(
+      actionButton(ns("dismiss"),
+        label = "Dismiss",
+        icon = icon("xmark")
+      ),
+      if (use_bslib_theme) {
+        bslib::input_task_button(
+          id = ns("submit_selection"),
+          label = "Submit",
+          icon = icon("check"),
+          type = "default"
+        )
+      } else {
+        actionButton(ns("submit_selection"),
+          label = "Submit",
+          icon = icon("check")
+        )
+      }
+    )
+  )
+}
+
+#' Load Material UI dependency
+#'
+#' @description A utility function that provides the necessary HTML
+#'  dependencies to include Material UI in a Shiny application. This function
+#'  ensures that both React and Material UI libraries are loaded.
+#'
+#' @return A list of HTML dependencies required for using Material UI
+#'  components in Shiny.
+#'
+#' @importFrom reactR html_dependency_react
+#' @importFrom htmltools htmlDependency
+#'
+#' @noRd
+muiDependency <- function() {
+  list(
+    # Material UI requires React
+    reactR::html_dependency_react(),
+    htmltools::htmlDependency(
+      name = "mui",
+      version = "5.6.3",
+      src = system.file("assets/material-ui", package = "sbShinyModules"),
+      script = "material-ui.production.min.js",
+      all_files = FALSE
+    )
+  )
+}
+
+#' Generate bslib modal UI
+#'
+#' @description
+#'  Creates a Shiny UI for a file selection modal using \code{bslib}. The UI
+#'  includes a file selection guide and a file preview table, tailored to the
+#'  type of file selection (single or multiple). This function uses
+#'  \code{bslib} to organize elements into accordions and cards.
+#'
+#' @details
+#'  The function constructs a modal UI with two main components:
+#'  \itemize{
+#'    \item **File Selection Guide** that provides users with detailed
+#'     instructions on how to select files. The instructions adapt based on
+#'     whether single or multiple file selection is allowed.
+#'    \item **Files Table Preview** that displays a table of files for
+#'     selection. Users can interact with the table to review file details,
+#'     use search and filter functionalities, sort columns, and navigate through
+#'     pages.
+#'  }
+#'  This UI uses \code{bslib} to organize elements into accordions and cards,
+#'  providing a more modern and dynamic interface compared to the regular UI
+#'  that uses \code{shinydashboard}.
+#'
+#' @param ns A namespace function.
+#' @param selection_type A string specifying the selection mode. Can be either
+#'  `single` for single file selection or `multiple` for multiple file
+#'   selection. Defaults to `single`.
+#'
+#' @return A tag list containing the UI elements for the file selection modal.
+#'
+#' @importFrom checkmate assert_choice
+#' @importFrom bslib accordion accordion_panel card card_header card_body
+#' @importFrom reactable.extras reactable_extras_dependency
+#' @importFrom reactable reactableOutput
+#'
+#' @noRd
+generate_bslib_modal_ui <- function(ns, selection_type) {
+  checkmate::assert_choice(selection_type, c("single", "multiple"))
+  tagList(
+    # nolint start
+    fluidRow(
+      div(
+        bslib::accordion(
+          bslib::accordion_panel(
+            title = "File Selection Guide",
+            tags$div(
+              tags$p("To efficiently manage files, follow these steps:"),
+              tags$ol(
+                tags$li("Review file details."),
+                if (selection_type == "single") {
+                  tags$li(HTML("To select a file, click the radio button in the leftmost column of the desired file's row."))
+                } else {
+                  tags$li(HTML("Use the checkboxes in each row to select multiple files simultaneously."))
+                },
+                tags$li(HTML("Use the search bar above the table to quickly locate a file by its name or metadata.")),
+                tags$li(HTML("Utilize the filter options to narrow down the file list based on specific criteria.")),
+                tags$li(HTML("Click on column headers to sort files in ascending or descending order.")),
+                tags$li(HTML("Use pagination controls at the bottom of the table to navigate through multiple pages of files.")),
+                tags$li(HTML("Once you're ready with your choice, click <b>Submit</b> located below the table."))
+              )
+            ),
+            open = FALSE
+          ),
+          open = FALSE
+        )
+      )
+    ),
+    br(),
+    # nolint end
+    fluidRow(
+      div(
+        class = "file-selection-table",
+        bslib::card(
+          bslib::card_header("Table Preview"),
+          bslib::card_body(
+            tags$div(
+              id = ns("file_picker_selection"),
+              reactable.extras::reactable_extras_dependency(),
+              muiDependency(),
+              reactable::reactableOutput(ns("table"))
+            )
+          )
+        )
+      )
+    ),
+    br(),
+    fluidRow(
+      tags$div(
+        if (selection_type == "single") {
+          h5("Selected file")
+        } else {
+          h5("Selected files")
+        }
+      ),
+      verbatimTextOutput(ns("selected_files"), placeholder = TRUE)
+    )
+  )
+}
+
+#' Generate regular modal UI
+#'
+#' @description A helper function that creates a regular Shiny UI for a file
+#'  selection modal. The UI includes a file selection guide and a file preview
+#'  table, tailored to the type of file selection (single or multiple). This
+#'  function uses \code{shinydashboard} to organize elements into boxes.
+#'
+#' @details
+#'  The function constructs a modal UI with two main components:
+#'  \itemize{
+#'    \item **File Selection Guide** that provides users with instructions on
+#'     how to select files. The instructions adapt based on whether single or
+#'     multiple file selection is allowed.
+#'    \item A **Files Table Preview** that displays a table of files for
+#'     selection. Users can interact with the table to review file details, use
+#'     search and filter functionalities, sort columns, and navigate through
+#'     pages.
+#'  }
+#'  This is a regular UI and uses \code{shinydashboard} to organize elements
+#'  into boxes. It is distinct from other UIs that may use \code{bslib} and
+#'  accordions.
+#'
+#' @param ns A namespace function.
+#' @param selection_type A string specifying the selection mode. Can be either
+#'  `single` for single file selection or `multiple` for multiple file
+#'   selection. Defaults to `single`.
+#'
+#' @return A tag list containing the UI elements for the file selection modal.
+#'
+#' @importFrom checkmate assert_choice
+#' @importFrom shinyWidgets useShinydashboard
+#' @importFrom shinydashboard box
+#' @importFrom reactable.extras reactable_extras_dependency
+#' @importFrom reactable reactableOutput
+#'
+#' @noRd
+generate_regular_modal_ui <- function(ns, selection_type) {
+  checkmate::assert_choice(selection_type, c("single", "multiple"))
+  tagList(
     shinyWidgets::useShinydashboard(),
+    # nolint start
     fluidRow(
       div(
         shinydashboard::box(
-          title = "File Selection Guides",
+          title = "File Selection Guide",
           width = 12,
           collapsible = TRUE,
           collapsed = TRUE,
@@ -64,28 +272,129 @@ file_picker_modal_ui <- function(ns, selection_type) {
           tags$div(
             id = ns("file_picker_selection"),
             reactable.extras::reactable_extras_dependency(),
+            muiDependency(),
             reactable::reactableOutput(ns("table"))
           ),
           br(),
           h5("Selected file"),
-          verbatimTextOutput(ns("selected_files"),
-            placeholder = TRUE
-          ),
+          verbatimTextOutput(ns("selected_files"), placeholder = TRUE),
           br()
         )
       )
-    ),
-    footer = tagList(
-      actionButton(ns("dismiss"),
-        label = "Dismiss",
-        icon = icon("xmark")
-      ),
-      bslib::input_task_button(
-        id = ns("submit_selection"),
-        label = "Submit",
-        icon = icon("check"),
-        type = "default"
-      )
     )
   )
+}
+
+#' Create column definitions for reactable
+#'
+#' @description Generates column definitions for a \code{reactable} table based
+#'  on the type of data in the column. Provides customized filtering UI and
+#'  logic for numeric and factor columns.
+#'
+#' @param col_data A vector representing the data of the column for which the
+#'  definition is being created.
+#'
+#' @return A \code{reactable::colDef} object with appropriate settings based
+#'  on the data type.
+#' \itemize{
+#'   \item **For numeric columns:** The function returns a column definition
+#'    with a range slider filter, allowing users to filter the table by
+#'    selecting a range of values. The slider is implemented using Material UI
+#'    and custom JavaScript.
+#'   \item **For factor columns:** The function returns a column definition
+#'    with a drop down filter, allowing users to filter the table by selecting
+#'    specific factor levels. The drop down is implemented using HTML tags and
+#'    JavaScript.
+#'   \item **For other data types:** The function returns a basic filterable
+#'    column definition without custom filtering UI.
+#' }
+#'
+#' @importFrom reactable colDef
+#' @importFrom htmlwidgets JS
+#'
+#' @noRd
+create_col_def <- function(col_data) {
+  if (is.numeric(col_data)) {
+    return(reactable::colDef(
+      filterable = TRUE,
+      resizable = TRUE,
+      filterMethod = htmlwidgets::JS("
+          function(rows, columnId, filterValue) {
+            const [min, max] = filterValue;
+            return rows.filter(row => {
+              const value = row.values[columnId];
+              return value >= min && value <= max;
+            });
+          }
+          "),
+      # nolint start
+      filterInput = htmlwidgets::JS("
+            function(column, state) {
+              const range = React.useMemo(() => {
+                let min = Infinity;
+                let max = -Infinity;
+                state.data.forEach(row => {
+                  const value = row[column.id];
+                  if (value < min) {
+                    min = Math.floor(value);
+                  } else if (value > max) {
+                    max = Math.ceil(value);
+                  }
+                });
+                return [min, max];
+              }, [state.data]);
+
+              const value = column.filterValue ? column.filterValue : range;
+              const valueLabel = `${value[0]}...${value[1]}`;
+
+              return React.createElement(
+                'div',
+                { style: { margin: '0 8px' } },
+                [
+                  React.createElement(
+                    MaterialUI.Slider,
+                    {
+                      min: range[0],
+                      max: range[1],
+                      valueLabelDisplay: 'off', // 'auto'
+                      value: value,
+                      onChange: (e, val) => column.setFilter(val),
+                      'aria-label': `Filter ${column.name}`
+                    }
+                  ),
+                  React.createElement('div', { style: { textAlign: 'center', marginTop: '4px' } }, valueLabel)
+                ]
+              );
+            }
+      ")
+      # nolint end
+    ))
+  } else if (is.factor(col_data)) {
+    return(reactable::colDef(
+      filterable = TRUE,
+      resizable = TRUE,
+      filterMethod = htmlwidgets::JS("
+            function(rows, columnId, filterValue) {
+              return rows.filter(row => {
+                const value = row.values[columnId];
+                return value === filterValue;
+              });
+            }
+          "),
+      filterInput = function(values, name) {
+        tags$select(
+          onchange = sprintf("Reactable.setFilter('file-picker-list', '%s', event.target.value || undefined)", name), # nolint
+          tags$option(value = "", "All"),
+          lapply(unique(values), tags$option),
+          "aria-label" = sprintf("Filter %s", name),
+          style = "width: 100%; height: 28px;"
+        )
+      }
+    ))
+  } else {
+    return(reactable::colDef(
+      filterable = TRUE,
+      resizable = TRUE
+    ))
+  }
 }

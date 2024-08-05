@@ -23,8 +23,6 @@
 #' @param button_width The width of the button. Defaults to `100\%`.
 # nolint end
 #'
-#' @importFrom shiny NS tagList
-#'
 #' @seealso \code{\link{mod_file_picker_server}} for the corresponding server
 #'  part of the module.
 #'
@@ -44,10 +42,21 @@ mod_file_picker_ui <- function(id,
 
 #' file_picker Server Functions
 #'
-#' @description Server function of a Shiny module for selecting either a single
+#' @description
+#'  Server function of a Shiny module for selecting either a single
 #'  file or multiple files to be used within the app. This module displays a
 #'  modal dialog with a preview table of files and allows users to select files
-#'  based on the specified `selection` mode ('single' or 'multiple').
+#'  based on the specified `selection` mode ('single' or 'multiple'). Table
+#'  columns are filterable, and different types of filters are available
+#'  depending on the type of data in each column:
+#'  \itemize{
+#'    \item For numeric columns: a range slider filter allows users to filter
+#'     the table by selecting a range of values.
+#'    \item For factor columns: a drop down filter allows users to filter the
+#'     table by selecting specific factor levels.
+#'     \item For other data types: a basic filter using a case-insensitive text
+#'      match is available.
+#'   }
 #'
 #' @details To incorporate this module into your Shiny app, you need to include
 #'  both the UI and server functions in the appropriate places in your app
@@ -70,13 +79,21 @@ mod_file_picker_ui <- function(id,
 #'  within Data Studio.This function returns a data frame containing
 #'  comprehensive file information, making it an ideal input for the
 #'  `mod_file_picker_server()` function.
-#'
 #' @param selection A string specifying the selection mode. Can be either
 #'  'single' for single file selection or 'multiple' for multiple file
 #'   selection. Defaults to 'single'.
 #' @param file_identifier_column A string specifying the column name in
 #'  `files_df` from which the values of selected files will be returned.
 #'   Defaults to `path`.
+#' @param default_page_size Number of rows per page to display in the table.
+#'  Defaults to 10.
+#' @param use_bslib_theme A logical value indicating whether to generate the
+#'  modal's UI using the \code{bslib} package. If \code{FALSE} (the default),
+#'  the regular UI will be generated. If \code{TRUE}, the UI will be generated
+#'  using the \code{bslib} package and its functions. Note that to use this
+#'  option, the main UI of the app must include the line
+#'  \code{theme = bslib::bs_theme()}. This requirement ensures the correct
+#'   application of the \code{bslib} theme throughout the app.
 #' @param ... Additional parameters to be passed to the `reactable()` function
 #'  this module relies on.
 #'
@@ -85,6 +102,7 @@ mod_file_picker_ui <- function(id,
 #'
 #' @importFrom checkmate assert_data_frame assert_choice assert_character
 #' @importFrom reactable getReactableState renderReactable reactable colDef
+#' @importFrom htmlwidgets JS
 #'
 #' @seealso \code{\link{mod_file_picker_ui}} for the corresponding server
 #'  part of the module.
@@ -96,6 +114,8 @@ mod_file_picker_server <- function(id,
                                    files_df,
                                    selection = "single",
                                    file_identifier_column = "path",
+                                   default_page_size = 10,
+                                   use_bslib_theme = FALSE,
                                    ...) {
   # Checks function arguments using checkmate
   checkmate::assert_data_frame(files_df, min.cols = 1)
@@ -109,7 +129,12 @@ mod_file_picker_server <- function(id,
 
     observeEvent(input$select_file, {
       showModal(
-        ui = file_picker_modal_ui(ns = ns, selection_type = selection)
+        # Generate modal's UI
+        ui = generate_file_picker_modal_ui(
+          ns = ns,
+          selection_type = selection,
+          use_bslib_theme = use_bslib_theme
+        )
       )
     })
 
@@ -123,22 +148,45 @@ mod_file_picker_server <- function(id,
       }
     })
 
+    # Create a named list of column definitions
+    column_defs <- lapply(files_df, create_col_def)
+    names(column_defs) <- names(files_df)
+
     output$table <- reactable::renderReactable({
       reactable::reactable(files_df,
         selection = selection,
         onClick = "select",
         filterable = TRUE,
         searchable = TRUE,
-        defaultPageSize = 5,
-        columns = list(
-          .selection = reactable::colDef(
-            width = 80,
-            sticky = "left",
-            style = list(cursor = "pointer"),
-            headerStyle = list(cursor = "pointer")
-          )
+        resizable = TRUE,
+        defaultPageSize = default_page_size,
+        # Limit the number of displayed characters in a cell to 40
+        defaultColDef = reactable::colDef(
+          # nolint start
+          cell = htmlwidgets::JS("function(cellInfo) {
+                    var data = cellInfo.value;
+                    return data != null && data.length > 40 ?
+                      '<span title=\"' + data + '\">' + data.substr(0, 40) + '...</span>' : data;
+                  }"),
+          # nolint end
+          html = TRUE,
+          style = list(whiteSpace = "nowrap"),
+          width = 400
         ),
-        ...
+        elementId = "file-picker-list",
+        columns = c(
+          list(
+            .selection = reactable::colDef(
+              width = 80,
+              sticky = "left",
+              style = list(cursor = "pointer"),
+              headerStyle = list(cursor = "pointer")
+            )
+          ),
+          # Add column definitions
+          column_defs,
+          ...
+        )
       )
     })
 

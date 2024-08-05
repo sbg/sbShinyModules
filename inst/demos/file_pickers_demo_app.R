@@ -1,9 +1,11 @@
 library(shiny)
 library(sbShinyModules)
+# library(bslib) # uncomment if you want to use a Bootstrap theme
 
 # App's  UI
 ui <- fluidPage(
   titlePanel("File Picker Module Examples"),
+  # theme = bslib::bs_theme(), # uncomment if you want to use a Bootstrap theme
   sidebarLayout(
     sidebarPanel(
       # Single File Picker - UI
@@ -38,6 +40,10 @@ server <- function(input, output, session) {
   # Load a built-in data frame for files
   files_df <- sbShinyModules::file_picker_example_data
 
+  # Remove units (bytes) from size column and make it numeric so that it has
+  # a range filter
+  files_df$size <- as.numeric(gsub(" bytes", "", files_df$size))
+
   # Or fetch files from a provided directory (path) using the
   # get_all_project_files() utility function
 
@@ -53,7 +59,9 @@ server <- function(input, output, session) {
   selected_files_single_picker <- sbShinyModules::mod_file_picker_server(
     id = "single_file_picker",
     files_df = files_df,
-    selection = "single"
+    # use_bslib_theme = TRUE, # uncomment if you want to use a Bootstrap theme
+    selection = "single",
+    default_page_size = 5
   )
 
   # Display selected files
@@ -76,7 +84,9 @@ server <- function(input, output, session) {
   selected_files_mult_picker <- sbShinyModules::mod_file_picker_server(
     id = "multiple_files_picker",
     files_df = files_df,
-    selection = "multiple"
+    # use_bslib_theme = TRUE, # uncomment if you want to use a Bootstrap theme
+    selection = "multiple",
+    default_page_size = 5
   )
 
   # Display selected files
@@ -91,6 +101,13 @@ server <- function(input, output, session) {
   })
   # ---------------------------------------------------------------------------
 }
+
+# Note: To use a Bootstrap theme, ensure you have the 'bslib' package
+# installed and loaded in your app.
+# 1. Uncomment `library(bslib)` at the beginning of the script.
+# 2. Uncomment the `theme = bslib::bs_theme()` line in the UI section.
+# 3. In the server logic, set `use_bslib_theme = TRUE` in the
+# `mod_file_picker_server()` function calls.
 
 # Run the Shiny app
 shinyApp(ui, server)
