@@ -26,6 +26,7 @@ htmlwidgets
 Illumina
 jovanovic
 jpeg
+json
 knitr
 LazyData
 licensable
@@ -52,6 +53,7 @@ renderPrint
 rlang
 RoxygenNote
 Sanger’
+SaveH
 SBG
 sbgenomics
 sbShinyModules
