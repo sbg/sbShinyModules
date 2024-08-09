@@ -27,14 +27,17 @@ mod_save_file_generic_ui <- function(id, save_button_title = "Save file") {
 #'  Seven Bridges Platform.
 #'
 #' @param id Module's ID.
-#' @param FUN Function for creating a file for saving, i.e `write.table`,
-#'  `save`, `write`, `write_json`, `write_xml`, `SaveH5Seurat` etc.
-#' @param args List of function arguments for the provided FUN.
-#' @param filename File name.
-#' @param extension Expected file extension. Please provide expected file
-#'  extension in order to properly validate the existence of the file with the
-#'  same name and extension.
-#' @param overwrite Boolean. Overwrite existing file with the same name.
+#' @param reac_vals Reactive values list containing mandatory fields:
+#' \itemize{
+#'  \item `FUN`- Function for creating a file for saving, i.e `write.table`,
+#'     `save`, `write`, `write_json`, `write_xml`, `SaveH5Seurat` etc.
+#'  \item `args`- List of function arguments for the provided FUN.
+#'  \item `filename`- File name.
+#'  \item `extension`- Expected file extension. Please provide expected file
+#'     extension in order to properly validate the existence of the file with
+#'     the same name and extension.
+#'  \item `overwrite`- Boolean. Overwrite existing file with the same name.
+#' }
 #' @param sbg_directory_path Path to the mounted `sbgenomics` directory
 #'  containing `project-files`, `output-files` and `workspace` sub-directories
 #'  on the instance.
@@ -49,21 +52,13 @@ mod_save_file_generic_ui <- function(id, save_button_title = "Save file") {
 #' @importFrom checkmate assert_function assert_list assert_string
 #' @importFrom checkmate assert_logical
 #'
-#' @example inst/demos/plot_exporter_demo_app.R
+#' @example inst/demos/generic_file_exporter_demo_app.R
 #'
 #' @export
-mod_save_file_geneeric_server <- function(id,
-                                          FUN,
-                                          args = list(),
-                                          filename,
-                                          extension = "",
-                                          overwrite = TRUE,
-                                          sbg_directory_path = "/sbgenomics") {
-  checkmate::assert_function(FUN)
-  checkmate::assert_list(args)
-  checkmate::assert_string(filename, null.ok = FALSE)
-  checkmate::assert_string(extension, null.ok = FALSE)
-  checkmate::assert_logical(overwrite)
+mod_save_file_generic_server <- function(id,
+                                         reac_vals,
+                                         sbg_directory_path = "/sbgenomics") {
+  checkmate::assert_true(isTruthy(reac_vals))
   checkmate::assert_string(sbg_directory_path, null.ok = FALSE)
 
   if (endsWith(x = sbg_directory_path, suffix = "/")) {
@@ -78,12 +73,28 @@ mod_save_file_geneeric_server <- function(id,
     ns <- session$ns
 
     observeEvent(input$save_file_btn, {
+      if (!isTruthy(reac_vals$filename)) {
+        shinyalert::shinyalert(
+          title = "File name missing",
+          text = "Please, provide the file name.",
+          type = "error"
+        )
+      }
+
+      checkmate::assert_function(reac_vals$FUN)
+      checkmate::assert_list(reac_vals$args)
+      checkmate::assert_string(reac_vals$extension, null.ok = FALSE)
+      checkmate::assert_logical(reac_vals$overwrite)
+
+      req(reac_vals$FUN)
+      req(reac_vals$filename)
+
       handle_file_export(
-        FUN = FUN,
-        args = args,
-        filename = filename,
-        extension = extension,
-        overwrite = overwrite,
+        FUN = reac_vals$FUN,
+        args = reac_vals$args,
+        filename = reac_vals$filename,
+        extension = reac_vals$extension,
+        overwrite = reac_vals$overwrite,
         sbg_directory_path = sbg_directory_path
       )
     })
@@ -134,12 +145,12 @@ handle_file_export <- function(FUN, args, filename, extension,
 
   # Check if the file exists in either directory
   file_exists <- check_file_existence(
-    file_name = paste0(filename, extension),
+    file_name = paste0(filename, ".", extension),
     directory_1 = file.path(sbg_directory_path, "project-files"),
     directory_2 = file.path(sbg_directory_path, "output-files")
   )
 
-  if (file_exists && !overwrite) {
+  if (file_exists && isFALSE(overwrite)) {
     shinyalert::shinyalert(
       title = "Warning!",
       text = "The file with the same name already exists in the project. Please, change the file name or set the `overwrite` parameter to TRUE.", # nolint
@@ -154,7 +165,7 @@ handle_file_export <- function(FUN, args, filename, extension,
       sapply(
         c("file", "filename", "path"),
         function(x) {
-          grep(x, names(fun_args))
+          grep(x, names(fun_args), fixed = TRUE)
         }
       )
     )
@@ -171,11 +182,17 @@ handle_file_export <- function(FUN, args, filename, extension,
   tryCatch(
     {
       filename_arg <- names(fun_args)[arg_idx[1]]
-      fun_args[[filename_arg]] <- file.path(
+      args[[filename_arg]] <- file.path(
         sbg_directory_path,
-        "output-files"
+        "output-files",
+        paste0(filename, ".", extension)
       )
-      do.call(FUN, fun_args)
+      do.call(FUN, args)
+      shinyalert::shinyalert(
+        title = "File successfully saved!",
+        text = "The file will be available in your project once you stop the app.", # nolint
+        type = "success"
+      )
     },
     error = function(e) {
       return(FALSE)

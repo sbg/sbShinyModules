@@ -3,7 +3,7 @@
 export(get_all_project_files)
 export(mod_file_picker_server)
 export(mod_file_picker_ui)
-export(mod_save_file_geneeric_server)
+export(mod_save_file_generic_server)
 export(mod_save_file_generic_ui)
 export(mod_save_plot_to_export_server)
 export(mod_save_plot_to_export_ui)
