@@ -15,7 +15,8 @@ mod_save_file_generic_ui <- function(id, save_button_title = "Save file") {
     actionButton(
       inputId = ns("save_file_btn"),
       label = save_button_title,
-      icon = icon("file-export")
+      icon = icon("file-export"),
+      width = "100%"
     )
   )
 }
@@ -34,8 +35,8 @@ mod_save_file_generic_ui <- function(id, save_button_title = "Save file") {
 #'  \item `args`- List of function arguments for the provided FUN.
 #'  \item `filename`- File name.
 #'  \item `extension`- Expected file extension. Please provide expected file
-#'     extension in order to properly validate the existence of the file with
-#'     the same name and extension.
+#'     extension if exists, in order to properly validate the existence of the
+#'     file with the same name and extension.
 #'  \item `overwrite`- Boolean. Overwrite existing file with the same name.
 #' }
 #' @param sbg_directory_path Path to the mounted `sbgenomics` directory
@@ -81,13 +82,29 @@ mod_save_file_generic_server <- function(id,
         )
       }
 
-      checkmate::assert_function(reac_vals$FUN)
-      checkmate::assert_list(reac_vals$args)
-      checkmate::assert_string(reac_vals$extension, null.ok = FALSE)
-      checkmate::assert_logical(reac_vals$overwrite)
+      tryCatch(
+        {
+          checkmate::assert_function(reac_vals$FUN)
+          checkmate::assert_list(reac_vals$args)
+          checkmate::assert_string(reac_vals$extension, null.ok = TRUE)
+          checkmate::assert_logical(reac_vals$overwrite)
+        },
+        error = function(e) {
+          shinyalert::shinyalert(
+            title = "The error occured when passing module parameters",
+            text = paste0(e$message),
+            type = "error"
+          )
+          return(FALSE)
+        }
+      )
 
       req(reac_vals$FUN)
       req(reac_vals$filename)
+
+      if (isTruthy(reac_vals$extension) && !startsWith(reac_vals$extension, ".")) { # nolint
+        reac_vals$extension <- paste0(".", reac_vals$extension)
+      }
 
       handle_file_export(
         FUN = reac_vals$FUN,
@@ -140,12 +157,12 @@ handle_file_export <- function(FUN, args, filename, extension,
   if (dot_position > 0) {
     # Remove the extension by substring up to the position of the last dot
     # and extension based on the button that was clicked.
-    filename <- paste0(substr(filename, 1, dot_position - 1), ".", extension)
+    filename <- paste0(substr(filename, 1, dot_position - 1), extension)
   }
 
   # Check if the file exists in either directory
   file_exists <- check_file_existence(
-    file_name = paste0(filename, ".", extension),
+    file_name = paste0(filename, extension),
     directory_1 = file.path(sbg_directory_path, "project-files"),
     directory_2 = file.path(sbg_directory_path, "output-files")
   )
@@ -163,14 +180,14 @@ handle_file_export <- function(FUN, args, filename, extension,
   arg_idx <- as.numeric(
     unlist(
       sapply(
-        c("file", "filename", "path"),
+        get_golem_config("FILENAME_FUN_ARGS_EXPECTED"),
         function(x) {
-          grep(x, names(fun_args), fixed = TRUE)
+          match(x, names(fun_args))
         }
       )
     )
   )
-  if (length(arg_idx) == 0) {
+  if (all(is.na(arg_idx))) {
     shinyalert::shinyalert(
       title = "Warning!",
       text = "The function doesn't contain arguments `filename`, `file` or `path` in order to set file name and its location.", # nolint
@@ -181,11 +198,12 @@ handle_file_export <- function(FUN, args, filename, extension,
 
   tryCatch(
     {
-      filename_arg <- names(fun_args)[arg_idx[1]]
+      na_excluded <- na.exclude(arg_idx)
+      filename_arg <- names(fun_args)[na_excluded[1]] # take first found
       args[[filename_arg]] <- file.path(
         sbg_directory_path,
         "output-files",
-        paste0(filename, ".", extension)
+        paste0(filename, extension)
       )
       do.call(FUN, args)
       shinyalert::shinyalert(
@@ -195,6 +213,11 @@ handle_file_export <- function(FUN, args, filename, extension,
       )
     },
     error = function(e) {
+      shinyalert::shinyalert(
+        title = "Error during file saving",
+        text = paste0(e),
+        type = "error"
+      )
       return(FALSE)
     }
   )

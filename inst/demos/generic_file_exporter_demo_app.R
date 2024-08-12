@@ -9,7 +9,7 @@ ui <- fluidPage(
   sidebarLayout(
     sidebarPanel(
       fluidRow(
-        h3("Export File to Platform"),
+        h3("Export txt/csv to Platform"),
         br(),
         textInput("file_name", label = "Set file name", width = "100%"),
         fluidRow(
@@ -39,9 +39,40 @@ ui <- fluidPage(
           )
         ),
         fluidRow(
-          column = 4,
-          sbShinyModules::mod_save_file_generic_ui(
-            id = "file_exporter"
+          column(
+            width = 4,
+            sbShinyModules::mod_save_file_generic_ui(
+              id = "file_exporter",
+              save_button_title = "Save txt/csv"
+            )
+          )
+        )
+      ),
+      fluidRow(
+        h3("Export json to Platform"),
+        br(),
+        textInput("file_name_json", label = "Set file name", width = "100%"),
+        fluidRow(
+          column(
+            width = 4,
+            sbShinyModules::mod_save_file_generic_ui(
+              id = "json_file_exporter",
+              save_button_title = "Save json"
+            )
+          )
+        )
+      ),
+      fluidRow(
+        h3("Export RDS object to Platform"),
+        br(),
+        textInput("file_name_rds", label = "Set file name", width = "100%"),
+        fluidRow(
+          column(
+            width = 4,
+            sbShinyModules::mod_save_file_generic_ui(
+              id = "rds_file_exporter",
+              save_button_title = "Save RDS"
+            )
           )
         )
       )
@@ -64,7 +95,7 @@ server <- function(input, output, session) {
     )
   })
 
-  helper_rv <- reactiveValues(
+  helper_rv_table <- reactiveValues(
     FUN = write.table,
     args = list(
       x = iris, quote = FALSE, row.names = FALSE,
@@ -76,10 +107,10 @@ server <- function(input, output, session) {
   )
 
   observe(
-    helper_rv$filename <- as.character(input$file_name)
+    helper_rv_table$filename <- as.character(input$file_name)
   )
   observe(
-    helper_rv$args[["sep"]] <- switch(input$separator,
+    helper_rv_table$args[["sep"]] <- switch(input$separator,
       "comma" = ",",
       "tab" = "\t",
       "new line" = "\n",
@@ -87,16 +118,65 @@ server <- function(input, output, session) {
     )
   )
   observe(
-    helper_rv$extension <- as.character(input$extension)
+    helper_rv_table$extension <- as.character(input$extension)
   )
   observe(
-    helper_rv$overwrite <- as.logical(input$overwrite)
+    helper_rv_table$overwrite <- as.logical(input$overwrite)
   )
 
-  # Call the plot exporter module
+  # Call the file exporter module
   sbShinyModules::mod_save_file_generic_server(
     id = "file_exporter",
-    reac_vals = helper_rv,
+    reac_vals = helper_rv_table,
+    sbg_directory_path = system.file(
+      "tests", "testthat", "sbgenomics_test",
+      package = "sbShinyModules"
+    )
+  )
+
+  helper_rv_json <- reactiveValues(
+    FUN = write,
+    args = list(
+      x = jsonlite::toJSON(x = iris, dataframe = "rows", pretty = TRUE),
+      file = "myjson.json"
+    ),
+    filename = NULL,
+    extension = "json",
+    overwrite = TRUE
+  )
+
+  observe(
+    helper_rv_json$filename <- as.character(input$file_name_json)
+  )
+
+  # Call the file exporter module
+  sbShinyModules::mod_save_file_generic_server(
+    id = "json_file_exporter",
+    reac_vals = helper_rv_json,
+    sbg_directory_path = system.file(
+      "tests", "testthat", "sbgenomics_test",
+      package = "sbShinyModules"
+    )
+  )
+
+  helper_rv_rds <- reactiveValues(
+    FUN = saveRDS,
+    args = list(
+      object = iris
+    ),
+    filename = NULL,
+    extension = "RDS",
+    overwrite = TRUE
+  )
+
+  observe(
+    helper_rv_rds$filename <- as.character(input$file_name_rds)
+  )
+
+  # Call the file exporter module
+  sbShinyModules::mod_save_file_generic_server(
+    id = "rds_file_exporter",
+    reac_vals = helper_rv_rds,
     sbg_directory_path = system.file(
       "tests", "testthat", "sbgenomics_test",
       package = "sbShinyModules"

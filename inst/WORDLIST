@@ -9,12 +9,14 @@ Config
 cph
 cre
 darkgray
+dev
 df
 dirs
 distPlot
 dplyr
 dropdown
 eventReactive
+expr
 fluidPage
 fluidRow
 fnd
@@ -25,9 +27,11 @@ grDevices
 htmltools
 htmlwidgets
 Illumina
+jeroen
 jovanovic
 jpeg
 json
+jsonlite
 knitr
 LazyData
 licensable
@@ -72,4 +76,5 @@ UI
 ui
 velsera
 Velsera
+wd
 xattrs
