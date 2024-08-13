@@ -50,6 +50,9 @@ test_that("muiDependency returns correct list of dependencies", {
   expect_s3_class(mui_dep, "html_dependency")
   expect_equal(mui_dep$name, "mui")
   expect_equal(mui_dep$version, "5.6.3")
-  expect_equal(mui_dep$src$href, "https://unpkg.com/@mui/material@5.6.3/umd/")
+  expect_equal(
+    mui_dep$src$file,
+    system.file("assets/material-ui", package = "sbShinyModules")
+  )
   expect_equal(mui_dep$script, "material-ui.production.min.js")
 })

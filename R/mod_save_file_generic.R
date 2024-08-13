@@ -100,19 +100,21 @@ mod_save_file_generic_server <- function(id,
       )
 
       req(reac_vals$FUN)
+      req(reac_vals$args)
       req(reac_vals$filename)
 
-      if (isTruthy(reac_vals$extension) && !startsWith(reac_vals$extension, ".")) { # nolint
-        reac_vals$extension <- paste0(".", reac_vals$extension)
-      }
-
-      handle_file_export(
+      status <- handle_file_export(
         FUN = reac_vals$FUN,
         args = reac_vals$args,
         filename = reac_vals$filename,
         extension = reac_vals$extension,
         overwrite = reac_vals$overwrite,
         sbg_directory_path = sbg_directory_path
+      )
+      shinyalert::shinyalert(
+        title = status$title,
+        text = status$text,
+        type = ifelse(status$check, yes = "success", no = "error")
       )
     })
   })
@@ -149,6 +151,11 @@ mod_save_file_generic_server <- function(id,
 #' @noRd
 handle_file_export <- function(FUN, args, filename, extension,
                                overwrite, sbg_directory_path) {
+  # Handle extension
+  if (isTruthy(extension) && !startsWith(extension, ".")) {
+    extension <- paste0(".", extension)
+  }
+
   # Remove extension if provided in the filename input
   # Find the last dot in the filename
   dot_position <- regexpr("\\.[^\\.]*$", filename)
@@ -168,12 +175,12 @@ handle_file_export <- function(FUN, args, filename, extension,
   )
 
   if (file_exists && isFALSE(overwrite)) {
-    shinyalert::shinyalert(
+    status <- list(
+      check = FALSE,
       title = "Warning!",
-      text = "The file with the same name already exists in the project. Please, change the file name or set the `overwrite` parameter to TRUE.", # nolint
-      type = "error"
+      text = "The file with the same name already exists in the project. Please, change the file name or set the `overwrite` parameter to TRUE." # nolint
     )
-    return(FALSE)
+    return(status)
   }
 
   fun_args <- as.list(args(FUN))
@@ -188,12 +195,12 @@ handle_file_export <- function(FUN, args, filename, extension,
     )
   )
   if (all(is.na(arg_idx))) {
-    shinyalert::shinyalert(
-      title = "Warning!",
-      text = "The function doesn't contain arguments `filename`, `file` or `path` in order to set file name and its location.", # nolint
-      type = "error"
+    status <- list(
+      check = FALSE,
+      title = "Error in FUN parameter",
+      text = "The function doesn't contain arguments `filename`, `file` or `path` in order to set file name and its location." # nolint
     )
-    return(FALSE)
+    return(status)
   }
 
   tryCatch(
@@ -206,22 +213,24 @@ handle_file_export <- function(FUN, args, filename, extension,
         paste0(filename, extension)
       )
       do.call(FUN, args)
-      shinyalert::shinyalert(
+      status <- list(
+        check = TRUE,
         title = "File successfully saved!",
-        text = "The file will be available in your project once you stop the app.", # nolint
-        type = "success"
+        text = "The file will be available in your project once you stop the app." # nolint
       )
+      return(status)
     },
     error = function(e) {
-      shinyalert::shinyalert(
+      status <- list(
+        check = FALSE,
         title = "Error during file saving",
-        text = paste0(e),
-        type = "error"
+        text = paste0(e)
       )
-      return(FALSE)
+      return(status)
     }
   )
 }
+
 ## To be copied in the UI
 # mod_save_file_generic_ui("save_file_generic_1")
 
