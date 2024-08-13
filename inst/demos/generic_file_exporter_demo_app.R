@@ -4,7 +4,84 @@ library(sbShinyModules)
 library(reactable)
 library(jsonlite)
 
-# App's  UI
+
+###### Test modules for demonstrating nested modules ######
+test_module_ui <- function(id) {
+  ns <- NS(id)
+  tagList(
+    actionButton(
+      inputId = ns("test_module_btn"),
+      label = "Test nesting modules",
+      width = "100%"
+    )
+  )
+}
+
+test_module_server <- function(id) {
+  moduleServer(id, module = function(input, output, session) {
+    ns <- session$ns
+
+    observeEvent(input$test_module_btn, {
+      showModal(
+        ui = modalDialog(
+          title = "Test nested modules",
+          size = "l",
+          tagList(
+            reactable::reactableOutput(ns("nested_table_data")),
+            fluidRow(
+              column(
+                width = 4,
+                sbShinyModules::mod_save_file_generic_ui(ns("save_file_nested"))
+              )
+            )
+          ),
+          footer = tagList(
+            actionButton(ns("dismiss"),
+              label = "Dismiss",
+              icon = icon("xmark")
+            )
+          )
+        )
+      )
+    })
+
+    output$nested_table_data <- reactable::renderReactable({
+      reactable::reactable(iris,
+        onClick = "select",
+        filterable = TRUE,
+        searchable = TRUE,
+        resizable = TRUE,
+        defaultPageSize = 10
+      )
+    })
+
+    # Close modal dialog by clicking the dismiss button
+    observeEvent(input$dismiss, {
+      removeModal()
+    })
+
+    # Create reactive values list with mandatory fields to pass to the module
+    helper_rv_nested <- reactiveValues(
+      FUN = write.table,
+      args = list(x = iris, quote = FALSE, row.names = FALSE, col.names = TRUE),
+      filename = "generic_file_name",
+      extension = ".txt",
+      overwrite = TRUE
+    )
+    # Call the file exporter module
+    sbShinyModules::mod_save_file_generic_server(
+      id = "save_file_nested",
+      reac_vals = helper_rv_nested,
+      sbg_directory_path = system.file(
+        "tests", "testthat", "sbgenomics_test",
+        package = "sbShinyModules"
+      )
+    )
+  })
+}
+############## Test modules end ###########################
+
+##### Demo App's  UI #######
 ui <- fluidPage(
   titlePanel("Save data for export to Platform - Module Demo"),
   sidebarLayout(
@@ -76,6 +153,16 @@ ui <- fluidPage(
             )
           )
         )
+      ),
+      fluidRow(
+        h3("Test nested modules"),
+        br(),
+        fluidRow(
+          column(
+            width = 4,
+            test_module_ui(id = "nested_modules")
+          )
+        )
       )
     ),
     mainPanel(
@@ -84,7 +171,7 @@ ui <- fluidPage(
   )
 )
 
-# App's Server Logic
+###### Demo App's Server Logic ######
 server <- function(input, output, session) {
   output$table_data <- reactable::renderReactable({
     reactable::reactable(iris,
@@ -96,6 +183,7 @@ server <- function(input, output, session) {
     )
   })
 
+  # Create reactive values list with mandatory fields to pass to the module
   helper_rv_table <- reactiveValues(
     FUN = write.table,
     args = list(x = iris, quote = FALSE, row.names = FALSE, col.names = TRUE),
@@ -131,7 +219,7 @@ server <- function(input, output, session) {
       package = "sbShinyModules"
     )
   )
-
+  # Create reactive values list for json file export
   helper_rv_json <- reactiveValues(
     FUN = write,
     args = list(
@@ -155,7 +243,7 @@ server <- function(input, output, session) {
       package = "sbShinyModules"
     )
   )
-
+  # Create reactive values list for RDS file export
   helper_rv_rds <- reactiveValues(
     FUN = saveRDS,
     args = list(
@@ -179,7 +267,10 @@ server <- function(input, output, session) {
       package = "sbShinyModules"
     )
   )
+
+  # Call test module
+  test_module_server(id = "nested_modules")
 }
 
-# Run the Shiny app
+###### Run the Shiny app #######
 shinyApp(ui, server)
