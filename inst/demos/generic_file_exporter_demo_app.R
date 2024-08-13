@@ -2,6 +2,7 @@ library(shiny)
 library(magrittr)
 library(sbShinyModules)
 library(reactable)
+library(jsonlite)
 
 # App's  UI
 ui <- fluidPage(
@@ -18,7 +19,7 @@ ui <- fluidPage(
             selectInput("separator",
               label = "Set separator",
               choices = c("comma", "tab", "new line", "semicolon")
-            ) # nolint
+            )
           ),
           column(
             width = 6,
@@ -97,10 +98,7 @@ server <- function(input, output, session) {
 
   helper_rv_table <- reactiveValues(
     FUN = write.table,
-    args = list(
-      x = iris, quote = FALSE, row.names = FALSE,
-      col.names = TRUE
-    ),
+    args = list(x = iris, quote = FALSE, row.names = FALSE, col.names = TRUE),
     filename = NULL,
     extension = NULL,
     overwrite = FALSE
@@ -137,8 +135,7 @@ server <- function(input, output, session) {
   helper_rv_json <- reactiveValues(
     FUN = write,
     args = list(
-      x = jsonlite::toJSON(x = iris, dataframe = "rows", pretty = TRUE),
-      file = "myjson.json"
+      x = jsonlite::toJSON(x = iris, dataframe = "rows", pretty = TRUE)
     ),
     filename = NULL,
     extension = "json",

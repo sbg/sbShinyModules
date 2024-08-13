@@ -51,7 +51,8 @@ mod_save_file_generic_ui <- function(id, save_button_title = "Save file") {
 #' @return No value. Use in UI & server of shiny application.
 #'
 #' @importFrom checkmate assert_function assert_list assert_string
-#' @importFrom checkmate assert_logical
+#' @importFrom checkmate assert_true assert_logical
+#' @importFrom shinyalert shinyalert
 #'
 #' @example inst/demos/generic_file_exporter_demo_app.R
 #'
@@ -125,12 +126,14 @@ mod_save_file_generic_server <- function(id,
 #'
 #' @description This function handles the export process of almost any file,
 #'  including checking for the existence of a file with the same name in
-#'  specified directories, and saving the file if no such file exists.
+#'  specified directories, and saving the file if no such exists.
 #'
 #' @param FUN Function for creating a file for saving, i.e `write.table`,
 #'  `save`, `write`, `write_json`, `write_xml`, `SaveH5Seurat` etc.
 #' @param args List of function arguments for the provided FUN.
-#' @param filename File name.
+#' @param filename File name. Please, be aware if you provide the `file`,
+#'  `path` or `filename` parameters within function's `args`, this `filename`
+#'  value will overwrite it.
 #' @param extension Expected file extension. Please provide expected file
 #'  extension in order to properly validate the existence of the file with the
 #'  same name and extension.
@@ -144,9 +147,8 @@ mod_save_file_generic_server <- function(id,
 #'  `project-files`, `output-files` and `workspace` and populate with test files
 #'  mimicking the project's file structure on the Platform.
 #'
-#' @return None or FALSE if error occurs.
-#'
-#' @importFrom shinyalert shinyalert
+#' @return A list containing file saving status with fields `check`, `title`
+#'  and `text` ready to be used in shinyalerts.
 #'
 #' @noRd
 handle_file_export <- function(FUN, args, filename, extension,
