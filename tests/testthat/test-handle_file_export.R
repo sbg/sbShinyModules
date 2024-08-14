@@ -81,7 +81,7 @@ testthat::test_that("handle_file_export saves files of csv extensions and report
   testthat::expect_equal(export_status$title, "Warning!")
   testthat::expect_equal(
     export_status$text,
-    "The file with the same name already exists in the project. Please, change the file name or set the `overwrite` parameter to TRUE." # nolint
+    "The file with the same name already exists in the project. Please change the file name or set the `overwrite` parameter to TRUE." # nolint
   )
 
   # Remove created csv file
@@ -187,7 +187,7 @@ testthat::test_that("handle_file_export reports error when FUN doesn't contain f
   testthat::expect_equal(export_status$title, "Error in FUN parameter")
   testthat::expect_equal(
     export_status$text,
-    "The function doesn't contain arguments `filename`, `file` or `path` in order to set file name and its location." # nolint
+    "The function doesn't contain arguments filename, file, or path to set the file name and its location." # nolint
   )
 })
 
@@ -234,4 +234,27 @@ testthat::test_that("check_file_existence works well", { # nolint
       directory1, directory2
     )
   )
+})
+
+test_that("handle_file_export handles errors in function execution", {
+  # Create a function that has the expected arguments and will throw
+  # an error during execution
+  error_function <- function(file, ...) {
+    stop("Execution error")
+  }
+
+
+  # Call handle_file_export with the error function
+  result <- sbShinyModules:::handle_file_export(
+    FUN = error_function,
+    args = list(file = NULL),
+    filename = "test_file",
+    extension = "txt",
+    overwrite = FALSE,
+    sbg_directory_path = testthat::test_path("sbgenomics_test")
+  )
+
+  # Check that the function handles the error correctly
+  expect_false(result$check)
+  expect_equal(result$title, "Error during file saving")
 })

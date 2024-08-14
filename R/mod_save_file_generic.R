@@ -78,7 +78,7 @@ mod_save_file_generic_server <- function(id,
       if (!isTruthy(reac_vals$filename)) {
         shinyalert::shinyalert(
           title = "File name missing",
-          text = "Please, provide the file name.",
+          text = "Please provide the file name.",
           type = "error"
         )
       }
@@ -87,7 +87,7 @@ mod_save_file_generic_server <- function(id,
         {
           checkmate::assert_function(reac_vals$FUN)
           checkmate::assert_list(reac_vals$args)
-          checkmate::assert_string(reac_vals$extension, null.ok = TRUE)
+          checkmate::assert_string(reac_vals$extension, null.ok = FALSE)
           checkmate::assert_logical(reac_vals$overwrite)
         },
         error = function(e) {
@@ -167,11 +167,13 @@ handle_file_export <- function(FUN, args, filename, extension,
     # Remove the extension by substring up to the position of the last dot
     # and extension based on the button that was clicked.
     filename <- paste0(substr(filename, 1, dot_position - 1), extension)
+  } else {
+    filename <- paste0(filename, extension)
   }
 
   # Check if the file exists in either directory
   file_exists <- check_file_existence(
-    file_name = paste0(filename, extension),
+    file_name = filename,
     directory_1 = file.path(sbg_directory_path, "project-files"),
     directory_2 = file.path(sbg_directory_path, "output-files")
   )
@@ -180,7 +182,7 @@ handle_file_export <- function(FUN, args, filename, extension,
     status <- list(
       check = FALSE,
       title = "Warning!",
-      text = "The file with the same name already exists in the project. Please, change the file name or set the `overwrite` parameter to TRUE." # nolint
+      text = "The file with the same name already exists in the project. Please change the file name or set the `overwrite` parameter to TRUE." # nolint
     )
     return(status)
   }
@@ -200,7 +202,7 @@ handle_file_export <- function(FUN, args, filename, extension,
     status <- list(
       check = FALSE,
       title = "Error in FUN parameter",
-      text = "The function doesn't contain arguments `filename`, `file` or `path` in order to set file name and its location." # nolint
+      text = "The function doesn't contain arguments filename, file, or path to set the file name and its location." # nolint
     )
     return(status)
   }
@@ -212,7 +214,7 @@ handle_file_export <- function(FUN, args, filename, extension,
       args[[filename_arg]] <- file.path(
         sbg_directory_path,
         "output-files",
-        paste0(filename, extension)
+        filename
       )
       do.call(FUN, args)
       status <- list(
