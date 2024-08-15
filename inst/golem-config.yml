@@ -3,8 +3,10 @@ default:
   golem_version: 0.0.0.9000
   app_prod: no
   PLOT_EXPORT_SUPPORTED_EXT: ["png", "pdf", "tiff", "jpeg", "svg", "bmp"]
+  FILENAME_FUN_ARGS_EXPECTED: ["file", "filename", "path"]
 production:
   app_prod: yes
   PLOT_EXPORT_SUPPORTED_EXT: ["png", "pdf", "tiff", "jpeg", "svg", "bmp"]
+  FILENAME_FUN_ARGS_EXPECTED: ["file", "filename", "path"]
 dev:
   golem_wd: !expr golem::pkg_path()

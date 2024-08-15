@@ -1,3 +1,4 @@
+args
 aut
 BAM
 bmp
@@ -8,12 +9,14 @@ Config
 cph
 cre
 darkgray
+dev
 df
 dirs
 distPlot
 dplyr
 dropdown
 eventReactive
+expr
 fluidPage
 fluidRow
 fnd
@@ -24,8 +27,11 @@ grDevices
 htmltools
 htmlwidgets
 Illumina
+jeroen
 jovanovic
 jpeg
+json
+jsonlite
 knitr
 LazyData
 licensable
@@ -52,6 +58,7 @@ renderPrint
 rlang
 RoxygenNote
 Sanger’
+SaveH
 SBG
 sbgenomics
 sbShinyModules
@@ -69,4 +76,5 @@ UI
 ui
 velsera
 Velsera
+wd
 xattrs
