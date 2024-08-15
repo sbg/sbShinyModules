@@ -158,18 +158,7 @@ handle_file_export <- function(FUN, args, filename, extension,
     extension <- paste0(".", extension)
   }
 
-  # Remove extension if provided in the filename input
-  # Find the last dot in the filename
-  dot_position <- regexpr("\\.[^\\.]*$", filename)
-
-  # If dot_position is greater than 0, it means an extension was found
-  if (dot_position > 0) {
-    # Remove the extension by substring up to the position of the last dot
-    # and extension based on the button that was clicked.
-    filename <- paste0(substr(filename, 1, dot_position - 1), extension)
-  } else {
-    filename <- paste0(filename, extension)
-  }
+  filename <- paste0(filename, extension)
 
   # Check if the file exists in either directory
   file_exists <- check_file_existence(

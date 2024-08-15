@@ -30,7 +30,7 @@ test_module_server <- function(id) {
             reactable::reactableOutput(ns("nested_table_data")),
             fluidRow(
               column(
-                width = 4,
+                width = 6,
                 sbShinyModules::mod_save_file_generic_ui(ns("save_file_nested"))
               )
             )
@@ -118,7 +118,7 @@ ui <- fluidPage(
         ),
         fluidRow(
           column(
-            width = 4,
+            width = 12,
             sbShinyModules::mod_save_file_generic_ui(
               id = "file_exporter",
               save_button_title = "Save txt/csv"
@@ -132,7 +132,7 @@ ui <- fluidPage(
         textInput("file_name_json", label = "Set file name", width = "100%"),
         fluidRow(
           column(
-            width = 4,
+            width = 12,
             sbShinyModules::mod_save_file_generic_ui(
               id = "json_file_exporter",
               save_button_title = "Save json"
@@ -146,7 +146,7 @@ ui <- fluidPage(
         textInput("file_name_rds", label = "Set file name", width = "100%"),
         fluidRow(
           column(
-            width = 4,
+            width = 12,
             sbShinyModules::mod_save_file_generic_ui(
               id = "rds_file_exporter",
               save_button_title = "Save RDS"
@@ -159,7 +159,7 @@ ui <- fluidPage(
         br(),
         fluidRow(
           column(
-            width = 4,
+            width = 12,
             test_module_ui(id = "nested_modules")
           )
         )
