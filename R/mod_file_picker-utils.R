@@ -381,15 +381,47 @@ create_col_def <- function(col_data) {
               });
             }
           "),
-      filterInput = function(values, name) {
-        tags$select(
-          onchange = sprintf("Reactable.setFilter('file-picker-list', '%s', event.target.value || undefined)", name), # nolint
-          tags$option(value = "", "All"),
-          lapply(unique(values), tags$option),
-          "aria-label" = sprintf("Filter %s", name),
-          style = "width: 100%; height: 28px;"
-        )
-      }
+      # nolint start
+      filterInput = htmlwidgets::JS("
+            function(column, state) {
+              // Get unique values for the dropdown
+              const values = React.useMemo(() => {
+                const uniqueValues = new Set();
+                state.data.forEach(row => uniqueValues.add(row[column.id]));
+                return Array.from(uniqueValues);
+              }, [state.data]);
+
+              // Current filter value or default to empty string
+              const value = column.filterValue || '';
+
+              // Create dropdown options
+              const options = values.map(val =>
+                React.createElement('option', { value: val, key: val }, val)
+              );
+
+              // Return the dropdown with 'All' option and the generated options
+              return React.createElement(
+                'div',
+                { style: { margin: '0 8px' } },
+                [
+                  React.createElement(
+                    'select',
+                    {
+                      value: value,
+                      onChange: (e) => column.setFilter(e.target.value || undefined),
+                      'aria-label': `Filter ${column.name}`,
+                      style: { width: '100%', height: '28px' }
+                    },
+                    [
+                      React.createElement('option', { value: '', key: 'all' }, 'All'),
+                      ...options
+                    ]
+                  )
+                ]
+              );
+            }
+      ")
+      # nolint end
     ))
   } else {
     return(reactable::colDef(
