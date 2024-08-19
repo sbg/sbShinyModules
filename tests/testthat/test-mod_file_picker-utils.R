@@ -43,7 +43,7 @@ test_that("muiDependency returns correct list of dependencies", {
   mui_dep <- deps[[2]]
   expect_s3_class(mui_dep, "html_dependency")
   expect_equal(mui_dep$name, "mui")
-  expect_equal(mui_dep$version, "5.6.3")
+  expect_equal(mui_dep$version, "5.16.7")
   expect_equal(
     mui_dep$src$file,
     system.file("assets/material-ui", package = "sbShinyModules")

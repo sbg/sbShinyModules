@@ -87,7 +87,7 @@ muiDependency <- function() {
     reactR::html_dependency_react(),
     htmltools::htmlDependency(
       name = "mui",
-      version = "5.6.3",
+      version = "5.16.7",
       src = system.file("assets/material-ui", package = "sbShinyModules"),
       script = "material-ui.production.min.js",
       all_files = FALSE
@@ -276,7 +276,13 @@ generate_regular_modal_ui <- function(ns, selection_type) {
             reactable::reactableOutput(ns("table"))
           ),
           br(),
-          h5("Selected file"),
+          tags$div(
+            if (selection_type == "single") {
+              h5("Selected file")
+            } else {
+              h5("Selected files")
+            }
+          ),
           verbatimTextOutput(ns("selected_files"), placeholder = TRUE),
           br()
         )

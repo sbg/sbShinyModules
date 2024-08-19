@@ -97,7 +97,7 @@ ui <- fluidPage(
         sbShinyModules::mod_file_picker_ui("single_file_picker"),
         br(),
         h5("Selected File"),
-        verbatimTextOutput("single_file_picker_selection")
+        verbatimTextOutput("single_file_picker_selection", placeholder = TRUE)
       ),
       hr(),
       # Multiple Files Picker - UI
@@ -107,7 +107,7 @@ ui <- fluidPage(
         sbShinyModules::mod_file_picker_ui("multiple_files_picker"),
         br(),
         h5("Selected Files"),
-        verbatimTextOutput("mult_files_picker_selection")
+        verbatimTextOutput("mult_files_picker_selection", placeholder = TRUE)
       )
     ),
     mainPanel(
