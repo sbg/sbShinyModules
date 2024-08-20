@@ -213,20 +213,12 @@ check_filename <- function(filename, device) {
 check_sbg_directory_path <- function(sbg_path) {
   checkmate::assert_character(sbg_path, null.ok = FALSE)
   if (!dir.exists(sbg_path)) {
-    shinyalert::shinyalert(
-      title = "Directory not found.",
-      text = "Provided directory path doesn't exist.",
-      type = "error"
-    )
+    rlang::abort("Directory not found. Provided directory path doesn't exist.")
   }
 
   if (!dir.exists(file.path(sbg_path, "project-files")) ||
     !dir.exists(file.path(sbg_path, "output-files"))) {
-    shinyalert::shinyalert(
-      title = "Subdirectories not found.",
-      text = "The provided directory path doesn't contain project-files and/or output-files sub-directories.", # nolint
-      type = "error"
-    )
+    rlang::abort("Subdirectories not found. The provided directory path doesn't contain project-files and/or output-files sub-directories.") # nolint
   }
 }
 
