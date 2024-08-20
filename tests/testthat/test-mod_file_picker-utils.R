@@ -15,14 +15,8 @@ test_that("create_col_def returns correct colDef for factor data", {
   expect_s3_class(result, "colDef")
   expect_true(result$filterable)
   expect_true(result$resizable)
-  # Check if filterInput is a function
-  expect_true(is.function(result$filterInput))
-
-  # Ensure that the function returns the expected HTML structure
-  filter_input_html <- result$filterInput(levels(col_data), "test")
-  expect_true(inherits(filter_input_html, "shiny.tag"))
-  expect_true(grepl("select", as.character(filter_input_html)))
-  expect_true(grepl("Reactable.setFilter", as.character(filter_input_html)))
+  # Check if filterInput inherits from JS_EVAL
+  expect_s3_class(result$filterInput, "JS_EVAL")
 })
 
 testthat::test_that("create_col_def returns correct colDef for other data types", { # nolint
@@ -49,7 +43,7 @@ test_that("muiDependency returns correct list of dependencies", {
   mui_dep <- deps[[2]]
   expect_s3_class(mui_dep, "html_dependency")
   expect_equal(mui_dep$name, "mui")
-  expect_equal(mui_dep$version, "5.6.3")
+  expect_equal(mui_dep$version, "5.16.7")
   expect_equal(
     mui_dep$src$file,
     system.file("assets/material-ui", package = "sbShinyModules")

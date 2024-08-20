@@ -103,6 +103,7 @@ mod_file_picker_ui <- function(id,
 #' @importFrom checkmate assert_data_frame assert_choice assert_character
 #' @importFrom reactable getReactableState renderReactable reactable colDef
 #' @importFrom htmlwidgets JS
+#' @importFrom shinyalert shinyalert
 #'
 #' @seealso \code{\link{mod_file_picker_ui}} for the corresponding server
 #'  part of the module.
@@ -128,14 +129,22 @@ mod_file_picker_server <- function(id,
     module_output_files <- reactiveVal(NULL)
 
     observeEvent(input$select_file, {
-      showModal(
-        # Generate modal's UI
-        ui = generate_file_picker_modal_ui(
-          ns = ns,
-          selection_type = selection,
-          use_bslib_theme = use_bslib_theme
+      if (nrow(files_df) == 0) {
+        shinyalert::shinyalert(
+          title = "Empty project",
+          text = "The project doesn't contain any files. Please add files to your project.", # nolint
+          type = "warning"
         )
-      )
+      } else {
+        showModal(
+          # Generate modal's UI
+          ui = generate_file_picker_modal_ui(
+            ns = ns,
+            selection_type = selection,
+            use_bslib_theme = use_bslib_theme
+          )
+        )
+      }
     })
 
     selected <- reactive({

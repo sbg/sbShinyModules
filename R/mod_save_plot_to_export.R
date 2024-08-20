@@ -21,6 +21,7 @@
 #'
 #' @importFrom shinyFeedback useShinyFeedback
 #' @importFrom shinyjs useShinyjs
+#' @importFrom shinyWidgets prettySwitch
 #' @importFrom htmltools css
 #'
 #' @noRd
@@ -31,17 +32,6 @@ save_plot_modalDialog_ui <- function(output_formats,
     html_dependency_moveable(),
     tags$div(plotOutput(ns("plot"))),
     fluidRow(
-      shinyFeedback::useShinyFeedback(),
-      column(
-        width = 4,
-        textInput(
-          inputId = ns("filename"),
-          label = "Filename:",
-          value = "export-plot",
-          placeholder = "Filename",
-          width = "100%"
-        )
-      ),
       column(
         width = 4,
         numericInput(
@@ -59,9 +49,7 @@ save_plot_modalDialog_ui <- function(output_formats,
           value = 400,
           width = "100%"
         )
-      )
-    ),
-    fluidRow(
+      ),
       column(
         width = 4,
         actionButton(
@@ -69,7 +57,31 @@ save_plot_modalDialog_ui <- function(output_formats,
           inputId = ns("update_preview"),
           label = "Update preview",
           icon = icon("eye"),
+          width = "100%",
+          style = "margin-top: 25px;"
+        )
+      )
+    ),
+    fluidRow(
+      shinyFeedback::useShinyFeedback(),
+      column(
+        width = 4,
+        textInput(
+          inputId = ns("filename"),
+          label = "Filename:",
+          value = "export-plot",
+          placeholder = "Filename",
           width = "100%"
+        )
+      ),
+      column(
+        width = 4,
+        style = "margin-top: 35px;",
+        shinyWidgets::prettySwitch(
+          inputId = ns("overwrite_switch"),
+          label = "Overwrite",
+          status = "primary",
+          fill = TRUE
         )
       )
     ),
@@ -201,6 +213,7 @@ mod_save_plot_to_export_ui <- function(id, save_button_title = "Save plot") {
 #'
 #' @importFrom shinyFeedback hideFeedback
 #' @importFrom checkmate assert_true assert_subset assert_character
+#' @importFrom checkmate assert_logical
 #' @importFrom shinyalert shinyalert
 #'
 #' @example inst/demos/plot_exporter_demo_app.R
@@ -303,7 +316,8 @@ mod_save_plot_to_export_server <- function(id,
       c(
         input$save_button,
         input$choose_export_type,
-        input$filename
+        input$filename,
+        input$overwrite_switch
       ),
       {
         shinyFeedback::hideFeedback("filename")

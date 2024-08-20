@@ -297,23 +297,36 @@ handle_plot_export <- function(input, filename, device, height, width,
   # Remove extension if provided in the filename input
   filename <- check_filename(filename = filename, device = device)
 
-  # Check if the file exists in either directory
-  file_exists <- check_file_existence(
-    file_name = filename,
-    directory_1 = file.path(sbg_directory_path, "project-files"),
-    directory_2 = file.path(sbg_directory_path, "output-files")
-  )
+  if (isFALSE(input$overwrite_switch)) {
+    # Check if the file exists in either directory
+    file_exists <- check_file_existence(
+      file_name = filename,
+      directory_1 = file.path(sbg_directory_path, "project-files"),
+      directory_2 = file.path(sbg_directory_path, "output-files")
+    )
 
-  if (file_exists) {
-    shinyalert::shinyalert(
-      title = "Warning!",
-      text = "The file with the same name already exists in the project. Please change the name and try again.", # nolint
-      type = "warning"
-    )
-    shinyFeedback::showFeedbackWarning(
-      inputId = "filename",
-      text = "Please change the name and try again."
-    )
+    if (file_exists) {
+      shinyalert::shinyalert(
+        title = "Warning!",
+        text = "The file with the same name already exists in the project. Please change the name and try again.", # nolint
+        type = "warning"
+      )
+      shinyFeedback::showFeedbackWarning(
+        inputId = "filename",
+        text = "Please change the name and try again."
+      )
+    } else {
+      status <- save_plot_file(
+        cur_plot = plot_rv$plot,
+        filename = filename,
+        device = device,
+        width = width,
+        height = height,
+        destination_folder = file.path(sbg_directory_path, "output-files")
+      )
+
+      check_plot_export_status(status, input)
+    }
   } else {
     status <- save_plot_file(
       cur_plot = plot_rv$plot,
