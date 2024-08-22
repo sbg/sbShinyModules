@@ -298,14 +298,11 @@ handle_plot_export <- function(input, filename, device, height, width,
     )
 
     if (file_exists) {
-      shinyalert::shinyalert(
+      status <- list(
         title = "Warning!",
         text = "The file with the same name already exists in the project. Please change the name and try again.", # nolint
-        type = "warning"
-      )
-      shinyFeedback::showFeedbackWarning(
-        inputId = "filename",
-        text = "Please change the name and try again."
+        type = "warning",
+        feedback = TRUE
       )
     } else {
       status <- save_plot_file(
@@ -316,8 +313,6 @@ handle_plot_export <- function(input, filename, device, height, width,
         height = height,
         destination_folder = file.path(sbg_directory_path, "output-files")
       )
-
-      check_plot_export_status(status, input)
     }
   } else {
     status <- save_plot_file(
@@ -328,9 +323,8 @@ handle_plot_export <- function(input, filename, device, height, width,
       height = height,
       destination_folder = file.path(sbg_directory_path, "output-files")
     )
-
-    check_plot_export_status(status, input)
   }
+  check_plot_export_status(status)
 }
 
 #' Save plot file function
@@ -347,8 +341,9 @@ handle_plot_export <- function(input, filename, device, height, width,
 #' @param destination_folder A string representing the path to the folder where
 #'  the plot file should be saved.
 #'
-#' @return The function returns TRUE or FALSE depending on the success of
-#'  saving the plot. Saves the file as a side effect.
+#' @return The function returns status list containing information about the
+#'  success of saving the plot that is used for informing the user.
+#'  Saves the file as a side effect.
 #'
 #' @importFrom grDevices png bmp tiff pdf svg jpeg
 #'
@@ -375,10 +370,21 @@ save_plot_file <- function(cur_plot, filename, device, width, height,
       do.call(device_functions[[device]]$fun, device_functions[[device]]$args)
       print(cur_plot)
       dev.off()
-      # return(TRUE)
+
+      status <- list(
+        title = "Success!",
+        text = "The plot has been successfully saved and will be available in the project once the analysis is stopped.", # nolint
+        type = "success"
+      )
+      return(status)
     },
     error = function(e) {
-      return(FALSE)
+      status <- list(
+        title = "Error occured during plot saving",
+        text = paste0(e),
+        type = "error"
+      )
+      return(status)
     }
   )
 }
@@ -391,22 +397,19 @@ save_plot_file <- function(cur_plot, filename, device, width, height,
 #' @param status Logical. A value returned by `save_plot_file` function.
 #'
 #' @importFrom shinyalert shinyalert
-#' @importFrom shinyFeedback hideFeedback
+#' @importFrom shinyFeedback showFeedbackWarning
 #'
 #' @noRd
-check_plot_export_status <- function(status, input) {
-  if (status) {
-    shinyalert::shinyalert(
-      title = "Success!",
-      text = "The plot has been successfully saved and will be available in the project once the analysis is stopped.", # nolint
-      type = "success"
-    )
-    shinyFeedback::hideFeedback("filename")
-  } else {
-    shinyalert::shinyalert(
-      title = "Error!",
-      text = "An error occured when trying to save the plot.",
-      type = "error"
+check_plot_export_status <- function(status) {
+  shinyalert::shinyalert(
+    title = status$title,
+    text = status$text,
+    type = status$type
+  )
+  if (!is.null(status$feedback) && status$feedback) {
+    shinyFeedback::showFeedbackWarning(
+      inputId = "filename",
+      text = "Please change the name and try again."
     )
   }
 }
