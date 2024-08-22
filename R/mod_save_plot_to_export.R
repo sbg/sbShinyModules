@@ -315,7 +315,6 @@ mod_save_plot_to_export_server <- function(id,
     observeEvent(
       c(
         input$save_button,
-        input$choose_export_type,
         input$filename,
         input$overwrite_switch
       ),
@@ -326,6 +325,7 @@ mod_save_plot_to_export_server <- function(id,
     )
 
     observeEvent(input$png, {
+      shinyFeedback::hideFeedback("filename")
       handle_plot_export(input,
         filename = input$filename,
         device = "png",
@@ -337,6 +337,7 @@ mod_save_plot_to_export_server <- function(id,
     })
 
     observeEvent(input$pdf, {
+      shinyFeedback::hideFeedback("filename")
       handle_plot_export(input,
         filename = input$filename,
         device = "pdf",
@@ -348,6 +349,7 @@ mod_save_plot_to_export_server <- function(id,
     })
 
     observeEvent(input$svg, {
+      shinyFeedback::hideFeedback("filename")
       handle_plot_export(input,
         filename = input$filename,
         device = "svg",
@@ -359,6 +361,7 @@ mod_save_plot_to_export_server <- function(id,
     })
 
     observeEvent(input$jpeg, {
+      shinyFeedback::hideFeedback("filename")
       handle_plot_export(input,
         filename = input$filename,
         device = "jpeg",
@@ -370,6 +373,7 @@ mod_save_plot_to_export_server <- function(id,
     })
 
     observeEvent(input$bmp, {
+      shinyFeedback::hideFeedback("filename")
       handle_plot_export(input,
         filename = input$filename,
         device = "bmp",
@@ -381,6 +385,7 @@ mod_save_plot_to_export_server <- function(id,
     })
 
     observeEvent(input$tiff, {
+      shinyFeedback::hideFeedback("filename")
       handle_plot_export(input,
         filename = input$filename,
         device = "tiff",
