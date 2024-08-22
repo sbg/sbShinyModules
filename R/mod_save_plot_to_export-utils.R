@@ -397,7 +397,7 @@ save_plot_file <- function(cur_plot, filename, device, width, height,
 #' @param status Logical. A value returned by `save_plot_file` function.
 #'
 #' @importFrom shinyalert shinyalert
-#' @importFrom shinyFeedback hideFeedback
+#' @importFrom shinyFeedback showFeedbackWarning
 #'
 #' @noRd
 check_plot_export_status <- function(status) {
