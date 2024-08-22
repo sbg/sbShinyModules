@@ -245,6 +245,10 @@ mod_save_plot_to_export_server <- function(id,
 
     observeEvent(input$save_button, {
       showModal(modalDialog(
+        # Overwrite --bs-modal-width that is setting modal width in case bslib theme is used. # nolint
+        tags$head(
+          tags$style(HTML(paste0(".modal-lg { --bs-modal-width: auto !important;}"))) # nolint
+        ),
         title = module_title,
         footer = modalButton("Close"),
         easyClose = TRUE,
