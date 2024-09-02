@@ -187,7 +187,7 @@ testthat::test_that("handle_file_export reports error when FUN doesn't contain f
   testthat::expect_equal(export_status$title, "Error in FUN parameter")
   testthat::expect_equal(
     export_status$text,
-    "The function doesn't contain arguments filename, file, or path to set the file name and its location." # nolint
+    "The function does not contain the filename, file, or path arguments to set the file name and its location." # nolint
   )
 })
 

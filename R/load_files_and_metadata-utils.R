@@ -1,14 +1,15 @@
-#' Get all project's files
+#' Get all project files
 #'
 #' @description
-#'  Utility function for fetching all project files recursively from SB File
-#'  system within Data Studio along side with their metadata associated if
-#'  available. The expected output is the data.frame containing all files
-#'  information available, ready to be used and displayed within file pickers.
+#'  Utility function for fetching all project files from the Seven Bridges File
+#'  system within Data Studio accompanied by associated metadata if available.
+#'  The expected output is the data.frame containing all available
+#'  information about the files, ready to be used and displayed within file
+#'  pickers.
 #'
 #' @param path Project files directory path.
-#' @param ... Additional parameters that can be passed to a function
-#'  `list.files()` that this function is relying on, like `pattern`,
+#' @param ... Additional parameters that can be passed to the `list.files()`
+#'  function that this function is relying on, like `pattern`,
 #'  `include.dirs` etc. See more details on `?list.files`.
 #'
 #' @importFrom xattrs get_xattr_df
@@ -56,7 +57,7 @@ get_all_project_files <- function(path, ...) {
   for (file in files_info_df[["path"]]) {
     file_df <- xattrs::get_xattr_df(file)
     file_df$file_path <- file
-    # In case of error that nul is present in the hex string, remove those nuls
+    # In case of an error that 'nul' is present in the hex string, remove those 'nuls' # nolint
     file_df$raw <- sapply(file_df$contents, function(x) {
       hex <- subset(x, !x == "00")
       rawToChar(as.raw(strtoi(hex, 16L)))

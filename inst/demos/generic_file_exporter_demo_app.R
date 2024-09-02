@@ -55,12 +55,13 @@ test_module_server <- function(id) {
       )
     })
 
-    # Close modal dialog by clicking the dismiss button
+    # Close the modal dialog by clicking the dismiss button
     observeEvent(input$dismiss, {
       removeModal()
     })
 
-    # Create reactive values list with mandatory fields to pass to the module
+    # Create the reactive values list with mandatory fields to pass to the
+    # module
     helper_rv_nested <- reactiveValues(
       FUN = write.table,
       args = list(x = iris, quote = FALSE, row.names = FALSE, col.names = TRUE),
@@ -81,13 +82,13 @@ test_module_server <- function(id) {
 }
 ############## Test modules end ###########################
 
-##### Demo App's  UI #######
+##### Demo App  UI #######
 ui <- fluidPage(
-  titlePanel("Save data for export to Platform - Module Demo"),
+  titlePanel("Save data for the export to the Platform - Module Demo"),
   sidebarLayout(
     sidebarPanel(
       fluidRow(
-        h3("Export txt/csv to Platform"),
+        h3("Export txt/csv to the Platform"),
         br(),
         textInput("file_name", label = "Set file name", width = "100%"),
         fluidRow(
@@ -127,7 +128,7 @@ ui <- fluidPage(
         )
       ),
       fluidRow(
-        h3("Export json to Platform"),
+        h3("Export json to the Platform"),
         br(),
         textInput("file_name_json", label = "Set file name", width = "100%"),
         fluidRow(
@@ -141,7 +142,7 @@ ui <- fluidPage(
         )
       ),
       fluidRow(
-        h3("Export RDS object to Platform"),
+        h3("Export RDS object to the Platform"),
         br(),
         textInput("file_name_rds", label = "Set file name", width = "100%"),
         fluidRow(
@@ -171,7 +172,7 @@ ui <- fluidPage(
   )
 )
 
-###### Demo App's Server Logic ######
+###### Demo App Server Logic ######
 server <- function(input, output, session) {
   output$table_data <- reactable::renderReactable({
     reactable::reactable(iris,
@@ -183,7 +184,7 @@ server <- function(input, output, session) {
     )
   })
 
-  # Create reactive values list with mandatory fields to pass to the module
+  # Create the reactive values list with mandatory fields to pass to the module
   helper_rv_table <- reactiveValues(
     FUN = write.table,
     args = list(x = iris, quote = FALSE, row.names = FALSE, col.names = TRUE),
@@ -219,7 +220,7 @@ server <- function(input, output, session) {
       package = "sbShinyModules"
     )
   )
-  # Create reactive values list for json file export
+  # Create reactive values list for the json file export
   helper_rv_json <- reactiveValues(
     FUN = write,
     args = list(
@@ -243,7 +244,7 @@ server <- function(input, output, session) {
       package = "sbShinyModules"
     )
   )
-  # Create reactive values list for RDS file export
+  # Create reactive values list for the RDS file export
   helper_rv_rds <- reactiveValues(
     FUN = saveRDS,
     args = list(
@@ -268,7 +269,7 @@ server <- function(input, output, session) {
     )
   )
 
-  # Call test module
+  # Call the test module
   test_module_server(id = "nested_modules")
 }
 

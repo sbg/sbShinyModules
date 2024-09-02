@@ -1,21 +1,21 @@
 #' `save_plot_to_export` module UI function
 #'
-#' @description UI function of the module for saving plots for export to the
-#'  Seven Bridges Platform. The function adds an action button that triggers
-#'  a plot export modal. This module allows users to adjust the plot they wish
-#'  to save to Seven Bridges Platform, by resizing it and then choosing the
-#'  file format for export: png, pdf, svg, jpeg, bmp, or tiff.
+#' @description UI function of the module that is saving plots for the export
+#'  to the Seven Bridges Platform. The function adds an action button that
+#'  triggers a plot export modal. This module allows users to adjust the plot
+#'  they wish to save to the Seven Bridges Platform, by resizing it and then
+#'  choosing the file format for the export: png, pdf, svg, jpeg, bmp, or tiff.
 #'  The UI function should be placed in the UI part of the Shiny app
 #'  where the file export button is required.
 #'  Please, have in mind that this module only saves the plot, while the actual
-#'  export of the saved plots happens when the users stop the app.
+#'  export of the saved plots occurs when the users stop the app.
 #'
-#' @param output_formats Output formats offered to the user. Can be a subset of:
-#'  "png", "pdf", "svg", "jpeg", "bmp", or "tiff".
-#' @param ns Namespace function for handling input IDs.
-#' @param btns_div_width Div width containing block with buttons for saving
-#'  plots. Suitable to adjust when having one or two buttons out of supported
-#'  set. Default is 12.
+#' @param output_formats Output formats offered to the user. It can be a subset
+#'  of: "png", "pdf", "svg", "jpeg", "bmp", or "tiff".
+#' @param ns Namespace function for handling the input IDs.
+#' @param btns_div_width Div width containing the block with buttons used for
+#'  saving plots. Suitable for adjusting the width when only one or two buttons
+#'  are enabled. The default value is 12.
 #'
 #' @return No value. Use in UI & server of shiny application
 #'
@@ -125,11 +125,11 @@ save_plot_modalDialog_ui <- function(output_formats,
   )
 }
 
-#' Save `plot` for export module UI function
+#' Save `plot` for the export module UI function
 #'
-#' @description UI part of the module that can be used to save the `plot`
-#'  for export to Seven Bridges Platform. The UI contains a button that triggers
-#'  a modal dialog with further settings.
+#' @description The UI part of the module that can be used to save the `plot`
+#'  for the export to the Seven Bridges Platform. The UI contains a button that
+#'  triggers a modal dialog with further settings.
 #'
 #' @param id Module ID.
 #' @param save_button_title Button label.
@@ -153,17 +153,17 @@ mod_save_plot_to_export_ui <- function(id, save_button_title = "Save plot") {
   )
 }
 
-#' Save `plot` for export module server function
+#' Save `plot` for the export module server function
 #'
-#' @description A server side of a shiny Module that allows users to save plots
-#'  generated within the Shiny app and export them to the project on the
+#' @description The server side of the shiny module that allows users to save
+#'  plots generated within the Shiny app and export them to the project on the
 #'  Seven Bridges Platform.
 #'
 #' @param id Module's ID.
 #' @param plot_reactVals A `reactiveValues` variable with a slot `plot`
-#'  containing an object created with `recordPlot()` function you would like to
-#'  save. Please, check out our example app in inst/demos folder -
-#'  `plot_exporter_demo_app.R` for demonstrating the usage of this module. \cr
+#'  containing an object created with the `recordPlot()` function you would
+#'  like to save. Please, check out our example app in the inst/demos folder -
+#'  `plot_exporter_demo_app.R` for a demo on how this module is used. \cr
 #'  Example:
 #'  ```{r}
 #'  helper_reactive <- reactiveValues(
@@ -193,23 +193,24 @@ mod_save_plot_to_export_ui <- function(id, save_button_title = "Save plot") {
 #'    plot_output()
 #'  })
 #'  ```
-#' @param output_formats Output formats supported. Can be a subset of:
+#' @param output_formats The supported output formats. It can be a subset of:
 #'  "png", "pdf", "svg", "jpeg", "bmp", or "tiff".
 #' @param module_title Title (top left corner) of a modal (popup window) with
-#'  settings.
+#'  the settings.
 #' @param sbg_directory_path Path to the mounted `sbgenomics` directory
 #'  containing `project-files`, `output-files` and `workspace` sub-directories
 #'  on the instance.
-#'  These directories are expected to exist on the instance where the app would
-#'  run. For the purposes of testing your app locally, you can create a mock
+#'  These directories are expected to exist on the instance where the app will
+#'  run. For the purpose of testing your app locally, you can create a mock
 #'  directory `sbgenomics` with the same structure - containing sub-directories
-#'  `project-files`, `output-files` and `workspace` and populate with test files
-#'  mimicking the project's file structure on the Platform.
-#' @param btns_div_width Width of the `div()` containing block with buttons for
-#'  saving plots in the pop-up modal dialogue. Suitable to update when having
-#'  one or two buttons out of supported set. Default is 12.
+#'  `project-files`, `output-files`, `workspace`, and populate it with test
+#'  files mimicking the project file structure on the Platform.
+#' @param btns_div_width Width of the `div()` containing the block with the
+#'  buttons for saving plots in the pop-up modal dialogue. Suitable to update
+#'  when having one or two buttons out of the supported set. The default value
+#'  is 12.
 #'
-#' @return No value. Use in UI & server of shiny application.
+#' @return No value. Use in the UI & server of shiny application.
 #'
 #' @importFrom shinyFeedback hideFeedback
 #' @importFrom checkmate assert_true assert_subset assert_character
@@ -245,7 +246,7 @@ mod_save_plot_to_export_server <- function(id,
 
     observeEvent(input$save_button, {
       showModal(modalDialog(
-        # Overwrite --bs-modal-width that is setting modal width in case bslib theme is used. # nolint
+        # Overwrite --bs-modal-width that is setting modal width in case the bslib theme is used. # nolint
         tags$head(
           tags$style(HTML(paste0(".modal-lg { --bs-modal-width: auto !important;}"))) # nolint
         ),
@@ -315,7 +316,7 @@ mod_save_plot_to_export_server <- function(id,
       plot_reactVals$plot
     })
 
-    # Hide feedback on file name input
+    # Hide feedback on the file name input
     observeEvent(
       c(
         input$save_button,

@@ -5,7 +5,7 @@
 #' @param id Module ID.
 #' @param save_button_title Button label.
 #'
-#' @return No value. Use in UI & server of shiny application.
+#' @return No value. Use in the UI & server of shiny application.
 #'
 #' @export
 mod_save_file_generic_ui <- function(id, save_button_title = "Save file") {
@@ -21,34 +21,35 @@ mod_save_file_generic_ui <- function(id, save_button_title = "Save file") {
   )
 }
 
-#' Generic module server function for saving files for export to Platform
+#' Generic module server function for saving files that are exported to
+#'  the Platform
 #'
-#' @description A server side of a shiny Module that allows users to save files
+#' @description Server side of the shiny Module that allows users to save files
 #'  generated within the Shiny app and export them to the project on the
 #'  Seven Bridges Platform.
 #'
 #' @param id Module's ID.
 #' @param reac_vals Reactive values list containing mandatory fields:
 #' \itemize{
-#'  \item `FUN`- Function for creating a file for saving, i.e `write.table`,
+#'  \item `FUN`- Function for creating a file, i.e `write.table`,
 #'     `save`, `write`, `write_json`, `write_xml`, `SaveH5Seurat` etc.
 #'  \item `args`- List of function arguments for the provided FUN.
 #'  \item `filename`- File name.
-#'  \item `extension`- Expected file extension. Please provide expected file
-#'     extension if exists, in order to properly validate the existence of the
-#'     file with the same name and extension.
-#'  \item `overwrite`- Boolean. Overwrite existing file with the same name.
+#'  \item `extension`- The expected file extension. Please provide the expected
+#'     file extension if available, in order to properly validate the existence
+#'     of the file with the same name and extension.
+#'  \item `overwrite`- Boolean. Overwrite the existing file with the same name.
 #' }
 #' @param sbg_directory_path Path to the mounted `sbgenomics` directory
 #'  containing `project-files`, `output-files` and `workspace` sub-directories
 #'  on the instance.
-#'  These directories are expected to exist on the instance where the app would
-#'  run. For the purposes of testing your app locally, you can create a mock
+#'  These directories are expected to exist on the instance where the app will
+#'  run. For the purpose of testing your app locally, you can create a mock
 #'  directory `sbgenomics` with the same structure - containing sub-directories
-#'  `project-files`, `output-files` and `workspace` and populate with test files
-#'  mimicking the project's file structure on the Platform.
+#'  `project-files`, `output-files` and `workspace` and populate them with test
+#'  files mimicking the project file structure on the Platform.
 #'
-#' @return No value. Use in UI & server of shiny application.
+#' @return No value. Use in the UI & server of shiny application.
 #'
 #' @importFrom checkmate assert_function assert_list assert_string
 #' @importFrom checkmate assert_true assert_logical
@@ -77,7 +78,7 @@ mod_save_file_generic_server <- function(id,
     observeEvent(input$save_file_btn, {
       if (!isTruthy(reac_vals$filename)) {
         shinyalert::shinyalert(
-          title = "File name missing",
+          title = "The file name is missing",
           text = "Please provide the file name.",
           type = "error"
         )
@@ -92,7 +93,7 @@ mod_save_file_generic_server <- function(id,
         },
         error = function(e) {
           shinyalert::shinyalert(
-            title = "The error occured when passing module parameters",
+            title = "An error occurred when passing module parameters",
             text = paste0(e$message),
             type = "error"
           )
@@ -122,33 +123,33 @@ mod_save_file_generic_server <- function(id,
 }
 
 
-#' Handle file export function
+#' Handle the file export function
 #'
 #' @description This function handles the export process of almost any file,
 #'  including checking for the existence of a file with the same name in
-#'  specified directories, and saving the file if no such exists.
+#'  specified directories, and saving the file if no such file exists.
 #'
-#' @param FUN Function for creating a file for saving, i.e `write.table`,
+#' @param FUN Function for creating a file, i.e `write.table`,
 #'  `save`, `write`, `write_json`, `write_xml`, `SaveH5Seurat` etc.
 #' @param args List of function arguments for the provided FUN.
 #' @param filename File name. Please, be aware if you provide the `file`,
 #'  `path` or `filename` parameters within function's `args`, this `filename`
 #'  value will overwrite it.
-#' @param extension Expected file extension. Please provide expected file
-#'  extension in order to properly validate the existence of the file with the
-#'  same name and extension.
-#' @param overwrite Boolean. Overwrite existing file with the same name.
-#' @param sbg_directory_path Path to the mounted `sbgenomics` directory
+#' @param extension The expected file extension. Please provide the expected
+#'  file extension in order to properly validate the existence of the file with
+#'  the same name and extension.
+#' @param overwrite Boolean. Overwrite the existing file with the same name.
+#' @param sbg_directory_path The path to the mounted `sbgenomics` directory
 #'  containing `project-files`, `output-files` and `workspace` sub-directories
 #'  on the instance.
-#'  These directories are expected to exist on the instance where the app would
-#'  run. For the purposes of testing your app locally, you can create a mock
+#'  These directories are expected on the instance where the app will
+#'  run. For the purpose of testing your app locally, you can create a mock
 #'  directory `sbgenomics` with the same structure - containing sub-directories
-#'  `project-files`, `output-files` and `workspace` and populate with test files
-#'  mimicking the project's file structure on the Platform.
+#'  `project-files`, `output-files`, `workspace` and populate them with test
+#'  files mimicking the project's file structure on the Platform.
 #'
-#' @return A list containing file saving status with fields `check`, `title`
-#'  and `text` ready to be used in shinyalerts.
+#' @return A list containing the status for saving files with fields `check`,
+#'  `title` and `text` ready to be used in the shinyalerts.
 #'
 #' @noRd
 handle_file_export <- function(FUN, args, filename, extension,
@@ -191,7 +192,7 @@ handle_file_export <- function(FUN, args, filename, extension,
     status <- list(
       check = FALSE,
       title = "Error in FUN parameter",
-      text = "The function doesn't contain arguments filename, file, or path to set the file name and its location." # nolint
+      text = "The function does not contain the filename, file, or path arguments to set the file name and its location." # nolint
     )
     return(status)
   }
