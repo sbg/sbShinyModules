@@ -6,7 +6,7 @@ output: html_document
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE, eval = FALSE)
 # library(sbShinyModules)
 ```
 
@@ -15,23 +15,38 @@ knitr::opts_chunk$set(echo = TRUE)
 This utility function for loading project files and their metadata `get_all_project_files()` is intended to be used when developing Shiny apps 
 within Data Studio, or to be deployed as on-demand Shiny apps using Data Studio infrastructure.
 
-Data Studio - [placeholder for more details about the files organization on the
-instance] 
+<details>
+  <summary>Data Studio File Organization</summary>
+  Data Studio environments (RStudio or Jupyter) come equipped with the Seven Bridges File System (SBFS) tool installed, allowing you to access their project files right from the    IDE/Data Studio. This means that project files are mounted on the local file system and can be imported into your analysis without any download or upload.  
 
-This means that developers should assume the existence of 
-`/sbgenomics/project-files` directory which represents the mounted directory on 
-the reserved instance for running Data Studio analysis (in our case - Shiny 
-app). This directory contains all project files that can be accessed and used 
-within the app. 
+  The mounted directory is called sbgenomics and contains these subdirectories:  
+  - project-files  
+  - output-files 
+  - workspace 
 
-The function itself accepts the project files directory path and fetches the 
+  The `/project-files` subdirectory contains all your project files (the project from which you started the application).
+
+  However, the `/output-files` subdirectory aims to "save" the files you wish to write/export from your analysis/application into your project; therefore, you would have "write"      permissions here. The files you store here will be exported to the project files once you stop your analysis/application.
+
+  The `/workspace` subdirectory can serve as a working directory where you can store temporary files produced during the app execution, which you do not want to export. The
+  content of this subdirectory will be saved and available the next time the app is initialized, but we strongly suggest not storing anything here.
+
+  This means that you should assume the existence of 
+  `/sbgenomics/project-files` directory which represents the mounted directory on 
+  the reserved instance for running Data Studio analysis (in our case - Shiny 
+  app). This directory contains all project files that can be accessed and used 
+  within the app. 
+</details> 
+<br>
+
+The function accepts the project files directory path and fetches the 
 files and their associated metadata recursively. 
+
 The output of this helper function is a data.frame containing all files details
 ready to be passed to a file picker [a link to the file picker chapter could be
 added here]. 
 
-The developers could manipulate with the data.frame and transform its columns 
-before passing it to the file picker.
+**Note**: You can manipulate the data.frame and transform its columns before passing it to the file picker.
 
 Example of usage is presented below:
 
