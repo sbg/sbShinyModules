@@ -35,6 +35,7 @@ json
 jsonlite
 knitr
 LazyData
+libattr
 licensable
 Licensor
 magrittr
