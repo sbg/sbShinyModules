@@ -91,7 +91,6 @@ repos:
               )$
     -   id: no-debug-statement
     -   id: deps-in-desc
-    -   id: pkgdown
 -   repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.6.0
     hooks:
@@ -100,7 +99,7 @@ repos:
     -   id: file-contents-sorter
         files: '^\.Rbuildignore$'
     -   id: end-of-file-fixer
-        exclude: '\.Rd'
+        exclude: '\.Rd|\.md'
 -   repo: https://github.com/pre-commit-ci/pre-commit-ci-config
     rev: v1.6.1
     hooks:
@@ -117,4 +116,3 @@ repos:
 
 ci:
     autoupdate_schedule: monthly
-    skip: [pkgdown]
