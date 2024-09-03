@@ -1,4 +1,5 @@
 title: "sbShinyModules"
 
+destination: public
 template:
   bootstrap: 5
