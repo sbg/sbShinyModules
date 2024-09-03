@@ -8,3 +8,4 @@
 .quarto
 .Renviron
 docs
+inst/doc

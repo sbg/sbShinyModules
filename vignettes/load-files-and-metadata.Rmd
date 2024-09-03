@@ -1,0 +1,94 @@
+---
+title: "Utility Function get_all_project_files(): Integration and Examples"
+date: "`r Sys.Date()`"
+output: 
+  rmarkdown::html_document:
+    toc: true
+    toc_float: true
+    toc_depth: 4
+    number_sections: false
+    theme: "flatly"
+    highlight: "textmate"
+    css: "sevenbridges.css"
+
+vignette: >
+  %\VignetteIndexEntry{Utility Function get_all_project_files(): Integration and Examples}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  eval = FALSE
+)
+```
+
+The get_all_project_files() function provides an efficient way to retrieve detailed information about all files within a specified directory on the Seven Bridges File System (SBFS). This utility function is ideal for preparing data frames that can be integrated with the File Picker Module, enhancing file selection and management in Shiny applications. 
+
+
+## Function Overview 
+
+
+This function fetches all files from a given directory path recursively, including their metadata if available. It constructs a comprehensive data frame containing file names, paths, sizes, and associated metadata, making it ready for use with the file picker module. 
+
+
+**Parameters**: 
+
+- **path**: The path to the project-files directory. This is a required parameter specifying the location from which to retrieve file information. 
+
+- **...**: Additional parameters passed to the list.files() function. Options such as pattern and include.dirs can be used to customize the file search. 
+
+  
+The function returns a comprehensive data frame containing **file names**, **paths**, **sizes**, and **associated metadata** (if available), making it ready for use with the file picker module. 
+
+**Note**: The function uses the **get_xattr_df()** function from the **xattrs** package to extract metadata for each file. 
+  
+
+## Integration with File Picker Module 
+
+The utility function for loading project files and their metadata `get_all_project_files()` is intended to be used when developing Shiny apps 
+within Data Studio, or to be deployed as on-demand Shiny apps using Data Studio infrastructure.
+
+<details>
+  <summary>Data Studio File Organization</summary>
+  Data Studio environments (RStudio or Jupyter) come equipped with the Seven Bridges File System (SBFS) tool installed, allowing you to access their project files right from the    IDE/Data Studio. This means that project files are mounted on the local file system and can be imported into your analysis without any download or upload.  
+
+  The mounted directory is called sbgenomics and contains these subdirectories:  
+  - project-files  
+  - output-files 
+  - workspace 
+
+  The `/project-files` subdirectory contains all your project files (the project from which you started the application).
+
+  However, the `/output-files` subdirectory aims to "save" the files you wish to write/export from your analysis/application into your project; therefore, you would have "write"      permissions here. The files you store here will be exported to the project files once you stop your analysis/application.
+
+  The `/workspace` subdirectory can serve as a working directory where you can store temporary files produced during the app execution, which you do not want to export. The
+  content of this subdirectory will be saved and available the next time the app is initialized, but we strongly suggest not storing anything here.
+
+  This means that you should assume the existence of 
+  `/sbgenomics/project-files` directory which represents the mounted directory on 
+  the reserved instance for running Data Studio analysis (in our case - Shiny 
+  app). This directory contains all project files that can be accessed and used 
+  within the app. 
+</details> 
+<br>
+
+
+The data frame produced by **get_all_project_files()** can be directly used as an input for the **files_df** parameter of the file picker module (check `vignette("file-pickers")` for more details). This streamlines the process of populating the file picker with accurate and up-to-date file information. 
+
+By utilizing get_all_project_files() function, you can efficiently gather and prepare file information, enhancing the functionality of Shiny applications that involve file management and selection.
+
+**Note:** To run this example on your computer, please ensure you have the **sbShinyModules** package installed.
+
+```{r}
+# Create a mock directory on the sbgenomics/project-files path and populate it
+# with some test fles to test the get_all_project_files() function
+all_files_df <- sbShinyModules::get_all_project_files(
+  path = "/sbgenomics/project-files"
+)
+
+head(all_files_df)
+```
