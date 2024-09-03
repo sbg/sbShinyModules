@@ -51,7 +51,7 @@ a user-friendly interface.
 mod_file_picker_ui("file_picker_1") 
 ```
 
-```r}
+```r
 # Server part
 mod_file_picker_server("file_picker_1", files_df, selection = "single") 
 ```
