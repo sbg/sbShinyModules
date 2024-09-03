@@ -18,7 +18,7 @@ mod_file_picker_server(
 \item{id}{A unique identifier for the module instance.}
 
 \item{files_df}{A data frame containing file information. This data frame
-should have a column for file paths and any other relevant metadata. You
+should have a column for the file paths and any other relevant metadata. You
 can use the \code{\link{get_all_project_files}} function to fetch all
 project files along with their metadata from the SB File system
 within Data Studio.This function returns a data frame containing
@@ -27,7 +27,7 @@ comprehensive file information, making it an ideal input for the
 
 \item{selection}{A string specifying the selection mode. Can be either
 'single' for single file selection or 'multiple' for multiple file
- selection. Defaults to 'single'.}
+ selection. The default value is 'single'.}
 
 \item{file_identifier_column}{A string specifying the column name in
 `files_df` from which the values of selected files will be returned.
@@ -36,8 +36,8 @@ comprehensive file information, making it an ideal input for the
 \item{default_page_size}{Number of rows per page to display in the table.
 Defaults to 10.}
 
-\item{use_bslib_theme}{A logical value indicating whether to generate the
-modal's UI using the \code{bslib} package. If \code{FALSE} (the default),
+\item{use_bslib_theme}{A logical value indicating if the modal's UI should
+be generated using the \code{bslib} package. If \code{FALSE} (the default),
 the regular UI will be generated. If \code{TRUE}, the UI will be generated
 using the \code{bslib} package and its functions. Note that to use this
 option, the main UI of the app must include the line
@@ -55,13 +55,13 @@ A reactive expression containing information about the selected
 Server function of a Shiny module for selecting either a single
  file or multiple files to be used within the app. This module displays a
  modal dialog with a preview table of files and allows users to select files
- based on the specified `selection` mode ('single' or 'multiple'). Table
+ based on the specified `selection` mode ('single' or 'multiple'). The table
  columns are filterable, and different types of filters are available
  depending on the type of data in each column:
  \itemize{
    \item For numeric columns: a range slider filter allows users to filter
     the table by selecting a range of values.
-   \item For factor columns: a drop down filter allows users to filter the
+   \item For factor columns: a drop-down filter allows users to filter the
     table by selecting specific factor levels.
     \item For other data types: a basic filter using a case-insensitive text
      match is available.
@@ -76,7 +76,7 @@ To incorporate this module into your Shiny app, you need to include
     UI part of your Shiny app where you want the action button to appear.
    \item **Server Function**: Add `mod_file_picker_server("file_picker_1", files_df)`
     to the server part of your Shiny app. Make sure to replace `files_df`
-    with your actual data frame containing file information.
+    with your actual data frame which contains file information.
  }
 }
 \examples{
@@ -116,17 +116,17 @@ ui <- fluidPage(
   )
 )
 
-# App's Server Logic
+# App Server Logic
 server <- function(input, output, session) {
   # ----------------------------- Load Files ----------------------------------
   # Load a built-in data frame for files
   files_df <- sbShinyModules::file_picker_example_data
 
-  # Remove units (bytes) from size column and make it numeric so that it has
+  # Remove units (bytes) from the size column and make it numeric so that it has
   # a range filter
   files_df$size <- as.numeric(gsub(" bytes", "", files_df$size))
 
-  # Or fetch files from a provided directory (path) using the
+  # Or fetch files from the provided directory (path) using the
   # get_all_project_files() utility function
 
   # files_df <- sbShinyModules::get_all_project_files(

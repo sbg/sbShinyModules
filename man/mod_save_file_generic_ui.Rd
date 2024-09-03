@@ -12,7 +12,7 @@ mod_save_file_generic_ui(id, save_button_title = "Save file")
 \item{save_button_title}{Button label.}
 }
 \value{
-No value. Use in UI & server of shiny application.
+No value. Use in the UI & server of shiny application.
 }
 \description{
 A shiny Module.

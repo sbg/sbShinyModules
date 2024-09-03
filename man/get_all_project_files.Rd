@@ -2,15 +2,15 @@
 % Please edit documentation in R/load_files_and_metadata-utils.R
 \name{get_all_project_files}
 \alias{get_all_project_files}
-\title{Get all project's files}
+\title{Get all project files}
 \usage{
 get_all_project_files(path, ...)
 }
 \arguments{
 \item{path}{Project files directory path.}
 
-\item{...}{Additional parameters that can be passed to a function
-`list.files()` that this function is relying on, like `pattern`,
+\item{...}{Additional parameters that can be passed to the `list.files()`
+function that this function is relying on, like `pattern`,
 `include.dirs` etc. See more details on `?list.files`.}
 }
 \value{
@@ -18,8 +18,9 @@ Data.frame containing all project files with their names, paths,
  sizes and associated metadata fields if available.
 }
 \description{
-Utility function for fetching all project files recursively from SB File
- system within Data Studio along side with their metadata associated if
- available. The expected output is the data.frame containing all files
- information available, ready to be used and displayed within file pickers.
+Utility function for fetching all project files from the Seven Bridges File
+ system within Data Studio accompanied by associated metadata if available.
+ The expected output is the data.frame containing all available
+ information about the files, ready to be used and displayed within file
+ pickers.
 }

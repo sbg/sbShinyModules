@@ -18,7 +18,7 @@ mod_file_picker_ui(
 \item{button_width}{The width of the button. Defaults to `100\%`.}
 }
 \description{
-UI function of the file picker Shiny module. The function adds
+UI function of the file picker Shiny module. It adds
  an action button that triggers a file picker modal. This module allows
  users to select either a single file or multiple files to be used within
  the app. The UI function should be placed in the UI part of the Shiny app
@@ -33,7 +33,7 @@ To incorporate this module into your Shiny app, you need to include
     UI part of your Shiny app where you want the action button to appear.
    \item **Server Function**: Add `mod_file_picker_server("file_picker_1", files_df)`
     to the server part of your Shiny app. Make sure to replace `files_df`
-    with your actual data frame containing file information.
+    with your actual data frame which contains file information.
  }
 }
 \examples{
@@ -73,17 +73,17 @@ ui <- fluidPage(
   )
 )
 
-# App's Server Logic
+# App Server Logic
 server <- function(input, output, session) {
   # ----------------------------- Load Files ----------------------------------
   # Load a built-in data frame for files
   files_df <- sbShinyModules::file_picker_example_data
 
-  # Remove units (bytes) from size column and make it numeric so that it has
+  # Remove units (bytes) from the size column and make it numeric so that it has
   # a range filter
   files_df$size <- as.numeric(gsub(" bytes", "", files_df$size))
 
-  # Or fetch files from a provided directory (path) using the
+  # Or fetch files from the provided directory (path) using the
   # get_all_project_files() utility function
 
   # files_df <- sbShinyModules::get_all_project_files(

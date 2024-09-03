@@ -2,7 +2,7 @@
 % Please edit documentation in R/mod_save_plot_to_export.R
 \name{mod_save_plot_to_export_server}
 \alias{mod_save_plot_to_export_server}
-\title{Save `plot` for export module server function}
+\title{Save `plot` for the export module server function}
 \usage{
 mod_save_plot_to_export_server(
   id,
@@ -17,9 +17,9 @@ mod_save_plot_to_export_server(
 \item{id}{Module's ID.}
 
 \item{plot_reactVals}{A `reactiveValues` variable with a slot `plot`
- containing an object created with `recordPlot()` function you would like to
- save. Please, check out our example app in inst/demos folder -
- `plot_exporter_demo_app.R` for demonstrating the usage of this module. \cr
+ containing an object created with the `recordPlot()` function you would
+ like to save. Please, check out our example app in the inst/demos folder -
+ `plot_exporter_demo_app.R` for a demo on how this module is used. \cr
  Example:
  ```{r}
  helper_reactive <- reactiveValues(
@@ -50,31 +50,32 @@ mod_save_plot_to_export_server(
  })
  ```}
 
-\item{output_formats}{Output formats supported. Can be a subset of:
+\item{output_formats}{The supported output formats. It can be a subset of:
 "png", "pdf", "svg", "jpeg", "bmp", or "tiff".}
 
 \item{module_title}{Title (top left corner) of a modal (popup window) with
-settings.}
+the settings.}
 
 \item{sbg_directory_path}{Path to the mounted `sbgenomics` directory
 containing `project-files`, `output-files` and `workspace` sub-directories
 on the instance.
-These directories are expected to exist on the instance where the app would
-run. For the purposes of testing your app locally, you can create a mock
+These directories are expected to exist on the instance where the app will
+run. For the purpose of testing your app locally, you can create a mock
 directory `sbgenomics` with the same structure - containing sub-directories
-`project-files`, `output-files` and `workspace` and populate with test files
-mimicking the project's file structure on the Platform.}
+`project-files`, `output-files`, `workspace`, and populate it with test
+files mimicking the project file structure on the Platform.}
 
-\item{btns_div_width}{Width of the `div()` containing block with buttons for
-saving plots in the pop-up modal dialogue. Suitable to update when having
-one or two buttons out of supported set. Default is 12.}
+\item{btns_div_width}{Width of the `div()` containing the block with the
+buttons for saving plots in the pop-up modal dialogue. Suitable to update
+when having one or two buttons out of the supported set. The default value
+is 12.}
 }
 \value{
-No value. Use in UI & server of shiny application.
+No value. Use in the UI & server of shiny application.
 }
 \description{
-A server side of a shiny Module that allows users to save plots
- generated within the Shiny app and export them to the project on the
+The server side of the shiny module that allows users to save
+ plots generated within the Shiny app and export them to the project on the
  Seven Bridges Platform.
 }
 \examples{
@@ -84,7 +85,7 @@ library(sbShinyModules)
 
 # App's  UI
 ui <- fluidPage(
-  titlePanel("Save plots for export to Platform - Module Demo"),
+  titlePanel("Save plots for the export to the Platform - Module Demo"),
   sidebarLayout(
     sidebarPanel(
       sliderInput("bins",
@@ -97,7 +98,7 @@ ui <- fluidPage(
     mainPanel(
       plotOutput("distPlot"),
       fluidRow(
-        h3("Export Plot to Platform"),
+        h3("Export Plot to the Platform"),
         br(),
         sbShinyModules::mod_save_plot_to_export_ui(
           id = "plot_exporter"
@@ -107,9 +108,9 @@ ui <- fluidPage(
   )
 )
 
-# App's Server Logic
+# App Server Logic
 server <- function(input, output, session) {
-  # Create reactive values list with plot field
+  # Create reactive values list with the plot field
   helper_reactive <- reactiveValues(
     plot = NULL
   )

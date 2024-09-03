@@ -2,7 +2,8 @@
 % Please edit documentation in R/mod_save_file_generic.R
 \name{mod_save_file_generic_server}
 \alias{mod_save_file_generic_server}
-\title{Generic module server function for saving files for export to Platform}
+\title{Generic module server function for saving files that are exported to
+ the Platform}
 \usage{
 mod_save_file_generic_server(id, reac_vals, sbg_directory_path = "/sbgenomics")
 }
@@ -11,30 +12,30 @@ mod_save_file_generic_server(id, reac_vals, sbg_directory_path = "/sbgenomics")
 
 \item{reac_vals}{Reactive values list containing mandatory fields:
 \itemize{
- \item `FUN`- Function for creating a file for saving, i.e `write.table`,
+ \item `FUN`- Function for creating a file, i.e `write.table`,
     `save`, `write`, `write_json`, `write_xml`, `SaveH5Seurat` etc.
  \item `args`- List of function arguments for the provided FUN.
  \item `filename`- File name.
- \item `extension`- Expected file extension. Please provide expected file
-    extension if exists, in order to properly validate the existence of the
-    file with the same name and extension.
- \item `overwrite`- Boolean. Overwrite existing file with the same name.
+ \item `extension`- The expected file extension. Please provide the expected
+    file extension if available, in order to properly validate the existence
+    of the file with the same name and extension.
+ \item `overwrite`- Boolean. Overwrite the existing file with the same name.
 }}
 
 \item{sbg_directory_path}{Path to the mounted `sbgenomics` directory
 containing `project-files`, `output-files` and `workspace` sub-directories
 on the instance.
-These directories are expected to exist on the instance where the app would
-run. For the purposes of testing your app locally, you can create a mock
+These directories are expected to exist on the instance where the app will
+run. For the purpose of testing your app locally, you can create a mock
 directory `sbgenomics` with the same structure - containing sub-directories
-`project-files`, `output-files` and `workspace` and populate with test files
-mimicking the project's file structure on the Platform.}
+`project-files`, `output-files` and `workspace` and populate them with test
+files mimicking the project file structure on the Platform.}
 }
 \value{
-No value. Use in UI & server of shiny application.
+No value. Use in the UI & server of shiny application.
 }
 \description{
-A server side of a shiny Module that allows users to save files
+Server side of the shiny Module that allows users to save files
  generated within the Shiny app and export them to the project on the
  Seven Bridges Platform.
 }
@@ -96,12 +97,13 @@ test_module_server <- function(id) {
       )
     })
 
-    # Close modal dialog by clicking the dismiss button
+    # Close the modal dialog by clicking the dismiss button
     observeEvent(input$dismiss, {
       removeModal()
     })
 
-    # Create reactive values list with mandatory fields to pass to the module
+    # Create the reactive values list with mandatory fields to pass to the
+    # module
     helper_rv_nested <- reactiveValues(
       FUN = write.table,
       args = list(x = iris, quote = FALSE, row.names = FALSE, col.names = TRUE),
@@ -122,13 +124,13 @@ test_module_server <- function(id) {
 }
 ############## Test modules end ###########################
 
-##### Demo App's  UI #######
+##### Demo App  UI #######
 ui <- fluidPage(
-  titlePanel("Save data for export to Platform - Module Demo"),
+  titlePanel("Save data for the export to the Platform - Module Demo"),
   sidebarLayout(
     sidebarPanel(
       fluidRow(
-        h3("Export txt/csv to Platform"),
+        h3("Export txt/csv to the Platform"),
         br(),
         textInput("file_name", label = "Set file name", width = "100\%"),
         fluidRow(
@@ -168,7 +170,7 @@ ui <- fluidPage(
         )
       ),
       fluidRow(
-        h3("Export json to Platform"),
+        h3("Export json to the Platform"),
         br(),
         textInput("file_name_json", label = "Set file name", width = "100\%"),
         fluidRow(
@@ -182,7 +184,7 @@ ui <- fluidPage(
         )
       ),
       fluidRow(
-        h3("Export RDS object to Platform"),
+        h3("Export RDS object to the Platform"),
         br(),
         textInput("file_name_rds", label = "Set file name", width = "100\%"),
         fluidRow(
@@ -212,7 +214,7 @@ ui <- fluidPage(
   )
 )
 
-###### Demo App's Server Logic ######
+###### Demo App Server Logic ######
 server <- function(input, output, session) {
   output$table_data <- reactable::renderReactable({
     reactable::reactable(iris,
@@ -224,7 +226,7 @@ server <- function(input, output, session) {
     )
   })
 
-  # Create reactive values list with mandatory fields to pass to the module
+  # Create the reactive values list with mandatory fields to pass to the module
   helper_rv_table <- reactiveValues(
     FUN = write.table,
     args = list(x = iris, quote = FALSE, row.names = FALSE, col.names = TRUE),
@@ -260,7 +262,7 @@ server <- function(input, output, session) {
       package = "sbShinyModules"
     )
   )
-  # Create reactive values list for json file export
+  # Create reactive values list for the json file export
   helper_rv_json <- reactiveValues(
     FUN = write,
     args = list(
@@ -284,7 +286,7 @@ server <- function(input, output, session) {
       package = "sbShinyModules"
     )
   )
-  # Create reactive values list for RDS file export
+  # Create reactive values list for the RDS file export
   helper_rv_rds <- reactiveValues(
     FUN = saveRDS,
     args = list(
@@ -309,7 +311,7 @@ server <- function(input, output, session) {
     )
   )
 
-  # Call test module
+  # Call the test module
   test_module_server(id = "nested_modules")
 }
 

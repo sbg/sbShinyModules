@@ -4,7 +4,7 @@ library(sbShinyModules)
 
 # App's  UI
 ui <- fluidPage(
-  titlePanel("Save plots for export to Platform - Module Demo"),
+  titlePanel("Save plots for the export to the Platform - Module Demo"),
   sidebarLayout(
     sidebarPanel(
       sliderInput("bins",
@@ -17,7 +17,7 @@ ui <- fluidPage(
     mainPanel(
       plotOutput("distPlot"),
       fluidRow(
-        h3("Export Plot to Platform"),
+        h3("Export Plot to the Platform"),
         br(),
         sbShinyModules::mod_save_plot_to_export_ui(
           id = "plot_exporter"
@@ -27,9 +27,9 @@ ui <- fluidPage(
   )
 )
 
-# App's Server Logic
+# App Server Logic
 server <- function(input, output, session) {
-  # Create reactive values list with plot field
+  # Create reactive values list with the plot field
   helper_reactive <- reactiveValues(
     plot = NULL
   )
