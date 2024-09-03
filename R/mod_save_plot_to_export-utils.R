@@ -43,7 +43,7 @@ download_plot_rv <- function(input, rv, device, folder = ".") {
 }
 
 
-#' Create an HTML Dependency for Moveable Library
+#' Create an HTML Dependency for the Moveable Library
 #'
 #' @description This function creates an HTML dependency for the Moveable
 #'  library, including the necessary JavaScript files.
@@ -61,19 +61,19 @@ html_dependency_moveable <- function() {
   )
 }
 
-#' Activate Resizer for a Specified Element
+#' Activate the Resizer for a Specified Element
 #'
-#' @description This function sends a custom message to activate a resizer for
-#'  a specified HTML element, with optional parameters for modal context and
-#'  container.
+#' @description This function sends a custom message to activate the resizer for
+#'  a specified HTML element, with optional parameters for the modal context and
+#'  the container.
 #'
 #' @param id A character string specifying the ID of the HTML element to be
 #'  resized.
 #' @param ... Additional parameters to be passed to the resizer.
-#' @param modal A logical value indicating whether the element is in a modal
-#'  dialog. Defaults to `FALSE`.
+#' @param modal A logical value indicating if the element is in a modal
+#'  dialog. The default value is `FALSE`.
 #' @param container A character string specifying the container for the
-#'  resizer. Defaults to `"body"`.
+#'  resizer. The default value is `"body"`.
 #' @param session Shiny session object. Default: `getDefaultReactiveDomain()`.
 #'
 #' @return None.
@@ -126,9 +126,9 @@ resize <- function(id,
 #'  bytes, formatted as a hexadecimal string.
 #'
 #' @param bytes An integer specifying the number of bytes for the ID.
-#'  Defaults to 12.
+#'  The default value is 12.
 #'
-#' @return A character string representing the generated ID in hexadecimal
+#' @return A character string representing the generated ID in the hexadecimal
 #'  format.
 #'
 #' @noRd
@@ -138,29 +138,29 @@ genId <- function(bytes = 12) {
   )
 }
 
-#' Check filename for plot saving
+#' Check the filename for plot saving
 #'
 #' @description Check if the provided file name already contains an extension
-#'  and remove it if it's one of those that file export supports: `png`, `pdf`,
-#'  `svg`, `jpeg`, `bmp`, `tiff`. If not, keep everything as the file's base
+#'  and remove it if it is supported by the file export: `png`, `pdf`, `svg`,
+#'  `jpeg`, `bmp`, `tiff`. If not, keep everything as the file base
 #'  name. Then add new extension based on the provided device parameter -
-#'  depends on the button user clicked. If not, keep everything as the file's
+#'  depends on the button user clicked. If not, keep everything as the file
 #'  base name.
 #'
-#' @details For example, provided with 'export-plot' as the `filename`
+#' @details For example, if 'export-plot' is specified as the `filename`
 #'  argument, the function returns 'export-plot.png' - file name as it is + real
 #'  extension according to the button that was clicked.
-#'  Provided with 'export-plot.png' also returns 'export-plot.png'.
+#'  In case 'export-plot.png' is specified, it also returns 'export-plot.png'.
 #'  On the other hand, when provided with 'export-plot.june', the
-#'  function will keep the extension (part after the last dot) since it is not
-#'  one of the common extensions supported by the plot exporter. It will take
-#'  the entire provided string 'export-plot.june' and treat it as a valid base
-#'  name for a plot about to be saved. Depending on the user selection, a plot
-#'  type extension will be added to that base name.
+#'  function will keep the extension (the part after the last dot) since it is
+#'  not one of the common extensions supported by the plot exporter. It will
+#'  take the entire provided string 'export-plot.june' and treat it as a valid
+#'  base name for a plot about to be saved. Depending on what the user selected,
+#'  a plot type extension will be added to the base name.
 #'  For example: 'export-plot.june.png'.
 #'
-#' @param filename Character. The name of the file (plot) from which the
-#'  function will check for and potentially remove the extension if it matches
+#' @param filename Character. The name of the file (plot) that the function will
+#'  check and potentially remove the extension if it matches
 #'  one of the specified types ("png", "pdf", "svg", "jpeg", "bmp", "tiff").
 #' @param device Character. The type of device to be used for the file
 #'  export (e.g., "png", "pdf", "tiff", "jpeg", "svg", "bmp") - depends on the
@@ -174,7 +174,7 @@ check_filename <- function(filename, device) {
   # Find the last dot in the filename
   dot_position <- regexpr("\\.[^\\.]*$", filename)
 
-  # If dot_position is greater than 0, it means an extension was found
+  # If the dot_position is greater than 0, that means an extension was found
   if (dot_position > 0) {
     # Extract the extension
     extension <- tolower(substr(filename, dot_position + 1, nchar(filename)))
@@ -188,16 +188,16 @@ check_filename <- function(filename, device) {
     }
   }
 
-  # If no valid extension was found, return file name + extension based on the
-  # button that was clicked.
+  # If no valid extension was found, return the file name + the extension based
+  # on the button that was clicked.
   return(paste0(filename, ".", device))
 }
 
 #' Check directory and its sub-directories existence
 #'
 #' @description The function checks if the directory exists on the provided
-#'  path, along with its sub-directories with expected names `project-files` and
-#'  `output-files`. The expected path on the Data Studio instance if hosting
+#'  path, along with its sub-directories with the expected names `project-files`
+#'  and `output-files`. The expected path on the Data Studio instance if hosting
 #'  the app as an on-demand app, should be `/sbgenomics` and it should contain
 #'  folders `project-files` and `output-files` which are mounted to the
 #'  instance.
@@ -218,13 +218,13 @@ check_sbg_directory_path <- function(sbg_path) {
 
   if (!dir.exists(file.path(sbg_path, "project-files")) ||
     !dir.exists(file.path(sbg_path, "output-files"))) {
-    rlang::abort("Subdirectories not found. The provided directory path doesn't contain project-files and/or output-files sub-directories.") # nolint
+    rlang::abort("Subdirectories not found. The provided directory path does not contain project-files and/or output-files sub-directories.") # nolint
   }
 }
 
-#' Check file existence
+#' Check the file existence
 #'
-#' @description The function checks if the file with the provided `file_name`
+#' @description This function checks if the file with the provided `file_name`
 #'  already exists in at least one of the two provided directories (paths). For
 #'  the on-demand DS version of the app, these two directories should be:
 #'  - `/sbgenomics/project-files`
@@ -232,7 +232,7 @@ check_sbg_directory_path <- function(sbg_path) {
 #'
 #' @details We need to check file existence in both places because the file
 #'  can be either in the `project-files` folder, which means that it is already
-#'  visible in the platform's project files tab, or it can exist in the analysis
+#'  visible in the platform project files tab, or it can exist in the analysis
 #'  `output-files`, which means that it will be visible on the platform once the
 #'  the analysis (app) is stopped (saved).
 #'
@@ -274,9 +274,9 @@ check_file_existence <- function(file_name, directory_1, directory_2) {
 #' @param sbg_directory_path Path to the `sbgenomics` directory containing
 #'  `project-files`, `output-files` and `workspace` subdirectories on the
 #'  instance. These directories are expected to exist on the instance where
-#'  the app would run. For the purposes of testing your app locally, you
+#'  the app will run. For the purpose of testing your app locally, you
 #'  can create a mock directory `sbgenomics` with the same structure -
-#'  containing sub-directories `project-files`, `output-files` and `workspace`.
+#'  containing sub-directories `project-files`, `output-files`, and `workspace`.
 #'
 #' @return None.
 #'
@@ -286,7 +286,7 @@ check_file_existence <- function(file_name, directory_1, directory_2) {
 #' @noRd
 handle_plot_export <- function(input, filename, device, height, width,
                                plot_rv, sbg_directory_path) {
-  # Remove extension if provided in the filename input
+  # Remove the extension if provided in the filename input
   filename <- check_filename(filename = filename, device = device)
 
   if (isFALSE(input$overwrite_switch)) {
@@ -327,12 +327,12 @@ handle_plot_export <- function(input, filename, device, height, width,
   check_plot_export_status(status)
 }
 
-#' Save plot file function
+#' Save the plot file function
 #'
-#' @description The function saves provided plot as a file in provided file
-#'  format (png, bmp, tiff, pdf, svg or jpeg).
+#' @description This function saves the provided plot as a file in the provided
+#'  file format (png, bmp, tiff, pdf, svg or jpeg).
 #'
-#' @param cur_plot Plot that should be saved.
+#' @param cur_plot The plot that should be saved.
 #' @param filename File name.
 #' @param device The type of device to be used for the file
 #'  export (e.g., "png", "pdf", "tiff", "jpeg", "svg", "bmp").
@@ -341,8 +341,8 @@ handle_plot_export <- function(input, filename, device, height, width,
 #' @param destination_folder A string representing the path to the folder where
 #'  the plot file should be saved.
 #'
-#' @return The function returns status list containing information about the
-#'  success of saving the plot that is used for informing the user.
+#' @return This function returns the status list containing information about
+#'  the success of saving the plot and is used for informing the user.
 #'  Saves the file as a side effect.
 #'
 #' @importFrom grDevices png bmp tiff pdf svg jpeg
@@ -380,7 +380,7 @@ save_plot_file <- function(cur_plot, filename, device, width, height,
     },
     error = function(e) {
       status <- list(
-        title = "Error occured during plot saving",
+        title = "Error occurred during plot saving",
         text = paste0(e),
         type = "error"
       )
@@ -389,12 +389,12 @@ save_plot_file <- function(cur_plot, filename, device, width, height,
   )
 }
 
-#' Check plot export status function
+#' Check the plot export status function
 #'
-#' @description Function checks the status for attempted plot export and
-#'  returns appropriate notification.
+#' @description This function checks the status for attempted plot export and
+#'  returns the appropriate notification.
 #'
-#' @param status Logical. A value returned by `save_plot_file` function.
+#' @param status Logical. A value returned by the `save_plot_file` function.
 #'
 #' @importFrom shinyalert shinyalert
 #' @importFrom shinyFeedback showFeedbackWarning
@@ -409,7 +409,7 @@ check_plot_export_status <- function(status) {
   if (!is.null(status$feedback) && status$feedback) {
     shinyFeedback::showFeedbackWarning(
       inputId = "filename",
-      text = "Please change the name and try again."
+      text = "Please change the file name and try again."
     )
   }
 }

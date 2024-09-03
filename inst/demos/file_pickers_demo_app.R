@@ -34,17 +34,17 @@ ui <- fluidPage(
   )
 )
 
-# App's Server Logic
+# App Server Logic
 server <- function(input, output, session) {
   # ----------------------------- Load Files ----------------------------------
   # Load a built-in data frame for files
   files_df <- sbShinyModules::file_picker_example_data
 
-  # Remove units (bytes) from size column and make it numeric so that it has
+  # Remove units (bytes) from the size column and make it numeric so that it has
   # a range filter
   files_df$size <- as.numeric(gsub(" bytes", "", files_df$size))
 
-  # Or fetch files from a provided directory (path) using the
+  # Or fetch files from the provided directory (path) using the
   # get_all_project_files() utility function
 
   # files_df <- sbShinyModules::get_all_project_files(

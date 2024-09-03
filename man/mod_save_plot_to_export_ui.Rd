@@ -2,7 +2,7 @@
 % Please edit documentation in R/mod_save_plot_to_export.R
 \name{mod_save_plot_to_export_ui}
 \alias{mod_save_plot_to_export_ui}
-\title{Save `plot` for export module UI function}
+\title{Save `plot` for the export module UI function}
 \usage{
 mod_save_plot_to_export_ui(id, save_button_title = "Save plot")
 }
@@ -15,9 +15,9 @@ mod_save_plot_to_export_ui(id, save_button_title = "Save plot")
 No value. Use in UI & server of shiny application.
 }
 \description{
-UI part of the module that can be used to save the `plot`
- for export to Seven Bridges Platform. The UI contains a button that triggers
- a modal dialog with further settings.
+The UI part of the module that can be used to save the `plot`
+ for the export to the Seven Bridges Platform. The UI contains a button that
+ triggers a modal dialog with further settings.
 }
 \examples{
 library(shiny)
@@ -26,7 +26,7 @@ library(sbShinyModules)
 
 # App's  UI
 ui <- fluidPage(
-  titlePanel("Save plots for export to Platform - Module Demo"),
+  titlePanel("Save plots for the export to the Platform - Module Demo"),
   sidebarLayout(
     sidebarPanel(
       sliderInput("bins",
@@ -39,7 +39,7 @@ ui <- fluidPage(
     mainPanel(
       plotOutput("distPlot"),
       fluidRow(
-        h3("Export Plot to Platform"),
+        h3("Export Plot to the Platform"),
         br(),
         sbShinyModules::mod_save_plot_to_export_ui(
           id = "plot_exporter"
@@ -49,9 +49,9 @@ ui <- fluidPage(
   )
 )
 
-# App's Server Logic
+# App Server Logic
 server <- function(input, output, session) {
-  # Create reactive values list with plot field
+  # Create reactive values list with the plot field
   helper_reactive <- reactiveValues(
     plot = NULL
   )
