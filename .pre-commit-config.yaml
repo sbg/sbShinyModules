@@ -95,7 +95,7 @@ repos:
     rev: v4.6.0
     hooks:
     -   id: check-added-large-files
-        args: ['--maxkb=500']
+        args: ['--maxkb=800']
     -   id: file-contents-sorter
         files: '^\.Rbuildignore$'
     -   id: end-of-file-fixer

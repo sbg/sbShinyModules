@@ -14,6 +14,9 @@ themselves. Modules such as file pickers and file exporters are designed to
 work seamlessly within on-demand Data Studio hosting solution, allowing for
 easy integration.
 
+A detailed guideline for integrating modules into your Shiny apps and 
+publishing them on our Seven Bridges Platform can be found [here](inst/Guideline_for_publishing_RShiny_on_demand_apps.pdf).
+
 ## Installation 
 
 Install the development version from [GitHub](github) using the `remotes`
@@ -97,7 +100,6 @@ The Generic File Exporter Module provides a flexible solution for saving and
 exporting a variety of file types from a Shiny app to the Platform project.
 It supports different file formats and export functions.
 
-<br>
 ```r
 # UI part
 mod_save_file_generic_ui("file_exporter_1")
