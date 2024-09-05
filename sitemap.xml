@@ -1,0 +1,23 @@
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>/404.html</loc></url>
+<url><loc>/LICENSE.html</loc></url>
+<url><loc>/articles/file-pickers.html</loc></url>
+<url><loc>/articles/generic-file-exporter.html</loc></url>
+<url><loc>/articles/index.html</loc></url>
+<url><loc>/articles/load-files-and-metadata.html</loc></url>
+<url><loc>/articles/plot-exporter.html</loc></url>
+<url><loc>/authors.html</loc></url>
+<url><loc>/index.html</loc></url>
+<url><loc>/news/index.html</loc></url>
+<url><loc>/reference/file_picker_example_data.html</loc></url>
+<url><loc>/reference/get_all_project_files.html</loc></url>
+<url><loc>/reference/index.html</loc></url>
+<url><loc>/reference/mod_file_picker_server.html</loc></url>
+<url><loc>/reference/mod_file_picker_ui.html</loc></url>
+<url><loc>/reference/mod_save_file_generic_server.html</loc></url>
+<url><loc>/reference/mod_save_file_generic_ui.html</loc></url>
+<url><loc>/reference/mod_save_plot_to_export_server.html</loc></url>
+<url><loc>/reference/mod_save_plot_to_export_ui.html</loc></url>
+<url><loc>/reference/run_app.html</loc></url>
+</urlset>
+
