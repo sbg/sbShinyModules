@@ -39,7 +39,7 @@ Imports:
     shinyjs,
     shinyWidgets,
     tidyr,
-    hrbrmstr/xattrs,
+    xattrs,
     jsonlite (>= 1.8.8)
 Suggests:
     knitr,
@@ -52,4 +52,5 @@ RoxygenNote: 7.3.2
 Language: en-US
 Remotes: 
     jeroen/jsonlite
+    hrbrmstr/xattrs
 VignetteBuilder: knitr
