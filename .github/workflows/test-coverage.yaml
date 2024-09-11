@@ -21,6 +21,9 @@ jobs:
         with:
           use-public-rspm: true
 
+      - name: Install libattr1-dev
+        run: sudo apt-get install -y libattr1-dev
+
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
           extra-packages: any::covr
