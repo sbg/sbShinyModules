@@ -39,7 +39,7 @@ Imports:
     shinyjs,
     shinyWidgets,
     tidyr,
-    xattrs,
+    hrbrmstr/xattrs,
     jsonlite (>= 1.8.8)
 Suggests:
     knitr,
