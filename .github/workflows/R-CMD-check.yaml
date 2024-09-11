@@ -28,7 +28,7 @@ jobs:
       R_KEEP_PKG_SOURCE: yes
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - uses: r-lib/actions/setup-pandoc@v2
 
@@ -39,13 +39,32 @@ jobs:
           use-public-rspm: true
 
       - name: Install libattr1-dev
+        if: runner.os == 'Linux'
         run: sudo apt-get install -y libattr1-dev
 
-      - uses: r-lib/actions/setup-r-dependencies@v2
-        with:
-          extra-packages: any::rcmdcheck
-          needs: check
+      # Set RENV_PATHS_ROOT to use a temporary directory for renv cache
+      - name: Set RENV_PATHS_ROOT
+        shell: bash
+        run: |
+          echo "RENV_PATHS_ROOT=${{ runner.temp }}/renv" >> $GITHUB_ENV
 
+      # Restore renv package cache using R version and OS version
+      - name: Restore Renv package cache
+        uses: actions/cache@v4
+        with:
+          path: ${{ env.RENV_PATHS_ROOT }}
+          key: ${{ matrix.config.os }}-${{ matrix.config.r }}-${{ hashFiles('renv.lock') }}
+          restore-keys: |
+            ${{ matrix.config.os }}-${{ matrix.config.r }}-
+
+      # Restore R environment from renv.lock
+      - name: Restore packages
+        shell: Rscript {0}
+        run: |
+          if (!requireNamespace("renv", quietly = TRUE)) install.packages("renv")
+          renv::restore()
+
+      # Run R CMD check using the pre-built GitHub Action
       - uses: r-lib/actions/check-r-package@v2
         with:
           upload-snapshots: true
