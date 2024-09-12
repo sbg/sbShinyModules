@@ -57,17 +57,11 @@ jobs:
           restore-keys: |
             ${{ matrix.config.os }}-${{ matrix.config.r }}-
 
-
-      # Set CRAN mirror
-      - name: Set CRAN mirror
-        run: |
-          echo 'options(repos = c(CRAN = "https://cloud.r-project.org/"))' >> ~/.Rprofile
-        shell: bash
-
       # Restore R environment from renv.lock
       - name: Restore packages
         shell: Rscript {0}
         run: |
+          options(repos = c(CRAN = "https://cloud.r-project.org/"))
           if (!requireNamespace("renv", quietly = TRUE)) install.packages("renv")
           renv::restore()
 
