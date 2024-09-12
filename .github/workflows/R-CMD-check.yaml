@@ -68,10 +68,10 @@ jobs:
           if (!requireNamespace("renv", quietly = TRUE)) install.packages("renv")
           renv::restore()
 
-      # Run custom R CMD Check
-      - name: Run R CMD check
+      # Build package and run custom R CMD Check
+      - name: Run R CMD build and check
         run: |
-          R CMD check --no-examples --no-vignettes .
+          R CMD build . && R CMD check $(ls -t *.tar.gz | head -n1) --no-examples --no-vignettes
 
       # Upload snapshots manually
       - name: Upload snapshots
