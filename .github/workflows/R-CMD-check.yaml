@@ -38,9 +38,9 @@ jobs:
           http-user-agent: ${{ matrix.config.http-user-agent }}
           use-public-rspm: true
 
-      - name: Install libattr1-dev
+      - name: Install system dependencies (Linux)
         if: runner.os == 'Linux'
-        run: sudo apt-get install -y libattr1-dev
+        run: sudo apt-get install -y libgit2-dev libcurl4-openssl-dev libxml2-dev libattr1-dev
 
       # Set RENV_PATHS_ROOT to use a temporary directory for renv cache
       - name: Set RENV_PATHS_ROOT
