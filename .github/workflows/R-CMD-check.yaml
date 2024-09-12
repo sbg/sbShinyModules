@@ -71,7 +71,7 @@ jobs:
       # Build package and run custom R CMD Check
       - name: Run R CMD build and check
         run: |
-          R CMD build . && R CMD check $(ls -t *.tar.gz | head -n1) --no-examples --no-vignettes
+          R CMD build . && R CMD check $(ls -t *.tar.gz | head -n1) --no-examples --no-vignettes --no-manual
 
       # Upload snapshots manually
       - name: Upload snapshots
