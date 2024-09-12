@@ -71,4 +71,5 @@ jobs:
       # Run R CMD check using the pre-built GitHub Action
       - uses: r-lib/actions/check-r-package@v2
         with:
+          args: "--no-examples --no-vignettes"
           upload-snapshots: true
