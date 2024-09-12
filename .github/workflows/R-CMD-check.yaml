@@ -68,8 +68,16 @@ jobs:
           if (!requireNamespace("renv", quietly = TRUE)) install.packages("renv")
           renv::restore()
 
-      # Run R CMD check using the pre-built GitHub Action
-      - uses: r-lib/actions/check-r-package@v2
+      # Run custom R CMD Check
+      - name: Run R CMD check
+        run: |
+          R CMD check --no-examples --no-vignettes .
+
+      # Upload snapshots manually
+      - name: Upload snapshots
+        if: success() || failure()
+        uses: actions/upload-artifact@v3
         with:
-          args: "--no-examples --no-vignettes"
-          upload-snapshots: true
+          name: snapshots
+          path: |
+            ./*.Rcheck
