@@ -18,7 +18,7 @@
 #'     with your actual data frame which contains file information.
 #'  }
 #'
-#' @param id,input,output,session Internal parameters for {shiny}.
+#' @param id Module ID.
 #' @param button_icon An optional icon to appear on the button. Defaults to `icon('circle-plus')`.
 #' @param button_width The width of the button. Defaults to `100\%`.
 # nolint end

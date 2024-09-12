@@ -11,7 +11,7 @@ mod_file_picker_ui(
 )
 }
 \arguments{
-\item{id, input, output, session}{Internal parameters for {shiny}.}
+\item{id}{Module ID.}
 
 \item{button_icon}{An optional icon to appear on the button. Defaults to `icon('circle-plus')`.}
 
