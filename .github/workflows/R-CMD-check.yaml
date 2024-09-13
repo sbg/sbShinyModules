@@ -50,7 +50,7 @@ jobs:
         run: |
           brew update
           brew install libgit2 curl libxml2 harfbuzz fribidi
-          curl -L https://raw.githubusercontent.com/Homebrew/homebrew-core/d28afc3bfdb5d24eab02157bfffcc9e17ed6666c/Formula/f/freetype.rb > freetype.rb && brew install freetype.rb
+          curl -L https://raw.githubusercontent.com/Homebrew/homebrew-core/d28afc3bfdb5d24eab02157bfffcc9e17ed6666c/Formula/f/freetype.rb -o freetype.rb && brew install ./freetype.rb
 
       # Set RENV_PATHS_ROOT to use a temporary directory for renv cache
       - name: Set RENV_PATHS_ROOT
