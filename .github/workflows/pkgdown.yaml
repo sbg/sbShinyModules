@@ -19,27 +19,54 @@ jobs:
       group: pkgdown-${{ github.event_name != 'pull_request' || github.run_id }}
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+      R_KEEP_PKG_SOURCE: yes
     permissions:
       contents: write
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
+      # Setup Pandoc
       - uses: r-lib/actions/setup-pandoc@v2
 
+      # Setup R
       - uses: r-lib/actions/setup-r@v2
         with:
           use-public-rspm: true
 
-      - name: Install libattr1-dev
-        run: sudo apt-get install -y libattr1-dev
+      # Install system dependencies
+      - name: Install system dependencies (Linux)
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libgit2-dev libcurl4-openssl-dev libxml2-dev libattr1-dev
+          sudo apt-get install -y libharfbuzz-dev libfribidi-dev
 
-      - uses: r-lib/actions/setup-r-dependencies@v2
+
+      # Set RENV_PATHS_ROOT to use a temporary directory for renv cache
+      - name: Set RENV_PATHS_ROOT
+        shell: bash
+        run: |
+          echo "RENV_PATHS_ROOT=${{ runner.temp }}/renv" >> $GITHUB_ENV
+
+      # Restore renv package cache using R version and OS version
+      - name: Restore Renv package cache
+        uses: actions/cache@v4
         with:
-          extra-packages: any::pkgdown, local::.
-          needs: website
+          path: ${{ env.RENV_PATHS_ROOT }}
+          key: ubuntu-latest-${{ hashFiles('renv.lock') }}
+          restore-keys: |
+           ubuntu-latest-
+
+      # Restore R environment from renv.lock
+      - name: Restore packages
+        shell: Rscript {0}
+        run: |
+          options(repos = c(CRAN = "https://cloud.r-project.org/"))
+          if (!requireNamespace("renv", quietly = TRUE)) install.packages("renv")
+          renv::restore()
 
       - name: Build site
-        run: pkgdown::build_site_github_pages(new_process = FALSE, install = FALSE)
+        run: pkgdown::build_site_github_pages(new_process = FALSE, install = FALSE, examples = FALSE)
         shell: Rscript {0}
 
       - name: Deploy to GitHub pages 🚀
