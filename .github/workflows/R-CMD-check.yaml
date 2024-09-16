@@ -100,11 +100,12 @@ jobs:
       # Build package and run custom R CMD Check (Windows)
       - name: Build and Check Package (Windows)
         if: runner.os == 'Windows'
-        shell: pwsh
+        shell: cmd
         run: |
-          R CMD build . | Out-String
-          $tarball = Get-ChildItem -Filter *.tar.gz | Sort-Object LastWriteTime -Descending | Select-Object -First 1
-          R CMD check $tarball.FullName --no-examples --no-vignettes --no-manual | Out-String
+          R CMD build .
+          for /f "delims=" %%i in ('dir /b /o-d *.tar.gz') do set TARFILE=%%i & goto :break
+          :break
+          R CMD check %TARFILE% --no-examples --no-vignettes --no-manual
 
       # Upload snapshots manually
       - name: Upload snapshots
