@@ -73,13 +73,23 @@ jobs:
           restore-keys: |
             ${{ matrix.config.os }}-${{ matrix.config.r }}-
 
-      # Restore R environment from renv.lock
+      # Restore R environment from renv.lock (unix-based systems)
       - name: Restore packages
+        if: runner.os != 'Windows'
         shell: Rscript {0}
         run: |
           options(repos = c(CRAN = "https://cloud.r-project.org/"))
           if (!requireNamespace("renv", quietly = TRUE)) install.packages("renv")
           renv::restore()
+
+      # Restore R environment from renv.lock (Windows)
+      - name: Restore packages (Windows)
+        if: runner.os == 'Windows'
+        shell: Rscript {0}
+        run: |
+          options(repos = c(CRAN = "https://cloud.r-project.org/"))
+          if (!requireNamespace("renv", quietly = TRUE)) install.packages("renv")
+          renv::restore(exclude = c("xattrs"))
 
       # Build package and run custom R CMD Check
       - name: Run R CMD build and check
