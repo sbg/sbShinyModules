@@ -52,5 +52,4 @@ RoxygenNote: 7.3.2
 Language: en-US
 Remotes: 
     jeroen/jsonlite
-    hrbrmstr/xattrs
 VignetteBuilder: knitr

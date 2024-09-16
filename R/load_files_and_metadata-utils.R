@@ -38,6 +38,10 @@ get_all_project_files <- function(path, ...) {
     rlang::abort("The function `get_all_project_files` is not supported on Windows operating systems.") # nolint
   }
 
+  if (!requireNamespace("xattrs", quietly = TRUE)) {
+    rlang::abort("The xattrs package is required for this function, but it is not installed.") # nolint
+  }
+
   checkmate::assert_string(path, null.ok = FALSE)
   if (!dir.exists(paths = path)) {
     rlang::abort(
