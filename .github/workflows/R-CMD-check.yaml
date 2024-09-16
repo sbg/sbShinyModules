@@ -101,6 +101,8 @@ jobs:
       - name: Build and Check Package (Windows)
         if: runner.os == 'Windows'
         shell: cmd
+        env:
+          _R_CHECK_FORCE_SUGGESTS_: false
         run: |
           R CMD build .
           for /f "delims=" %%i in ('dir /b /o-d *.tar.gz') do set TARFILE=%%i & goto :break
