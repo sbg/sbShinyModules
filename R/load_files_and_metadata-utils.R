@@ -20,7 +20,6 @@
 #'  function that this function is relying on, like `pattern`,
 #'  `include.dirs` etc. See more details on `?list.files`.
 #'
-#' @importFrom xattrs get_xattr_df
 #' @importFrom tidyr pivot_wider
 #' @importFrom dplyr select left_join join_by mutate
 #' @importFrom magrittr %>%
