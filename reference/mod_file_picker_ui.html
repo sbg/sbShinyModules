@@ -144,8 +144,10 @@
 <span>  <span class="co"># a range filter</span></span>
 <span>  <span class="va">files_df</span><span class="op">$</span><span class="va">size</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">gsub</a></span><span class="op">(</span><span class="st">" bytes"</span>, <span class="st">""</span>, <span class="va">files_df</span><span class="op">$</span><span class="va">size</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
-<span>  <span class="co"># Or fetch files from the provided directory (path) using the</span></span>
-<span>  <span class="co"># get_all_project_files() utility function</span></span>
+<span>  <span class="co"># Alternatively, fetch files from a provided directory (path) using the</span></span>
+<span>  <span class="co"># get_all_project_files() utility function. Note that this requires the</span></span>
+<span>  <span class="co"># xattrs package, which is not available for Windows systems. Therefore,</span></span>
+<span>  <span class="co"># this approach will only work on Unix-based systems.</span></span>
 <span></span>
 <span>  <span class="co"># files_df &lt;- sbShinyModules::get_all_project_files(</span></span>
 <span>  <span class="co">#   path = "/sbgenomics/project-files"</span></span>

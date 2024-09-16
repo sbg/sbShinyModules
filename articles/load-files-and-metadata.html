@@ -60,7 +60,7 @@
 
       <h1>Utility Function get_all_project_files(): Integration and Examples</h1>
             
-            <h4 data-toc-skip class="date">2024-09-15</h4>
+            <h4 data-toc-skip class="date">2024-09-16</h4>
       
 
       <div class="d-none name"><code>load-files-and-metadata.Rmd</code></div>
@@ -95,9 +95,28 @@ used to customize the file search.</p></li>
 <strong>file names</strong>, <strong>paths</strong>,
 <strong>sizes</strong>, and <strong>associated metadata</strong> (if
 available), making it ready for use with the file picker module.</p>
-<p><strong>Note</strong>: The function uses the
-<strong>get_xattr_df()</strong> function from the
-<strong>xattrs</strong> package to extract metadata for each file.</p>
+</div>
+<div class="section level2">
+<h2 id="note-on-dependencies">Note on Dependencies<a class="anchor" aria-label="anchor" href="#note-on-dependencies"></a>
+</h2>
+<p>The <code><a href="../reference/get_all_project_files.html">get_all_project_files()</a></code> function depends on the <a href="https://github.com/hrbrmstr/xattrs" class="external-link">xattrs package</a>for extended
+attribute support. This package is not installed automatically with
+*<strong>sbShinyModules</strong>, so you will need to install
+<strong>xattrs</strong> separately if you wish to use this function.</p>
+<p>On Unix-based systems, you can install xattrs using:</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"hrbrmstr/xattrs"</span><span class="op">)</span></span></code></pre></div>
+<p>If you encounter installation issues, it may be due to missing system
+libraries. For instance, on Ubuntu Linux, you can resolve this by
+installing the <code>libattr1-dev</code> library with:</p>
+<pre><code>sudo apt-get update
+sudo apt-get install libattr1-dev</code></pre>
+<p>For macOS users, additional system libraries are typically not
+required for xattrs, but ensure your system is up-to-date.</p>
+<p>Please note that the <code><a href="../reference/get_all_project_files.html">get_all_project_files()</a></code> function is
+<strong>not available on Windows systems</strong>. This is because it
+depends on the xattrs package, which requires extended attribute
+functions that are not supported on Windows.</p>
 </div>
 <div class="section level2">
 <h2 id="integration-with-file-picker-module">Integration with File Picker Module<a class="anchor" aria-label="anchor" href="#integration-with-file-picker-module"></a>
@@ -144,10 +163,11 @@ up-to-date file information.</p>
 <p>By utilizing get_all_project_files() function, you can efficiently
 gather and prepare file information, enhancing the functionality of
 Shiny applications that involve file management and selection.</p>
-<p><strong>Note:</strong> To run this example on your computer, please
-ensure you have the <strong>sbShinyModules</strong> package
-installed.</p>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<p><strong>Note:</strong> To run this example, ensure that both the
+<strong>sbShinyModules</strong> and <strong>xattrs</strong> packages are
+installed. <strong>Please be aware that this will not work on Windows
+systems.</strong></p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Create a mock directory on the sbgenomics/project-files path and populate it</span></span>
 <span><span class="co"># with some test fles to test the get_all_project_files() function</span></span>
 <span><span class="va">all_files_df</span> <span class="op">&lt;-</span> <span class="fu">sbShinyModules</span><span class="fu">::</span><span class="fu"><a href="../reference/get_all_project_files.html">get_all_project_files</a></span><span class="op">(</span></span>

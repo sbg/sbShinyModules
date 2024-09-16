@@ -62,7 +62,7 @@
 </h2>
 <p><strong>sbShinyModules</strong> is an R package designed to simplify the development of Shiny applications specifically for hosting as on-demand Shiny applications on <strong>Seven Bridges Platforms</strong>. This package aims to assist both internal and external developers by providing pre-built, reusable Shiny modules tailored to fit Seven Bridges hosting infrastructure.</p>
 <p>By using these modules, developers can focus on the unique aspects of their applications without needing to research and implement common functionalities themselves. Modules such as file pickers and file exporters are designed to work seamlessly within on-demand Data Studio hosting solution, allowing for easy integration.</p>
-<p>A detailed guideline for integrating modules into your Shiny apps and publishing them on our Seven Bridges Platform can be found <a href="inst/Guideline_for_publishing_RShiny_on_demand_apps.pdf">here</a>.</p>
+<p>A detailed guideline for integrating modules into your Shiny apps and publishing them on our Seven Bridges Platform can be found <a href="https://docs.cancergenomicscloud.org/docs/bring-your-shiny-apps" class="external-link">here</a>.</p>
 </div>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
@@ -78,8 +78,24 @@
 <div class="section level2">
 <h2 id="note-on-dependencies">Note on Dependencies<a class="anchor" aria-label="anchor" href="#note-on-dependencies"></a>
 </h2>
-<p>The sbShinyModules package depends on the <strong>xattrs package</strong>, which in turn requires the <strong>libattr1-dev</strong> system library. If you encounter issues installing xattrs, it might be due to the absence of libattr1-dev.</p>
-<p>To resolve this, install the libattr1-dev library using your system’s package manager, then retry the installation of sbShinyModules.</p>
+<p>The sbShinyModules package has a core set of functionalities that are available by default upon installation. However, the get_all_project_files() function requires the <a href="https://github.com/hrbrmstr/xattrs" class="external-link">xattrs package</a> for extended attribute support.</p>
+<p><strong>For Unix-based Systems (Linux, macOS):</strong></p>
+<ul>
+<li>xattrs Package: To use the get_all_project_files() function, you need to install the xattrs package. On Unix-based systems, you can install it with:</li>
+</ul>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"hrbrmstr/xattrs"</span><span class="op">)</span></span></code></pre></div>
+<ul>
+<li>System Dependencies: On some Unix-based systems, additional system libraries might be required. For example, on Ubuntu Linux, you need the libattr1-dev library. Install it using:</li>
+</ul>
+<pre><code>sudo apt-get update
+sudo apt-get install libattr1-dev</code></pre>
+<p>For macOS users, additional system libraries are typically not required for xattrs, but ensure your system is up-to-date.</p>
+<p><strong>For Windows Users:</strong></p>
+<ul>
+<li>The get_all_project_files() function is not available on Windows systems because it depends on the xattrs package, which requires extended attribute functions that are not supported on Windows.</li>
+</ul>
+<p>By default, all other modules and functions of the sbShinyModules package will be available to you without the xattrs package.</p>
 </div>
 <div class="section level2">
 <h2 id="features">Features<a class="anchor" aria-label="anchor" href="#features"></a>
@@ -88,10 +104,10 @@
 <h3 id="file-picker-module">File Picker Module<a class="anchor" aria-label="anchor" href="#file-picker-module"></a>
 </h3>
 <p>The File Picker Module enables users to select files from Platform projects within a Shiny app. It supports both single and multiple file selections with a user-friendly interface.</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># UI part</span></span>
 <span><span class="fu"><a href="reference/mod_file_picker_ui.html">mod_file_picker_ui</a></span><span class="op">(</span><span class="st">"file_picker_1"</span><span class="op">)</span> </span></code></pre></div>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Server part</span></span>
 <span><span class="fu"><a href="reference/mod_file_picker_server.html">mod_file_picker_server</a></span><span class="op">(</span><span class="st">"file_picker_1"</span>, <span class="va">files_df</span>, selection <span class="op">=</span> <span class="st">"single"</span><span class="op">)</span> </span></code></pre></div>
 <br><center>
@@ -105,10 +121,10 @@
 <h3 id="plot-exporter-module">Plot Exporter Module<a class="anchor" aria-label="anchor" href="#plot-exporter-module"></a>
 </h3>
 <p>The Plot Exporter Module allows users to save and export plots generated within a Shiny app. It supports various output formats and integrates with Seven Bridges Platform for seamless project file management.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># UI part</span></span>
 <span><span class="fu">mod_plot_exporter_ui</span><span class="op">(</span><span class="st">"plot_exporter_1"</span>, save_button_title <span class="op">=</span> <span class="st">"Save Plot"</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Server part</span></span>
 <span><span class="fu">mod_plot_exporter_server</span><span class="op">(</span> </span>
 <span>  id <span class="op">=</span> <span class="st">"plot_exporter_1"</span>, </span>
@@ -129,10 +145,10 @@
 <h3 id="generic-file-exporter-module">Generic File Exporter Module<a class="anchor" aria-label="anchor" href="#generic-file-exporter-module"></a>
 </h3>
 <p>The Generic File Exporter Module provides a flexible solution for saving and exporting a variety of file types from a Shiny app to the Platform project. It supports different file formats and export functions.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># UI part</span></span>
 <span><span class="fu"><a href="reference/mod_save_file_generic_ui.html">mod_save_file_generic_ui</a></span><span class="op">(</span><span class="st">"file_exporter_1"</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Server part</span></span>
 <span><span class="fu"><a href="reference/mod_save_file_generic_server.html">mod_save_file_generic_server</a></span><span class="op">(</span></span>
 <span>  id <span class="op">=</span> <span class="st">"file_exporter_1"</span>,  </span>
@@ -150,7 +166,13 @@
 <h3 id="get_all_project_files-function">get_all_project_files() Function<a class="anchor" aria-label="anchor" href="#get_all_project_files-function"></a>
 </h3>
 <p>This utility function simplifies file management by efficiently retrieving detailed information about files within a specified directory.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<blockquote>
+<p>[!IMPORTANT] <strong>Platform Compatibility:</strong> The get_all_project_files() function is available only on Unix-based systems (e.g., Linux, macOS). It is not supported on Windows.</p>
+</blockquote>
+<blockquote>
+<p>[!NOTE] <strong>Dependencies:</strong> To fully utilize this function, ensure that the xattrs R package is installed on Unix-based systems.</p>
+</blockquote>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Create a mock directory on the sbgenomics/project-files path and populate it</span></span>
 <span><span class="co"># with some test fles to test the get_all_project_files() function</span></span>
 <span><span class="va">all_files_df</span> <span class="op">&lt;-</span> <span class="fu">sbShinyModules</span><span class="fu">::</span><span class="fu"><a href="reference/get_all_project_files.html">get_all_project_files</a></span><span class="op">(</span></span>
