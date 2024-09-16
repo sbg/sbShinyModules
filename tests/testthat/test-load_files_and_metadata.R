@@ -1,10 +1,11 @@
 # Skip tests on Windows OS
 testthat::test_that("Skip get_all_project_files tests on Windows", {
-  testthat::skip_if(.Platform$OS.type == "windows", "Skipping tests on Windows") # nolint
+  testthat::skip_if(.Platform$OS.type == "windows", "Skipping tests on Windows.") # nolint
 })
 
 
-testthat::test_that("Utility fucntion get_all_project_files() works as expected", { # nolint
+testthat::test_that("Utility function get_all_project_files() works as expected", { # nolint
+  testthat::skip_if(.Platform$OS.type == "windows", "Skipping this test on Windows OS.") # nolint
   # Get mock directory for testing
   project_path <- testthat::test_path("sbgenomics_test/project-files/")
   files_df <- get_all_project_files(path = project_path)
@@ -15,7 +16,8 @@ testthat::test_that("Utility fucntion get_all_project_files() works as expected"
   testthat::expect_true(all(c("name", "path", "size") %in% names(files_df)))
 })
 
-test_that("Utility fucntion get_all_project_files() throws error when expected", { # nolint
+test_that("Utility function get_all_project_files() throws error when expected", { # nolint
+  testthat::skip_if(.Platform$OS.type == "windows", "Skipping this test on Windows OS.") # nolint
   # Test non-existing directory path
   project_path <- "non-existing-folder"
   testthat::expect_error(
