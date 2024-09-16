@@ -44,8 +44,34 @@ This function fetches all files from a given directory path recursively, includi
   
 The function returns a comprehensive data frame containing **file names**, **paths**, **sizes**, and **associated metadata** (if available), making it ready for use with the file picker module. 
 
-**Note**: The function uses the **get_xattr_df()** function from the **xattrs** package to extract metadata for each file. 
-  
+## Note on Dependencies 
+
+The `get_all_project_files()` function depends on the
+[xattrs package](https://github.com/hrbrmstr/xattrs)for extended attribute
+support. This package is not installed automatically with ***sbShinyModules**,
+so you will need to install **xattrs** separately if you wish to use this
+function.
+
+On Unix-based systems, you can install xattrs using:
+```r
+remotes::install_github("hrbrmstr/xattrs")
+```
+
+If you encounter installation issues, it may be due to missing system
+libraries. For instance, on Ubuntu Linux, you can resolve this by installing
+the `libattr1-dev` library with:
+```
+sudo apt-get update
+sudo apt-get install libattr1-dev
+```
+For macOS users, additional system libraries are typically not required for
+xattrs, but ensure your system is up-to-date.
+
+
+Please note that the `get_all_project_files()` function is
+**not available on Windows systems**. This is because it depends on the xattrs
+package, which requires extended attribute functions that are not supported on
+Windows.
 
 ## Integration with File Picker Module 
 
@@ -81,7 +107,9 @@ The data frame produced by **get_all_project_files()** can be directly used as a
 
 By utilizing get_all_project_files() function, you can efficiently gather and prepare file information, enhancing the functionality of Shiny applications that involve file management and selection.
 
-**Note:** To run this example on your computer, please ensure you have the **sbShinyModules** package installed.
+**Note:** To run this example, ensure that both the **sbShinyModules** and 
+**xattrs** packages are installed. 
+**Please be aware that this will not work on Windows systems.**
 
 ```{r}
 # Create a mock directory on the sbgenomics/project-files path and populate it

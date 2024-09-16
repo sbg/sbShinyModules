@@ -44,11 +44,44 @@ files and their associated metadata recursively.
 
 The output of this helper function is a data.frame containing all files details
 ready to be passed to a file picker [a link to the file picker chapter could be
-added here]. 
+added here].
 
 **Note**: You can manipulate the data.frame and transform its columns before passing it to the file picker.
 
-Example of usage is presented below:
+## Note on Dependencies 
+
+The `get_all_project_files()` function depends on the
+[xattrs package](https://github.com/hrbrmstr/xattrs)for extended attribute
+support. This package is not installed automatically with ***sbShinyModules**,
+so you will need to install **xattrs** separately if you wish to use this
+function.
+
+On Unix-based systems, you can install xattrs using:
+```r
+remotes::install_github("hrbrmstr/xattrs")
+```
+
+If you encounter installation issues, it may be due to missing system
+libraries. For instance, on Ubuntu Linux, you can resolve this by installing
+the `libattr1-dev` library with:
+```
+sudo apt-get update
+sudo apt-get install libattr1-dev
+```
+For macOS users, additional system libraries are typically not required for
+xattrs, but ensure your system is up-to-date.
+
+
+Please note that the `get_all_project_files()` function is
+**not available on Windows systems**. This is because it depends on the xattrs
+package, which requires extended attribute functions that are not supported on
+Windows.
+
+Example of usage is presented below.
+
+**Note:** To run this example, ensure that both the **sbShinyModules** and 
+**xattrs** packages are installed. 
+**Please be aware that this will not work on Windows systems.**
 
 ```{r}
 # Create mock directory on path sbgenomics/project-files to test

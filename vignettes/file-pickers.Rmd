@@ -204,8 +204,10 @@ server <- function(input, output, session) {
   # a range filter
   files_df$size <- as.numeric(gsub(" bytes", "", files_df$size))
 
-  # Or fetch files from a provided directory (path) using the
-  # get_all_project_files() utility function
+  # Alternatively, fetch files from a provided directory (path) using the
+  # get_all_project_files() utility function. Note that this requires the
+  # xattrs package, which is not available for Windows systems. Therefore,
+  # this approach will only work on Unix-based systems.
 
   # files_df <- sbShinyModules::get_all_project_files(
   #   path = "/sbgenomics/project-files"

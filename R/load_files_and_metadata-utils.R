@@ -7,6 +7,14 @@
 #'  information about the files, ready to be used and displayed within file
 #'  pickers.
 #'
+#'  **Note:** The `xattrs` package is required for extended attribute support,
+#'  which includes retrieving additional metadata. This package works only on
+#'  Unix-based operating systems (e.g., Linux, macOS) and cannot be installed
+#'  or used on Windows systems due to the lack of support for extended
+#'  attributes functions on Windows. Therefore, the `get_all_project_files()`
+#'  function will not work on Windows systems. For Unix-based systems, please
+#'  install the `xattrs` package to utilize this function.
+#'
 #' @param path Project files directory path.
 #' @param ... Additional parameters that can be passed to the `list.files()`
 #'  function that this function is relying on, like `pattern`,
@@ -25,6 +33,11 @@
 #'
 #' @export
 get_all_project_files <- function(path, ...) {
+  # Check for OS type and abort if Windows
+  if (.Platform$OS.type == "windows") {
+    rlang::abort("The function `get_all_project_files` is not supported on Windows operating systems.") # nolint
+  }
+
   checkmate::assert_string(path, null.ok = FALSE)
   if (!dir.exists(paths = path)) {
     rlang::abort(
@@ -55,7 +68,12 @@ get_all_project_files <- function(path, ...) {
   metadata <- data.frame()
 
   for (file in files_info_df[["path"]]) {
-    file_df <- xattrs::get_xattr_df(file)
+    file_df <- tryCatch(
+      xattrs::get_xattr_df(file),
+      error = function(e) {
+        rlang::abort(glue::glue_col("Error retrieving metadata for file {file}: {e$message}")) # nolint
+      }
+    )
     file_df$file_path <- file
     # In case of an error that 'nul' is present in the hex string, remove those 'nuls' # nolint
     file_df$raw <- sapply(file_df$contents, function(x) {

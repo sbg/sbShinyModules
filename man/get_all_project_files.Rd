@@ -23,4 +23,12 @@ Utility function for fetching all project files from the Seven Bridges File
  The expected output is the data.frame containing all available
  information about the files, ready to be used and displayed within file
  pickers.
+
+ **Note:** The `xattrs` package is required for extended attribute support,
+ which includes retrieving additional metadata. This package works only on
+ Unix-based operating systems (e.g., Linux, macOS) and cannot be installed
+ or used on Windows systems due to the lack of support for extended
+ attributes functions on Windows. Therefore, the `get_all_project_files()`
+ function will not work on Windows systems. For Unix-based systems, please
+ install the `xattrs` package to utilize this function.
 }
