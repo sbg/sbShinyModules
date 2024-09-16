@@ -15,7 +15,7 @@ work seamlessly within on-demand Data Studio hosting solution, allowing for
 easy integration.
 
 A detailed guideline for integrating modules into your Shiny apps and 
-publishing them on our Seven Bridges Platform can be found [here](inst/Guideline_for_publishing_RShiny_on_demand_apps.pdf).
+publishing them on our Seven Bridges Platform can be found [here](https://docs.cancergenomicscloud.org/docs/bring-your-shiny-apps).
 
 ## Installation 
 
@@ -32,13 +32,38 @@ remotes::install_github("sbg/sbShinyModule@develop")
 
 ## Note on Dependencies 
 
-The sbShinyModules package depends on the **xattrs package**, which in turn
-requires the **libattr1-dev** system library. 
-If you encounter issues installing xattrs, it might be due to the absence of
-libattr1-dev.
+The sbShinyModules package has a core set of functionalities that are available
+by default upon installation. However, the get_all_project_files() function
+requires the [xattrs package](https://github.com/hrbrmstr/xattrs) for extended
+attribute support.
 
-To resolve this, install the libattr1-dev library using your system's package
-manager, then retry the installation of sbShinyModules.
+**For Unix-based Systems (Linux, macOS):**
+
+- xattrs Package: To use the get_all_project_files() function, you need to
+install the xattrs package. On Unix-based systems, you can install it with: 
+```r
+remotes::install_github("hrbrmstr/xattrs")
+```
+- System Dependencies: On some Unix-based systems, additional system libraries
+might be required. For example, on Ubuntu Linux, you need the libattr1-dev
+library. Install it using:
+
+```
+sudo apt-get update
+sudo apt-get install libattr1-dev
+```
+For macOS users, additional system libraries are typically not required for
+xattrs, but ensure your system is up-to-date.
+
+**For Windows Users:**
+
+- The get_all_project_files() function is not available on Windows systems
+because it depends on the xattrs package, which requires extended attribute
+functions that are not supported on Windows.
+
+
+By default, all other modules and functions of the sbShinyModules package will
+be available to you without the xattrs package.
 
 
 ## Features
@@ -126,6 +151,13 @@ mod_save_file_generic_server(
 This utility function simplifies file management by efficiently retrieving
 detailed information about files within a specified directory.
 
+> [!IMPORTANT] **Platform Compatibility:** The get_all_project_files()
+function is available only on Unix-based systems (e.g., Linux, macOS). It is
+not supported on Windows.
+
+> [!NOTE] **Dependencies:** To fully utilize this function, ensure that the 
+xattrs R package is installed on Unix-based systems.
+ 
 ```r
 # Create a mock directory on the sbgenomics/project-files path and populate it
 # with some test fles to test the get_all_project_files() function
