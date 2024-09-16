@@ -91,10 +91,20 @@ jobs:
           if (!requireNamespace("renv", quietly = TRUE)) install.packages("renv")
           renv::restore(exclude = c("xattrs"))
 
-      # Build package and run custom R CMD Check
-      - name: Run R CMD build and check
+      # Build package and run custom R CMD Check (unix-based systems)
+      - name: Build and Check Package (Unix-based)
+        if: runner.os != 'Windows'
         run: |
           R CMD build . && R CMD check $(ls -t *.tar.gz | head -n1) --no-examples --no-vignettes --no-manual
+
+      # Build package and run custom R CMD Check (Windows)
+      - name: Build and Check Package (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          R CMD build .
+          $package = Get-ChildItem -Path . -Filter "*.tar.gz" | Sort-Object LastWriteTime -Descending | Select-Object -First 1
+          R CMD check $package.FullName --no-examples --no-vignettes --no-manual
 
       # Upload snapshots manually
       - name: Upload snapshots
