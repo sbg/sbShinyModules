@@ -102,9 +102,9 @@ jobs:
         if: runner.os == 'Windows'
         shell: pwsh
         run: |
-          R CMD build .
-          $package = Get-ChildItem -Path . -Filter "*.tar.gz" | Sort-Object LastWriteTime -Descending | Select-Object -First 1
-          R CMD check $package.FullName --no-examples --no-vignettes --no-manual
+          R CMD build . | Out-String
+          $tarball = Get-ChildItem -Filter *.tar.gz | Sort-Object LastWriteTime -Descending | Select-Object -First 1
+          R CMD check $tarball.FullName --no-examples --no-vignettes --no-manual | Out-String
 
       # Upload snapshots manually
       - name: Upload snapshots
