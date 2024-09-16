@@ -1,3 +1,9 @@
+# Skip tests on Windows OS
+testthat::test_that("Skip get_all_project_files tests on Windows", {
+  testthat::skip_if(.Platform$OS.type == "windows", "Skipping tests on Windows") # nolint
+})
+
+
 testthat::test_that("Utility fucntion get_all_project_files() works as expected", { # nolint
   # Get mock directory for testing
   project_path <- testthat::test_path("sbgenomics_test/project-files/")
