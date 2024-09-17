@@ -92,7 +92,7 @@ mod_file_picker_server("file_picker_1", files_df, selection = "single")
 ```
 <br>
 <center>
-  ![Single file picker](inst/single_file_picker.png)
+  ![Single file picker](https://raw.githubusercontent.com/sbg/sbShinyModules/develop/inst/single_file_picker.png?token=GHSAT0AAAAAACXOWLUORMY4ETNRRY2SJDRUZXJRJTA)
 </center>
 <br>
 
@@ -121,7 +121,7 @@ mod_plot_exporter_server(
 ```
 <br>
 <center>
-  ![Plot exporter](inst/save_plot_modal_dialog.png)
+  ![Plot exporter](https://raw.githubusercontent.com/sbg/sbShinyModules/develop/inst/save_plot_modal_dialog.png?token=GHSAT0AAAAAACXOWLUO24ZK3HYTWBKJ5O5CZXJRKSQ)
 </center>
 <br>
 
