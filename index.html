@@ -73,7 +73,7 @@
 <span><span class="co"># install.packages("remotes")</span></span>
 <span></span>
 <span><span class="co"># Install sbShinyModules from GitHub</span></span>
-<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"sbg/sbShinyModule@develop"</span><span class="op">)</span> </span></code></pre></div>
+<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"sbg/sbShinyModules@develop"</span><span class="op">)</span> </span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="note-on-dependencies">Note on Dependencies<a class="anchor" aria-label="anchor" href="#note-on-dependencies"></a>
@@ -96,6 +96,7 @@ sudo apt-get install libattr1-dev</code></pre>
 <li>The get_all_project_files() function is not available on Windows systems because it depends on the xattrs package, which requires extended attribute functions that are not supported on Windows.</li>
 </ul>
 <p>By default, all other modules and functions of the sbShinyModules package will be available to you without the xattrs package.</p>
+<p><strong>Note:</strong> The Data Studio RStudio environments on Seven Bridges Platforms are based on Ubuntu, a Unix-based system. While this should facilitate the installation of the <code>xattrs</code> package, you might still need to install the <code>libattr1-dev</code> library before the <code>xattrs</code> package can be successfully installed.</p>
 </div>
 <div class="section level2">
 <h2 id="features">Features<a class="anchor" aria-label="anchor" href="#features"></a>
@@ -112,7 +113,7 @@ sudo apt-get install libattr1-dev</code></pre>
 <span><span class="fu"><a href="reference/mod_file_picker_server.html">mod_file_picker_server</a></span><span class="op">(</span><span class="st">"file_picker_1"</span>, <span class="va">files_df</span>, selection <span class="op">=</span> <span class="st">"single"</span><span class="op">)</span> </span></code></pre></div>
 <br><center>
 <div class="float">
-<img src="articles/figures/file_picker/single_file_picker.png" alt="Single file picker"><div class="figcaption">Single file picker</div>
+<img src="inst/single_file_picker.png" alt="Single file picker"><div class="figcaption">Single file picker</div>
 </div>
 </center>
 <p><br></p>
@@ -136,7 +137,7 @@ sudo apt-get install libattr1-dev</code></pre>
 <span><span class="op">)</span> </span></code></pre></div>
 <br><center>
 <div class="float">
-<img src="articles/figures/plot_exporter/save_plot_modal_dialog.png" alt="Plot exporter"><div class="figcaption">Plot exporter</div>
+<img src="inst/save_plot_modal_dialog.png" alt="Plot exporter"><div class="figcaption">Plot exporter</div>
 </div>
 </center>
 <p><br></p>
@@ -166,12 +167,13 @@ sudo apt-get install libattr1-dev</code></pre>
 <h3 id="get_all_project_files-function">get_all_project_files() Function<a class="anchor" aria-label="anchor" href="#get_all_project_files-function"></a>
 </h3>
 <p>This utility function simplifies file management by efficiently retrieving detailed information about files within a specified directory.</p>
+<p><br></p>
 <blockquote>
-<p>[!IMPORTANT] <strong>Platform Compatibility:</strong> The get_all_project_files() function is available only on Unix-based systems (e.g., Linux, macOS). It is not supported on Windows.</p>
+<p><strong>Important Note!</strong></p>
+<p><u>Platform Compatibility</u>: The <code><a href="reference/get_all_project_files.html">get_all_project_files()</a></code> function is supported exclusively on Unix-based systems (e.g., Linux, macOS) and is NOT available on Windows.</p>
+<p><u>Dependencies</u>: The <code>xattrs</code> R package is required for using this function. Please ensure that the package is installed so that the full functionality is enabled.</p>
 </blockquote>
-<blockquote>
-<p>[!NOTE] <strong>Dependencies:</strong> To fully utilize this function, ensure that the xattrs R package is installed on Unix-based systems.</p>
-</blockquote>
+<p><br></p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Create a mock directory on the sbgenomics/project-files path and populate it</span></span>
 <span><span class="co"># with some test fles to test the get_all_project_files() function</span></span>
