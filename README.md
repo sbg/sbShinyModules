@@ -90,13 +90,12 @@ mod_file_picker_ui("file_picker_1")
 # Server part
 mod_file_picker_server("file_picker_1", files_df, selection = "single") 
 ```
-<br>
-<center>
-  ![Single file picker](https://raw.githubusercontent.com/sbg/sbShinyModules/develop/inst/single_file_picker.png?token=GHSAT0AAAAAACXOWLUORMY4ETNRRY2SJDRUZXJRJTA)
-</center>
-<br>
+
+<img src="man/figures/single_file_picker.png" align="center" />
 
 
+<br>
+<br>
 ### Plot Exporter Module
 
 The Plot Exporter Module allows users to save and export plots generated
@@ -120,9 +119,7 @@ mod_plot_exporter_server(
 ) 
 ```
 <br>
-<center>
-  ![Plot exporter](https://raw.githubusercontent.com/sbg/sbShinyModules/develop/inst/save_plot_modal_dialog.png?token=GHSAT0AAAAAACXOWLUO24ZK3HYTWBKJ5O5CZXJRKSQ)
-</center>
+<img src="man/figures/save_plot_modal_dialog.png" align="center" />
 <br>
 
 
