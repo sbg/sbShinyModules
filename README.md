@@ -95,7 +95,7 @@ mod_file_picker_server("file_picker_1", files_df, selection = "single")
 
 
 <br>
-<br>
+
 ### Plot Exporter Module
 
 The Plot Exporter Module allows users to save and export plots generated
