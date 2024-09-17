@@ -51,7 +51,7 @@ added here].
 ## Note on Dependencies 
 
 The `get_all_project_files()` function depends on the
-[xattrs package](https://github.com/hrbrmstr/xattrs)for extended attribute
+[xattrs package](https://github.com/hrbrmstr/xattrs) for extended attribute
 support. This package is not installed automatically with ***sbShinyModules**,
 so you will need to install **xattrs** separately if you wish to use this
 function.
