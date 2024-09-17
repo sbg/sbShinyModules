@@ -4,9 +4,9 @@
 
 **sbShinyModules** is an R package designed to simplify the development of
 Shiny applications specifically for hosting as on-demand Shiny applications on
-**Seven Bridges Platforms**. This package aims to assist both internal and external
-developers by providing pre-built, reusable Shiny modules tailored to fit
-Seven Bridges hosting infrastructure.
+**Seven Bridges Platforms**. This package aims to assist both internal and
+external developers by providing pre-built, reusable Shiny modules tailored to
+fit Seven Bridges hosting infrastructure.
 
 By using these modules, developers can focus on the unique aspects of their
 applications without needing to research and implement common functionalities
@@ -15,7 +15,8 @@ work seamlessly within on-demand Data Studio hosting solution, allowing for
 easy integration.
 
 A detailed guideline for integrating modules into your Shiny apps and 
-publishing them on our Seven Bridges Platform can be found [here](https://docs.cancergenomicscloud.org/docs/bring-your-shiny-apps).
+publishing them on our Seven Bridges Platform can be found
+[here](https://docs.cancergenomicscloud.org/docs/bring-your-shiny-apps).
 
 ## Installation 
 
@@ -27,7 +28,7 @@ package:
 # install.packages("remotes")
 
 # Install sbShinyModules from GitHub
-remotes::install_github("sbg/sbShinyModule@develop") 
+remotes::install_github("sbg/sbShinyModules@develop") 
 ```
 
 ## Note on Dependencies 
@@ -66,6 +67,12 @@ By default, all other modules and functions of the sbShinyModules package will
 be available to you without the xattrs package.
 
 
+**Note:** The Data Studio RStudio environments on Seven Bridges Platforms are
+based on Ubuntu, a Unix-based system. While this should facilitate the
+installation of the `xattrs` package, you might still need to install the
+`libattr1-dev` library before the `xattrs` package can be successfully
+installed.
+
 ## Features
 
 ### File Picker Module
@@ -85,7 +92,7 @@ mod_file_picker_server("file_picker_1", files_df, selection = "single")
 ```
 <br>
 <center>
-  ![Single file picker](vignettes/figures/file_picker/single_file_picker.png)
+  ![Single file picker](inst/single_file_picker.png)
 </center>
 <br>
 
@@ -114,7 +121,7 @@ mod_plot_exporter_server(
 ```
 <br>
 <center>
-  ![Plot exporter](vignettes/figures/plot_exporter/save_plot_modal_dialog.png)
+  ![Plot exporter](inst/save_plot_modal_dialog.png)
 </center>
 <br>
 
@@ -151,12 +158,19 @@ mod_save_file_generic_server(
 This utility function simplifies file management by efficiently retrieving
 detailed information about files within a specified directory.
 
-> [!IMPORTANT] **Platform Compatibility:** The get_all_project_files()
-function is available only on Unix-based systems (e.g., Linux, macOS). It is
-not supported on Windows.
+<br>
 
-> [!NOTE] **Dependencies:** To fully utilize this function, ensure that the 
-xattrs R package is installed on Unix-based systems.
+> **Important Note!** 
+> 
+> <u>Platform Compatibility</u>: The `get_all_project_files()` function is
+> supported exclusively on Unix-based systems (e.g., Linux, macOS) and is NOT
+> available on Windows.
+>
+> <u>Dependencies</u>: The `xattrs` R package is required for using this
+> function. Please ensure that the package is installed so that the full
+> functionality is enabled.
+
+<br>
  
 ```r
 # Create a mock directory on the sbgenomics/project-files path and populate it
