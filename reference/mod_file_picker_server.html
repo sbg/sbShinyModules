@@ -88,6 +88,8 @@ For other data types: a basic filter using a case-insensitive text
 <span>  file_identifier_column <span class="op">=</span> <span class="st">"path"</span>,</span>
 <span>  default_page_size <span class="op">=</span> <span class="fl">10</span>,</span>
 <span>  use_bslib_theme <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  show_guide <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  guide_content <span class="op">=</span> <span class="st">"default"</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -135,6 +137,32 @@ using the <code>bslib</code> package and its functions. Note that to use this
 option, the main UI of the app must include the line
 <code>theme = bslib::bs_theme()</code>. This requirement ensures the correct
  application of the <code>bslib</code> theme throughout the app.</p></dd>
+
+
+<dt id="arg-show-guide">show_guide<a class="anchor" aria-label="anchor" href="#arg-show-guide"></a></dt>
+<dd><p>A boolean indicating whether to show the File Selection
+Guide. The default value is `TRUE`.</p></dd>
+
+
+<dt id="arg-guide-content">guide_content<a class="anchor" aria-label="anchor" href="#arg-guide-content"></a></dt>
+<dd><p>A string that controls the content of the File
+ Selection Guide.</p><ul><li><p>**"default"**: When set to `"default"` (the default value), the
+    function displays a standard guide that provides instructions on how to
+    manage file selection, including steps like reviewing file details,
+    selecting files, using search and filter features, and submitting
+    selected files.</p></li>
+<li><p>**File path**: Alternatively, developers can provide a file path to
+    a Markdown (`.md`) file. If a valid file path is provided, the
+    `generate_guide_content_from_file()` function will read the Markdown
+    file, convert it to HTML, and render it within the File Selection Guide
+    box. This allows for custom, user-defined instructions to be displayed
+    in the guide. If the Shiny app is being developed within the Golem
+    framework, it is recommended to place the Markdown file inside the
+    `inst/` directory. You can then reference the file using
+    `system.file("path/inside/inst/filename.md", package = "yourgolemapp")`
+    to ensure the file is properly bundled and accessible after deployment.</p></li>
+</ul><p>The guide is collapsible and can be customized to adapt to single or
+ multiple file selection modes.</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
@@ -207,8 +235,8 @@ this module relies on.</p></dd>
 <span>  <span class="co"># Load a built-in data frame for files</span></span>
 <span>  <span class="va">files_df</span> <span class="op">&lt;-</span> <span class="fu">sbShinyModules</span><span class="fu">::</span><span class="va"><a href="file_picker_example_data.html">file_picker_example_data</a></span></span>
 <span></span>
-<span>  <span class="co"># Remove units (bytes) from the size column and make it numeric so that it has</span></span>
-<span>  <span class="co"># a range filter</span></span>
+<span>  <span class="co"># Remove units (bytes) from the size column and make it numeric so that it</span></span>
+<span>  <span class="co"># has a range filter</span></span>
 <span>  <span class="va">files_df</span><span class="op">$</span><span class="va">size</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">gsub</a></span><span class="op">(</span><span class="st">" bytes"</span>, <span class="st">""</span>, <span class="va">files_df</span><span class="op">$</span><span class="va">size</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span>  <span class="co"># Alternatively, fetch files from a provided directory (path) using the</span></span>
@@ -228,9 +256,17 @@ this module relies on.</p></dd>
 <span>  <span class="va">selected_files_single_picker</span> <span class="op">&lt;-</span> <span class="fu">sbShinyModules</span><span class="fu">::</span><span class="fu">mod_file_picker_server</span><span class="op">(</span></span>
 <span>    id <span class="op">=</span> <span class="st">"single_file_picker"</span>,</span>
 <span>    files_df <span class="op">=</span> <span class="va">files_df</span>,</span>
-<span>    <span class="co"># use_bslib_theme = TRUE, # uncomment if you want to use a Bootstrap theme</span></span>
+<span>    <span class="co"># use_bslib_theme = TRUE, # Uncomment if you want to use a Bootstrap theme</span></span>
 <span>    selection <span class="op">=</span> <span class="st">"single"</span>,</span>
-<span>    default_page_size <span class="op">=</span> <span class="fl">5</span></span>
+<span>    default_page_size <span class="op">=</span> <span class="fl">5</span>,</span>
+<span>    show_guide <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>    guide_content <span class="op">=</span> <span class="st">"default"</span></span>
+<span>    <span class="co"># If you want to use a custom guide instead of the default,</span></span>
+<span>    <span class="co"># comment out the line above (guide_content = "default")</span></span>
+<span>    <span class="co"># and uncomment the following lines to use the built-in example Markdown</span></span>
+<span>    <span class="co"># file:</span></span>
+<span>    <span class="co"># guide_content = system.file("app/md/file_picker_custom_guide_example.md",</span></span>
+<span>    <span class="co">#                             package = "sbShinyModules")</span></span>
 <span>  <span class="op">)</span></span>
 <span></span>
 <span>  <span class="co"># Display selected files</span></span>
@@ -255,7 +291,15 @@ this module relies on.</p></dd>
 <span>    files_df <span class="op">=</span> <span class="va">files_df</span>,</span>
 <span>    <span class="co"># use_bslib_theme = TRUE, # uncomment if you want to use a Bootstrap theme</span></span>
 <span>    selection <span class="op">=</span> <span class="st">"multiple"</span>,</span>
-<span>    default_page_size <span class="op">=</span> <span class="fl">5</span></span>
+<span>    default_page_size <span class="op">=</span> <span class="fl">5</span>,</span>
+<span>    show_guide <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>    guide_content <span class="op">=</span> <span class="st">"default"</span></span>
+<span>    <span class="co"># If you want to use a custom guide instead of the default,</span></span>
+<span>    <span class="co"># comment out the line above (guide_content = "default")</span></span>
+<span>    <span class="co"># and uncomment the following lines to use the built-in example Markdown</span></span>
+<span>    <span class="co"># file:</span></span>
+<span>    <span class="co"># guide_content = system.file("app/md/file_picker_custom_guide_example.md",</span></span>
+<span>    <span class="co">#                             package = "sbShinyModules")</span></span>
 <span>  <span class="op">)</span></span>
 <span></span>
 <span>  <span class="co"># Display selected files</span></span>

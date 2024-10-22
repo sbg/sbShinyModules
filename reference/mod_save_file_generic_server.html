@@ -167,8 +167,7 @@ files mimicking the project file structure on the Platform.</p></dd>
 <span>    <span class="fu">sbShinyModules</span><span class="fu">::</span><span class="fu">mod_save_file_generic_server</span><span class="op">(</span></span>
 <span>      id <span class="op">=</span> <span class="st">"save_file_nested"</span>,</span>
 <span>      reac_vals <span class="op">=</span> <span class="va">helper_rv_nested</span>,</span>
-<span>      sbg_directory_path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span></span>
-<span>        <span class="st">"tests"</span>, <span class="st">"testthat"</span>, <span class="st">"sbgenomics_test"</span>,</span>
+<span>      sbg_directory_path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"demos/sbgenomics_test"</span>,</span>
 <span>        package <span class="op">=</span> <span class="st">"sbShinyModules"</span></span>
 <span>      <span class="op">)</span></span>
 <span>    <span class="op">)</span></span>
@@ -309,8 +308,7 @@ files mimicking the project file structure on the Platform.</p></dd>
 <span>  <span class="fu">sbShinyModules</span><span class="fu">::</span><span class="fu">mod_save_file_generic_server</span><span class="op">(</span></span>
 <span>    id <span class="op">=</span> <span class="st">"file_exporter"</span>,</span>
 <span>    reac_vals <span class="op">=</span> <span class="va">helper_rv_table</span>,</span>
-<span>    sbg_directory_path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span></span>
-<span>      <span class="st">"tests"</span>, <span class="st">"testthat"</span>, <span class="st">"sbgenomics_test"</span>,</span>
+<span>    sbg_directory_path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"demos/sbgenomics_test"</span>,</span>
 <span>      package <span class="op">=</span> <span class="st">"sbShinyModules"</span></span>
 <span>    <span class="op">)</span></span>
 <span>  <span class="op">)</span></span>
@@ -333,8 +331,7 @@ files mimicking the project file structure on the Platform.</p></dd>
 <span>  <span class="fu">sbShinyModules</span><span class="fu">::</span><span class="fu">mod_save_file_generic_server</span><span class="op">(</span></span>
 <span>    id <span class="op">=</span> <span class="st">"json_file_exporter"</span>,</span>
 <span>    reac_vals <span class="op">=</span> <span class="va">helper_rv_json</span>,</span>
-<span>    sbg_directory_path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span></span>
-<span>      <span class="st">"tests"</span>, <span class="st">"testthat"</span>, <span class="st">"sbgenomics_test"</span>,</span>
+<span>    sbg_directory_path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"demos/sbgenomics_test"</span>,</span>
 <span>      package <span class="op">=</span> <span class="st">"sbShinyModules"</span></span>
 <span>    <span class="op">)</span></span>
 <span>  <span class="op">)</span></span>
@@ -357,11 +354,29 @@ files mimicking the project file structure on the Platform.</p></dd>
 <span>  <span class="fu">sbShinyModules</span><span class="fu">::</span><span class="fu">mod_save_file_generic_server</span><span class="op">(</span></span>
 <span>    id <span class="op">=</span> <span class="st">"rds_file_exporter"</span>,</span>
 <span>    reac_vals <span class="op">=</span> <span class="va">helper_rv_rds</span>,</span>
-<span>    sbg_directory_path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span></span>
-<span>      <span class="st">"tests"</span>, <span class="st">"testthat"</span>, <span class="st">"sbgenomics_test"</span>,</span>
+<span>    sbg_directory_path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"demos/sbgenomics_test"</span>,</span>
 <span>      package <span class="op">=</span> <span class="st">"sbShinyModules"</span></span>
 <span>    <span class="op">)</span></span>
 <span>  <span class="op">)</span></span>
+<span></span>
+<span>  <span class="co"># Note: This way the file will be saved in a specific directory within the</span></span>
+<span>  <span class="co"># package installation path. To find this default location, you can use the</span></span>
+<span>  <span class="co"># following R command to determine the installation path of the</span></span>
+<span>  <span class="co"># sbShinyModules package:</span></span>
+<span>  <span class="co">#</span></span>
+<span>  <span class="co"># find.package("sbShinyModules")</span></span>
+<span>  <span class="co">#</span></span>
+<span>  <span class="co"># Within this directory, exported files will be placed under:</span></span>
+<span>  <span class="co">#</span></span>
+<span>  <span class="co"># demos/sbgenomics_test/output-files</span></span>
+<span>  <span class="co">#</span></span>
+<span>  <span class="co"># You can specify your own destination directory for exported files by</span></span>
+<span>  <span class="co"># setting the sbg_directory_path parameter in the</span></span>
+<span>  <span class="co"># mod_save_file_generic_server() function. Ensure that the custom directory</span></span>
+<span>  <span class="co"># you choose follows the required organizational structure for proper</span></span>
+<span>  <span class="co"># functionality. Refer to the sbg_directory_path parameter description in the</span></span>
+<span>  <span class="co"># documentation for detailed requirements.</span></span>
+<span></span>
 <span></span>
 <span>  <span class="co"># Call the test module</span></span>
 <span>  <span class="fu">test_module_server</span><span class="op">(</span>id <span class="op">=</span> <span class="st">"nested_modules"</span><span class="op">)</span></span>

@@ -140,8 +140,8 @@
 <span>  <span class="co"># Load a built-in data frame for files</span></span>
 <span>  <span class="va">files_df</span> <span class="op">&lt;-</span> <span class="fu">sbShinyModules</span><span class="fu">::</span><span class="va"><a href="file_picker_example_data.html">file_picker_example_data</a></span></span>
 <span></span>
-<span>  <span class="co"># Remove units (bytes) from the size column and make it numeric so that it has</span></span>
-<span>  <span class="co"># a range filter</span></span>
+<span>  <span class="co"># Remove units (bytes) from the size column and make it numeric so that it</span></span>
+<span>  <span class="co"># has a range filter</span></span>
 <span>  <span class="va">files_df</span><span class="op">$</span><span class="va">size</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">gsub</a></span><span class="op">(</span><span class="st">" bytes"</span>, <span class="st">""</span>, <span class="va">files_df</span><span class="op">$</span><span class="va">size</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span>  <span class="co"># Alternatively, fetch files from a provided directory (path) using the</span></span>
@@ -161,9 +161,17 @@
 <span>  <span class="va">selected_files_single_picker</span> <span class="op">&lt;-</span> <span class="fu">sbShinyModules</span><span class="fu">::</span><span class="fu"><a href="mod_file_picker_server.html">mod_file_picker_server</a></span><span class="op">(</span></span>
 <span>    id <span class="op">=</span> <span class="st">"single_file_picker"</span>,</span>
 <span>    files_df <span class="op">=</span> <span class="va">files_df</span>,</span>
-<span>    <span class="co"># use_bslib_theme = TRUE, # uncomment if you want to use a Bootstrap theme</span></span>
+<span>    <span class="co"># use_bslib_theme = TRUE, # Uncomment if you want to use a Bootstrap theme</span></span>
 <span>    selection <span class="op">=</span> <span class="st">"single"</span>,</span>
-<span>    default_page_size <span class="op">=</span> <span class="fl">5</span></span>
+<span>    default_page_size <span class="op">=</span> <span class="fl">5</span>,</span>
+<span>    show_guide <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>    guide_content <span class="op">=</span> <span class="st">"default"</span></span>
+<span>    <span class="co"># If you want to use a custom guide instead of the default,</span></span>
+<span>    <span class="co"># comment out the line above (guide_content = "default")</span></span>
+<span>    <span class="co"># and uncomment the following lines to use the built-in example Markdown</span></span>
+<span>    <span class="co"># file:</span></span>
+<span>    <span class="co"># guide_content = system.file("app/md/file_picker_custom_guide_example.md",</span></span>
+<span>    <span class="co">#                             package = "sbShinyModules")</span></span>
 <span>  <span class="op">)</span></span>
 <span></span>
 <span>  <span class="co"># Display selected files</span></span>
@@ -188,7 +196,15 @@
 <span>    files_df <span class="op">=</span> <span class="va">files_df</span>,</span>
 <span>    <span class="co"># use_bslib_theme = TRUE, # uncomment if you want to use a Bootstrap theme</span></span>
 <span>    selection <span class="op">=</span> <span class="st">"multiple"</span>,</span>
-<span>    default_page_size <span class="op">=</span> <span class="fl">5</span></span>
+<span>    default_page_size <span class="op">=</span> <span class="fl">5</span>,</span>
+<span>    show_guide <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>    guide_content <span class="op">=</span> <span class="st">"default"</span></span>
+<span>    <span class="co"># If you want to use a custom guide instead of the default,</span></span>
+<span>    <span class="co"># comment out the line above (guide_content = "default")</span></span>
+<span>    <span class="co"># and uncomment the following lines to use the built-in example Markdown</span></span>
+<span>    <span class="co"># file:</span></span>
+<span>    <span class="co"># guide_content = system.file("app/md/file_picker_custom_guide_example.md",</span></span>
+<span>    <span class="co">#                             package = "sbShinyModules")</span></span>
 <span>  <span class="op">)</span></span>
 <span></span>
 <span>  <span class="co"># Display selected files</span></span>
