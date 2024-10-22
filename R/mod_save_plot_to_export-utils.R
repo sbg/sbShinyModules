@@ -369,7 +369,7 @@ save_plot_file <- function(cur_plot, filename, device, width, height,
     {
       do.call(device_functions[[device]]$fun, device_functions[[device]]$args)
       print(cur_plot)
-      dev.off()
+      grDevices::dev.off()
 
       status <- list(
         title = "Success!",

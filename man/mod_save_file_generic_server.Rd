@@ -115,8 +115,7 @@ test_module_server <- function(id) {
     sbShinyModules::mod_save_file_generic_server(
       id = "save_file_nested",
       reac_vals = helper_rv_nested,
-      sbg_directory_path = system.file(
-        "tests", "testthat", "sbgenomics_test",
+      sbg_directory_path = system.file("demos/sbgenomics_test",
         package = "sbShinyModules"
       )
     )
@@ -257,8 +256,7 @@ server <- function(input, output, session) {
   sbShinyModules::mod_save_file_generic_server(
     id = "file_exporter",
     reac_vals = helper_rv_table,
-    sbg_directory_path = system.file(
-      "tests", "testthat", "sbgenomics_test",
+    sbg_directory_path = system.file("demos/sbgenomics_test",
       package = "sbShinyModules"
     )
   )
@@ -281,8 +279,7 @@ server <- function(input, output, session) {
   sbShinyModules::mod_save_file_generic_server(
     id = "json_file_exporter",
     reac_vals = helper_rv_json,
-    sbg_directory_path = system.file(
-      "tests", "testthat", "sbgenomics_test",
+    sbg_directory_path = system.file("demos/sbgenomics_test",
       package = "sbShinyModules"
     )
   )
@@ -305,11 +302,29 @@ server <- function(input, output, session) {
   sbShinyModules::mod_save_file_generic_server(
     id = "rds_file_exporter",
     reac_vals = helper_rv_rds,
-    sbg_directory_path = system.file(
-      "tests", "testthat", "sbgenomics_test",
+    sbg_directory_path = system.file("demos/sbgenomics_test",
       package = "sbShinyModules"
     )
   )
+
+  # Note: This way the file will be saved in a specific directory within the
+  # package installation path. To find this default location, you can use the
+  # following R command to determine the installation path of the
+  # sbShinyModules package:
+  #
+  # find.package("sbShinyModules")
+  #
+  # Within this directory, exported files will be placed under:
+  #
+  # demos/sbgenomics_test/output-files
+  #
+  # You can specify your own destination directory for exported files by
+  # setting the sbg_directory_path parameter in the
+  # mod_save_file_generic_server() function. Ensure that the custom directory
+  # you choose follows the required organizational structure for proper
+  # functionality. Refer to the sbg_directory_path parameter description in the
+  # documentation for detailed requirements.
+
 
   # Call the test module
   test_module_server(id = "nested_modules")
