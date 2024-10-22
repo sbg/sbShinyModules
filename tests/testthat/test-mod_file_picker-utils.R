@@ -116,6 +116,9 @@ testthat::test_that("load_guide_content throws error when trying to read a file 
   # from the file. We aim to verify that the error gets propagated correctly
   # through the tryCatch block and that the expected error message is produced.
 
+  # Skip this test on Windows OS because Sys.chmod() function is Unix-specific.
+  testthat::skip_if(.Platform$OS.type == "windows", "Skipping tests on Windows.") # nolint
+
   # Create a temporary file with .md extension
   temp_md <- tempfile(fileext = ".md")
   writeLines("This is a valid markdown file.", temp_md)
