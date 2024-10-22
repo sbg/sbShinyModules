@@ -18,6 +18,30 @@
 #'  Note that to use this option, the main UI of the app must include the line
 #'  \code{theme = bslib::bs_theme()}. This requirement ensures the correct
 #'   application of the \code{bslib} theme throughout the app.
+#' @param show_guide A boolean indicating whether to show the File Selection
+#'  Guide. The default value is `TRUE`.
+#' @param guide_content A string that controls the content of the File
+#'  Selection Guide.
+#'  \itemize{
+#'    \item **"default"**: When set to `"default"` (the default value), the
+#'     function displays a standard guide that provides instructions on how to
+#'     manage file selection, including steps like reviewing file details,
+#'     selecting files, using search and filter features, and submitting
+#'     selected files.
+#'    \item **File path**: Alternatively, developers can provide a file path to
+#'     a Markdown (`.md`) file. If a valid file path is provided, the
+#'     `generate_guide_content_from_file()` function will read the Markdown
+#'     file, convert it to HTML, and render it within the File Selection Guide
+#'     box. This allows for custom, user-defined instructions to be displayed
+#'     in the guide. If the Shiny app is being developed within the Golem
+#'     framework, it is recommended to place the Markdown file inside the
+#'     `inst/` directory. You can then reference the file using
+#'     `system.file("path/inside/inst/filename.md", package = "yourgolemapp")`
+#'     to ensure the file is properly bundled and accessible after deployment.
+#'  }
+#'
+#'  The guide is collapsible and can be customized to adapt to single or
+#'  multiple file selection modes.
 #'
 #' @return A Shiny modal dialog UI object.
 #'
@@ -30,19 +54,25 @@
 #' @noRd
 generate_file_picker_modal_ui <- function(ns,
                                           selection_type,
-                                          use_bslib_theme = FALSE) {
+                                          use_bslib_theme = FALSE,
+                                          show_guide = TRUE,
+                                          guide_content = "default") {
   modalDialog(
     title = "File Selection",
     size = ifelse(use_bslib_theme, "xl", "l"),
     if (use_bslib_theme) {
       generate_bslib_modal_ui(
         ns = ns,
-        selection_type = selection_type
+        selection_type = selection_type,
+        show_guide = show_guide,
+        guide_content = guide_content
       )
     } else {
       generate_regular_modal_ui(
         ns = ns,
-        selection_type = selection_type
+        selection_type = selection_type,
+        show_guide = show_guide,
+        guide_content = guide_content
       )
     },
     br(),
@@ -122,46 +152,81 @@ muiDependency <- function() {
 #' @param selection_type A string specifying the selection mode. Can be either
 #'  `single` for single file selection or `multiple` for multiple file
 #'   selection. The default value is `single`.
+#' @param show_guide A boolean indicating whether to show the File Selection
+#'  Guide. The default value is `TRUE`.
+#' @param guide_content A string that controls the content of the File
+#'  Selection Guide.
+#'  \itemize{
+#'    \item **"default"**: When set to `"default"` (the default value), the
+#'     function displays a standard guide that provides instructions on how to
+#'     manage file selection, including steps like reviewing file details,
+#'     selecting files, using search and filter features, and submitting
+#'     selected files.
+#'    \item **File path**: Alternatively, developers can provide a file path to
+#'     a Markdown (`.md`) file. If a valid file path is provided, the
+#'     `generate_guide_content_from_file()` function will read the Markdown
+#'     file, convert it to HTML, and render it within the File Selection Guide
+#'     box. This allows for custom, user-defined instructions to be displayed
+#'     in the guide. If the Shiny app is being developed within the Golem
+#'     framework, it is recommended to place the Markdown file inside the
+#'     `inst/` directory. You can then reference the file using
+#'     `system.file("path/inside/inst/filename.md", package = "yourgolemapp")`
+#'     to ensure the file is properly bundled and accessible after deployment.
+#'  }
+#'
+#'  The guide is collapsible and can be customized to adapt to single or
+#'  multiple file selection modes.
 #'
 #' @return A tag list containing the UI elements for the file selection modal.
 #'
-#' @importFrom checkmate assert_choice
+#' @importFrom checkmate assert_choice assert_flag assert_character
 #' @importFrom bslib accordion accordion_panel card card_header card_body
 #' @importFrom reactable.extras reactable_extras_dependency
 #' @importFrom reactable reactableOutput
 #'
 #' @noRd
-generate_bslib_modal_ui <- function(ns, selection_type) {
+generate_bslib_modal_ui <- function(ns, selection_type,
+                                    show_guide = TRUE,
+                                    guide_content = "default") {
   checkmate::assert_choice(selection_type, c("single", "multiple"))
+  checkmate::assert_flag(show_guide)
+  checkmate::assert_character(guide_content)
+
   tagList(
     # nolint start
-    fluidRow(
-      div(
-        bslib::accordion(
-          bslib::accordion_panel(
-            title = "File Selection Guide",
-            tags$div(
-              tags$p("To efficiently manage files, follow these steps:"),
-              tags$ol(
-                tags$li("Review file details."),
-                if (selection_type == "single") {
-                  tags$li(HTML("To select a file, click the radio button in the leftmost column of the desired file row."))
-                } else {
-                  tags$li(HTML("Use the checkboxes in each row to select multiple files."))
-                },
-                tags$li(HTML("Use the search bar above the table to quickly locate a file by its name or metadata.")),
-                tags$li(HTML("Utilize the filter options to narrow down the file list based on specific criteria.")),
-                tags$li(HTML("Click on column headers to sort files in the ascending or descending order.")),
-                tags$li(HTML("Use pagination controls at the bottom of the table to navigate through multiple pages of files.")),
-                tags$li(HTML("Once you made your choice, click <b>Submit</b> located below the table."))
-              )
+    if (show_guide) {
+      fluidRow(
+        div(
+          bslib::accordion(
+            bslib::accordion_panel(
+              title = "File Selection Guide",
+              if (guide_content == "default") {
+                tags$div(
+                  tags$p("To efficiently manage files, follow these steps:"),
+                  tags$ol(
+                    tags$li("Review file details."),
+                    if (selection_type == "single") {
+                      tags$li(HTML("To select a file, click the radio button in the leftmost column of the desired file row."))
+                    } else {
+                      tags$li(HTML("Use the checkboxes in each row to select multiple files."))
+                    },
+                    tags$li(HTML("Use the search bar above the table to quickly locate a file by its name or metadata.")),
+                    tags$li(HTML("Utilize the filter options to narrow down the file list based on specific criteria.")),
+                    tags$li(HTML("Click on column headers to sort files in the ascending or descending order.")),
+                    tags$li(HTML("Use pagination controls at the bottom of the table to navigate through multiple pages of files.")),
+                    tags$li(HTML("Once you made your choice, click <b>Submit</b> located below the table."))
+                  )
+                )
+              } else {
+                tags$div(load_guide_content(guide_content))
+              },
+              open = FALSE
             ),
             open = FALSE
-          ),
-          open = FALSE
+          )
         )
       )
-    ),
+    },
     br(),
     # nolint end
     fluidRow(
@@ -219,48 +284,85 @@ generate_bslib_modal_ui <- function(ns, selection_type) {
 #' @param ns A namespace function.
 #' @param selection_type A string specifying the selection mode. It can be
 #'  either `single` for single file selection or `multiple` for multiple file
-#'   selection. The default value is `single`.
+#'  selection. The default value is `single`.
+#' @param show_guide A boolean indicating whether to show the File Selection
+#'  Guide. The default value is `TRUE`.
+#' @param guide_content A string that controls the content of the File
+#'  Selection Guide.
+#'  \itemize{
+#'    \item **"default"**: When set to `"default"` (the default value), the
+#'     function displays a standard guide that provides instructions on how to
+#'     manage file selection, including steps like reviewing file details,
+#'     selecting files, using search and filter features, and submitting
+#'     selected files.
+#'    \item **File path**: Alternatively, developers can provide a file path to
+#'     a Markdown (`.md`) file. If a valid file path is provided, the
+#'     `generate_guide_content_from_file()` function will read the Markdown
+#'     file, convert it to HTML, and render it within the File Selection Guide
+#'     box. This allows for custom, user-defined instructions to be displayed
+#'     in the guide. If the Shiny app is being developed within the Golem
+#'     framework, it is recommended to place the Markdown file inside the
+#'     `inst/` directory. You can then reference the file using
+#'     `system.file("path/inside/inst/filename.md", package = "yourgolemapp")`
+#'     to ensure the file is properly bundled and accessible after deployment.
+#'  }
+#'
+#'  The guide is collapsible and can be customized to adapt to single or
+#'  multiple file selection modes.
 #'
 #' @return A tag list containing the UI elements for the file selection modal.
 #'
-#' @importFrom checkmate assert_choice
+#' @importFrom checkmate assert_choice assert_flag assert_character
 #' @importFrom shinyWidgets useShinydashboard
 #' @importFrom shinydashboard box
 #' @importFrom reactable.extras reactable_extras_dependency
 #' @importFrom reactable reactableOutput
 #'
 #' @noRd
-generate_regular_modal_ui <- function(ns, selection_type) {
+generate_regular_modal_ui <- function(ns,
+                                      selection_type,
+                                      show_guide = TRUE,
+                                      guide_content = "default") {
   checkmate::assert_choice(selection_type, c("single", "multiple"))
+  checkmate::assert_flag(show_guide)
+  checkmate::assert_character(guide_content)
+
   tagList(
     shinyWidgets::useShinydashboard(),
     # nolint start
-    fluidRow(
-      div(
-        shinydashboard::box(
-          title = "File Selection Guide",
-          width = 12,
-          collapsible = TRUE,
-          collapsed = TRUE,
-          tags$div(
-            tags$p("To efficiently manage files, follow these steps:"),
-            tags$ol(
-              tags$li("Review file details."),
-              if (selection_type == "single") {
-                tags$li(HTML("To select a file, click the radio button in the leftmost column of the desired file row."))
-              } else {
-                tags$li(HTML("Use the checkboxes in each row to select multiple files."))
-              },
-              tags$li(HTML("Use the search bar above the table to quickly locate a file by its name or metadata.")),
-              tags$li(HTML("Utilize the filter options to narrow down the file list based on specific criteria.")),
-              tags$li(HTML("Click on column headers to sort files in ascending or descending order.")),
-              tags$li(HTML("Use pagination controls at the bottom of the table to navigate through multiple pages of files.")),
-              tags$li(HTML("Once you made your choice, click <b>Submit</b> located below the table."))
-            )
+
+    if (show_guide) {
+      fluidRow(
+        div(
+          shinydashboard::box(
+            title = "File Selection Guide",
+            width = 12,
+            collapsible = TRUE,
+            collapsed = TRUE,
+            if (guide_content == "default") {
+              tags$div(
+                tags$p("To efficiently manage files, follow these steps:"),
+                tags$ol(
+                  tags$li("Review file details."),
+                  if (selection_type == "single") {
+                    tags$li(HTML("To select a file, click the radio button in the leftmost column of the desired file row."))
+                  } else {
+                    tags$li(HTML("Use the checkboxes in each row to select multiple files."))
+                  },
+                  tags$li(HTML("Use the search bar above the table to quickly locate a file by its name or metadata.")),
+                  tags$li(HTML("Utilize the filter options to narrow down the file list based on specific criteria.")),
+                  tags$li(HTML("Click on column headers to sort files in ascending or descending order.")),
+                  tags$li(HTML("Use pagination controls at the bottom of the table to navigate through multiple pages of files.")),
+                  tags$li(HTML("Once you made your choice, click <b>Submit</b> located below the table."))
+                )
+              )
+            } else {
+              tags$div(load_guide_content(guide_content))
+            }
           )
         )
       )
-    ),
+    },
     # nolint end
     fluidRow(
       div(
@@ -435,4 +537,131 @@ create_col_def <- function(col_data) {
       resizable = TRUE
     ))
   }
+}
+
+#' Load Guide Content from Markdown File
+#'
+#' @description This helper function reads a Markdown (`.md`) file, converts it
+#'  to HTML, and returns the HTML content for rendering within a Shiny
+#'  application. It is used to display custom content in the File Selection
+#'  Guide when a file path is provided.
+#'
+#' @param md_file_path A string specifying the path to the Markdown file. The
+#'  function reads the content of this file, converts the Markdown to HTML, and
+#'  wraps it in \code{HTML()} for rendering in Shiny.
+#'
+#' @return A character string containing the converted Markdown content,
+#'  marked as HTML and ready to be displayed in a Shiny application.
+#'
+#' @details
+#'  The function checks if the provided file path exists and verifies that it
+#'  has a `.md` extension. If the file does not exist or the extension is not
+#'  valid, it throws an error with an appropriate message. After reading the
+#'  Markdown content from the file, it is converted to HTML using the
+#'  \code{commonmark::markdown_html()} function. The resulting HTML is wrapped
+#'  in \code{HTML()} to ensure proper rendering within Shiny.
+#'
+#' @importFrom checkmate assert_string
+#' @importFrom glue glue_col
+#' @importFrom commonmark markdown_html
+#' @importFrom rlang abort
+#' @importFrom tools file_ext
+#'
+#' @noRd
+load_guide_content <- function(md_file_path) {
+  # Check if md_file_path is a character string
+  checkmate::assert_string(md_file_path)
+
+  if (!file.exists(md_file_path)) {
+    rlang::abort(glue::glue_col(
+      "The {red {md_file_path}} file does not exist."
+    ))
+  }
+
+  # Check if the file has a .md extension
+  if (tools::file_ext(md_file_path) != "md") {
+    rlang::abort(
+      glue::glue_col("The provided file is not a Markdown (.md) file: {red {md_file_path}}") # nolint
+    )
+  }
+
+
+  # Read the markdown file content
+  md_content <- tryCatch(
+    {
+      readLines(md_file_path)
+    },
+    error = function(e) {
+      rlang::abort(paste("Failed to read the markdown file:", e$message))
+    }
+  )
+
+  # Convert markdown content to HTML
+  html_content <- tryCatch(
+    {
+      commonmark::markdown_html(md_content)
+    },
+    error = function(e) {
+      rlang::abort(paste("Failed to convert markdown to HTML:", e$message))
+    }
+  )
+
+  # # Escape potentially harmful HTML content
+  safe_html_content <- sanitize_html(html_content)
+
+  return(HTML(safe_html_content))
+}
+
+#' Sanitize HTML content by removing risky rlements
+#'
+#' @description This function sanitizes HTML content by removing potentially
+#'  dangerous elements such as `<script>`, `<iframe>`, `<embed>`, `<object>`,
+#'  `<svg>`, and `<img>` tags. It also checks the `href` attributes of `<a>`
+#'  (anchor) tags and only allows safe protocols (`http`, `https`, and
+#'  `mailto`). Any unsafe `href` values are replaced with `"#"` to neutralize
+#'  them.
+#'
+#' @param html_content A character string containing the HTML content to be
+#'  sanitized.
+#'
+#' @return A sanitized character string containing HTML that is safe to render
+#'  in a browser. Risky elements are removed, and only safe `href` links are
+#'  allowed.
+#'
+#' @details
+#' - The function parses the provided HTML content and removes all instances of
+#'  potentially dangerous elements, such as `<script>`, `<iframe>`, `<embed>`,
+#'  `<object>`, `<svg>`, and `<img>`.
+#' - For `<a>` (anchor) tags, the function checks the `href` attribute and only
+#'  allows URLs that start with `http`, `https`, or `mailto`. Any other
+#'  protocols (e.g., `javascript:`) are considered unsafe and are replaced
+#'  with `"#"`.
+#' - This sanitization ensures that the HTML content can be safely displayed
+#'  in a browser without risk of executing harmful scripts or unsafe links.
+#'
+#' @importFrom xml2 read_html xml_remove xml_find_all xml_attr
+#'
+#' @noRd
+sanitize_html <- function(html_content) {
+  # Parse the HTML content
+  doc <- xml2::read_html(html_content)
+
+  # Remove all <script>, <iframe>, <embed>, and <object> tags
+  xml2::xml_remove(xml_find_all(doc, ".//script | .//iframe | .//embed | .//object | .//svg | .//img")) # nolint
+
+  # Find all <a> tags and sanitize their href attributes
+  links <- xml2::xml_find_all(doc, ".//a")
+
+  # Loop through all <a> elements and sanitize href attributes
+  for (link in links) {
+    href_value <- xml2::xml_attr(link, "href")
+
+    # Only allow safe href protocols: http, https, mailto
+    if (!grepl("^(http|https|mailto):", href_value)) {
+      xml2::xml_attr(link, "href") <- "#"
+    }
+  }
+
+  # Return the sanitized HTML as a string
+  as.character(doc)
 }

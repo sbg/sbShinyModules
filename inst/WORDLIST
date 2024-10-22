@@ -5,6 +5,7 @@ bmp
 br
 bslib
 btns
+commonmark
 config
 Config
 cph
@@ -45,6 +46,7 @@ marija
 Marija
 marko
 Marko
+md
 MERCHANTABILITY
 minimalistic
 Moveable
@@ -94,3 +96,4 @@ VignetteBuilder
 wd
 xattr
 xattrs
+yourgolemapp

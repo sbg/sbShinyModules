@@ -82,12 +82,29 @@ server <- function(input, output, session) {
     id = "plot_exporter",
     plot_reactVals = helper_reactive,
     module_title = "Save plot to Platform",
-    sbg_directory_path = system.file(
-      "tests", "testthat", "sbgenomics_test",
+    sbg_directory_path = system.file("demos/sbgenomics_test",
       package = "sbShinyModules"
     ),
     btns_div_width = 12
   )
+
+  # Note: This way the plot will be saved in a specific directory within the
+  # package installation path. To find this default location, you can use the
+  # following R command to determine the installation path of the
+  # sbShinyModules package:
+  #
+  # find.package("sbShinyModules")
+  #
+  # Within this directory, exported files will be placed under:
+  #
+  # demos/sbgenomics_test/output-files
+  #
+  # You can specify your own destination directory for exported files by
+  # setting the sbg_directory_path parameter in the
+  # mod_save_plot_to_export_server() function. Ensure that the custom directory
+  # you choose follows the required organizational structure for proper
+  # functionality. Refer to the sbg_directory_path parameter description in the
+  # documentation for detailed requirements.
 }
 
 # Run the Shiny app

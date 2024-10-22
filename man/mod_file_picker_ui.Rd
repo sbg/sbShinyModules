@@ -79,8 +79,8 @@ server <- function(input, output, session) {
   # Load a built-in data frame for files
   files_df <- sbShinyModules::file_picker_example_data
 
-  # Remove units (bytes) from the size column and make it numeric so that it has
-  # a range filter
+  # Remove units (bytes) from the size column and make it numeric so that it
+  # has a range filter
   files_df$size <- as.numeric(gsub(" bytes", "", files_df$size))
 
   # Alternatively, fetch files from a provided directory (path) using the
@@ -100,9 +100,17 @@ server <- function(input, output, session) {
   selected_files_single_picker <- sbShinyModules::mod_file_picker_server(
     id = "single_file_picker",
     files_df = files_df,
-    # use_bslib_theme = TRUE, # uncomment if you want to use a Bootstrap theme
+    # use_bslib_theme = TRUE, # Uncomment if you want to use a Bootstrap theme
     selection = "single",
-    default_page_size = 5
+    default_page_size = 5,
+    show_guide = TRUE,
+    guide_content = "default"
+    # If you want to use a custom guide instead of the default,
+    # comment out the line above (guide_content = "default")
+    # and uncomment the following lines to use the built-in example Markdown
+    # file:
+    # guide_content = system.file("app/md/file_picker_custom_guide_example.md",
+    #                             package = "sbShinyModules")
   )
 
   # Display selected files
@@ -127,7 +135,15 @@ server <- function(input, output, session) {
     files_df = files_df,
     # use_bslib_theme = TRUE, # uncomment if you want to use a Bootstrap theme
     selection = "multiple",
-    default_page_size = 5
+    default_page_size = 5,
+    show_guide = TRUE,
+    guide_content = "default"
+    # If you want to use a custom guide instead of the default,
+    # comment out the line above (guide_content = "default")
+    # and uncomment the following lines to use the built-in example Markdown
+    # file:
+    # guide_content = system.file("app/md/file_picker_custom_guide_example.md",
+    #                             package = "sbShinyModules")
   )
 
   # Display selected files

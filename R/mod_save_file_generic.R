@@ -151,6 +151,8 @@ mod_save_file_generic_server <- function(id,
 #' @return A list containing the status for saving files with fields `check`,
 #'  `title` and `text` ready to be used in the shinyalerts.
 #'
+#' @importFrom stats na.exclude
+#'
 #' @noRd
 handle_file_export <- function(FUN, args, filename, extension,
                                overwrite, sbg_directory_path) {
@@ -199,7 +201,7 @@ handle_file_export <- function(FUN, args, filename, extension,
 
   tryCatch(
     {
-      na_excluded <- na.exclude(arg_idx)
+      na_excluded <- stats::na.exclude(arg_idx)
       filename_arg <- names(fun_args)[na_excluded[1]] # take first found
       args[[filename_arg]] <- file.path(
         sbg_directory_path,

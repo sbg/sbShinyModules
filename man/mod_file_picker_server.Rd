@@ -11,6 +11,8 @@ mod_file_picker_server(
   file_identifier_column = "path",
   default_page_size = 10,
   use_bslib_theme = FALSE,
+  show_guide = TRUE,
+  guide_content = "default",
   ...
 )
 }
@@ -43,6 +45,32 @@ using the \code{bslib} package and its functions. Note that to use this
 option, the main UI of the app must include the line
 \code{theme = bslib::bs_theme()}. This requirement ensures the correct
  application of the \code{bslib} theme throughout the app.}
+
+\item{show_guide}{A boolean indicating whether to show the File Selection
+Guide. The default value is `TRUE`.}
+
+\item{guide_content}{A string that controls the content of the File
+ Selection Guide.
+ \itemize{
+   \item **"default"**: When set to `"default"` (the default value), the
+    function displays a standard guide that provides instructions on how to
+    manage file selection, including steps like reviewing file details,
+    selecting files, using search and filter features, and submitting
+    selected files.
+   \item **File path**: Alternatively, developers can provide a file path to
+    a Markdown (`.md`) file. If a valid file path is provided, the
+    `generate_guide_content_from_file()` function will read the Markdown
+    file, convert it to HTML, and render it within the File Selection Guide
+    box. This allows for custom, user-defined instructions to be displayed
+    in the guide. If the Shiny app is being developed within the Golem
+    framework, it is recommended to place the Markdown file inside the
+    `inst/` directory. You can then reference the file using
+    `system.file("path/inside/inst/filename.md", package = "yourgolemapp")`
+    to ensure the file is properly bundled and accessible after deployment.
+ }
+
+ The guide is collapsible and can be customized to adapt to single or
+ multiple file selection modes.}
 
 \item{...}{Additional parameters to be passed to the `reactable()` function
 this module relies on.}
@@ -122,8 +150,8 @@ server <- function(input, output, session) {
   # Load a built-in data frame for files
   files_df <- sbShinyModules::file_picker_example_data
 
-  # Remove units (bytes) from the size column and make it numeric so that it has
-  # a range filter
+  # Remove units (bytes) from the size column and make it numeric so that it
+  # has a range filter
   files_df$size <- as.numeric(gsub(" bytes", "", files_df$size))
 
   # Alternatively, fetch files from a provided directory (path) using the
@@ -143,9 +171,17 @@ server <- function(input, output, session) {
   selected_files_single_picker <- sbShinyModules::mod_file_picker_server(
     id = "single_file_picker",
     files_df = files_df,
-    # use_bslib_theme = TRUE, # uncomment if you want to use a Bootstrap theme
+    # use_bslib_theme = TRUE, # Uncomment if you want to use a Bootstrap theme
     selection = "single",
-    default_page_size = 5
+    default_page_size = 5,
+    show_guide = TRUE,
+    guide_content = "default"
+    # If you want to use a custom guide instead of the default,
+    # comment out the line above (guide_content = "default")
+    # and uncomment the following lines to use the built-in example Markdown
+    # file:
+    # guide_content = system.file("app/md/file_picker_custom_guide_example.md",
+    #                             package = "sbShinyModules")
   )
 
   # Display selected files
@@ -170,7 +206,15 @@ server <- function(input, output, session) {
     files_df = files_df,
     # use_bslib_theme = TRUE, # uncomment if you want to use a Bootstrap theme
     selection = "multiple",
-    default_page_size = 5
+    default_page_size = 5,
+    show_guide = TRUE,
+    guide_content = "default"
+    # If you want to use a custom guide instead of the default,
+    # comment out the line above (guide_content = "default")
+    # and uncomment the following lines to use the built-in example Markdown
+    # file:
+    # guide_content = system.file("app/md/file_picker_custom_guide_example.md",
+    #                             package = "sbShinyModules")
   )
 
   # Display selected files

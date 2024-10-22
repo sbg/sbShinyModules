@@ -94,6 +94,30 @@ mod_file_picker_ui <- function(id,
 #'  option, the main UI of the app must include the line
 #'  \code{theme = bslib::bs_theme()}. This requirement ensures the correct
 #'   application of the \code{bslib} theme throughout the app.
+#' @param show_guide A boolean indicating whether to show the File Selection
+#'  Guide. The default value is `TRUE`.
+#' @param guide_content A string that controls the content of the File
+#'  Selection Guide.
+#'  \itemize{
+#'    \item **"default"**: When set to `"default"` (the default value), the
+#'     function displays a standard guide that provides instructions on how to
+#'     manage file selection, including steps like reviewing file details,
+#'     selecting files, using search and filter features, and submitting
+#'     selected files.
+#'    \item **File path**: Alternatively, developers can provide a file path to
+#'     a Markdown (`.md`) file. If a valid file path is provided, the
+#'     `generate_guide_content_from_file()` function will read the Markdown
+#'     file, convert it to HTML, and render it within the File Selection Guide
+#'     box. This allows for custom, user-defined instructions to be displayed
+#'     in the guide. If the Shiny app is being developed within the Golem
+#'     framework, it is recommended to place the Markdown file inside the
+#'     `inst/` directory. You can then reference the file using
+#'     `system.file("path/inside/inst/filename.md", package = "yourgolemapp")`
+#'     to ensure the file is properly bundled and accessible after deployment.
+#'  }
+#'
+#'  The guide is collapsible and can be customized to adapt to single or
+#'  multiple file selection modes.
 #' @param ... Additional parameters to be passed to the `reactable()` function
 #'  this module relies on.
 #'
@@ -117,11 +141,14 @@ mod_file_picker_server <- function(id,
                                    file_identifier_column = "path",
                                    default_page_size = 10,
                                    use_bslib_theme = FALSE,
+                                   show_guide = TRUE,
+                                   guide_content = "default",
                                    ...) {
   # Checks the function arguments using checkmate
   checkmate::assert_data_frame(files_df, min.cols = 1)
   checkmate::assert_choice(selection, c("single", "multiple"))
   checkmate::assert_character(file_identifier_column)
+  checkmate::assert_character(guide_content)
 
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
@@ -141,7 +168,9 @@ mod_file_picker_server <- function(id,
           ui = generate_file_picker_modal_ui(
             ns = ns,
             selection_type = selection,
-            use_bslib_theme = use_bslib_theme
+            use_bslib_theme = use_bslib_theme,
+            show_guide = show_guide,
+            guide_content = guide_content
           )
         )
       }
