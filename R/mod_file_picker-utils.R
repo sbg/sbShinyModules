@@ -665,3 +665,31 @@ sanitize_html <- function(html_content) {
   # Return the sanitized HTML as a string
   as.character(doc)
 }
+
+#' Check and transform `files_df` input
+#'
+#' @description This helper function verifies that the provided `files_df`
+#'  parameter is a data frame with at least one column, regardless of whether
+#'  it is a reactive expression or a regular data frame. If `files_df` is a
+#'  reactive expression, it retrieves and checks the underlying data frame. If
+#'  the validation passes, the function returns the data frame in a consistent
+#'  format for downstream use.
+#'
+#' @param files_df Either a regular data frame or a reactive expression
+#'  returning a data frame. The data frame should contain at least one column.
+#'
+#' @return A data frame extracted from `files_df`, suitable for use in both
+#'  reactive and non-reactive contexts.
+#'
+#' @importFrom checkmate assert_data_frame
+#'
+#' @noRd
+check_and_transform_files_df <- function(files_df) {
+  if (is.reactive(files_df)) {
+    checkmate::assert_data_frame(files_df(), min.cols = 1)
+    return(files_df())
+  } else {
+    checkmate::assert_data_frame(files_df, min.cols = 1)
+    return(files_df)
+  }
+}

@@ -205,3 +205,42 @@ testthat::test_that("sanitize_html removes other risky tags", {
   expect_false(grepl("<svg>", safe_html))
   expect_false(grepl("<img>", safe_html))
 })
+
+testthat::test_that("check_and_transform_files_df works with a regular data frame", { # nolint
+  df <- data.frame(path = c("file1", "file2"), size = c(100, 200))
+
+  # Expect the function to return the same data frame
+  result <- check_and_transform_files_df(df)
+  testthat::expect_equal(result, df)
+
+  # Expect the result to be a data frame
+  testthat::expect_s3_class(result, "data.frame")
+
+  # Expect at least one column in the result
+  testthat::expect_true(ncol(result) >= 1)
+})
+
+testthat::test_that("check_and_transform_files_df throws an error for non-data-frame input", { # nolint
+  invalid_input1 <- list(path = c("file1", "file2"), size = c(100, 200))
+  invalid_input2 <- "not a data frame"
+
+  # Expect errors
+  testthat::expect_error(
+    check_and_transform_files_df(invalid_input1),
+    "Must be of type 'data.frame', not 'list'."
+  )
+  testthat::expect_error(
+    check_and_transform_files_df(invalid_input2),
+    "Must be of type 'data.frame', not 'character'."
+  )
+})
+
+testthat::test_that("check_and_transform_files_df throws an error for data frames with no columns", { # nolint
+  empty_df <- data.frame()
+
+  # Expect errors for data frames without columns
+  testthat::expect_error(
+    check_and_transform_files_df(empty_df),
+    "Must have at least 1 cols, but has 0 cols."
+  )
+})
