@@ -40,7 +40,9 @@ The module UI function creates an action button that triggers a modal dialog for
 <br>
 
 
-The UI function also allows you to customize the action button icon (`button_icon` parameter) and width (`button_width` parameter) to suit the needs of your application. 
+The UI function also allows you to customize the action button label 
+(`button_label` parameter), icon (`button_icon` parameter) and width 
+(`button_width` parameter) to suit the needs of your application. 
 
 
 #### UI Function Call
@@ -61,7 +63,7 @@ The server function handles the logic for displaying the file picker modal and m
 
 - **id**: A unique identifier for the module instance. 
 
-- **files_df**: A data frame containing the file information. This is the most important argument, and it must include columns for the file paths and any other relevant metadata. 
+- **files_df**: A data frame or reactive expression returning a data frame, containing the files information. This is the most important argument, and it must include columns for the file paths and any other relevant metadata. If provided as a reactive expression, ensure it returns a data frame in the required format.
 
 - **selection**: Specifies the selection mode ('single' or 'multiple'). Defaults to 'single'.
 
