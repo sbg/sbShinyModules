@@ -19,13 +19,15 @@ mod_file_picker_server(
 \arguments{
 \item{id}{A unique identifier for the module instance.}
 
-\item{files_df}{A data frame containing file information. This data frame
-should have a column for the file paths and any other relevant metadata. You
-can use the \code{\link{get_all_project_files}} function to fetch all
-project files along with their metadata from the SB File system
-within Data Studio.This function returns a data frame containing
-comprehensive file information, making it an ideal input for the
-`mod_file_picker_server()` function.}
+\item{files_df}{A data frame or reactive expression returning a data frame,
+containing file information. This data frame should have a column for the
+file paths and any other relevant metadata. If provided as a reactive
+expression, ensure it returns a data frame in the required format. You can
+use the \code{\link{get_all_project_files}} function to fetch all project
+files along with their metadata from the SB File system within Data Studio.
+This function returns a data frame containing comprehensive file
+information, making it an ideal input for the `mod_file_picker_server()`
+function.}
 
 \item{selection}{A string specifying the selection mode. Can be either
 'single' for single file selection or 'multiple' for multiple file

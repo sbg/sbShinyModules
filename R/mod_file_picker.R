@@ -19,7 +19,9 @@
 #'  }
 #'
 #' @param id Module ID.
-#' @param button_icon An optional icon to appear on the button. Defaults to `icon('circle-plus')`.
+#' @param button_label Custom button label. Default to `Add files`.
+#' @param button_icon An optional icon to appear on the button.
+#'  Defaults to `icon('circle-plus')`.
 #' @param button_width The width of the button. Defaults to `100\%`.
 # nolint end
 #'
@@ -30,11 +32,12 @@
 #'
 #' @export
 mod_file_picker_ui <- function(id,
+                               button_label = "Add files",
                                button_icon = icon("circle-plus"),
                                button_width = "100%") {
   ns <- NS(id)
   actionButton(ns("select_file"),
-    label = "Add files",
+    label = button_label,
     icon = button_icon,
     width = button_width
   )
@@ -72,13 +75,15 @@ mod_file_picker_ui <- function(id,
 # nolint end.
 #'
 #' @param id A unique identifier for the module instance.
-#' @param files_df A data frame containing file information. This data frame
-#'  should have a column for the file paths and any other relevant metadata. You
-#'  can use the \code{\link{get_all_project_files}} function to fetch all
-#'  project files along with their metadata from the SB File system
-#'  within Data Studio.This function returns a data frame containing
-#'  comprehensive file information, making it an ideal input for the
-#'  `mod_file_picker_server()` function.
+#' @param files_df A data frame or reactive expression returning a data frame,
+#'  containing file information. This data frame should have a column for the
+#'  file paths and any other relevant metadata. If provided as a reactive
+#'  expression, ensure it returns a data frame in the required format. You can
+#'  use the \code{\link{get_all_project_files}} function to fetch all project
+#'  files along with their metadata from the SB File system within Data Studio.
+#'  This function returns a data frame containing comprehensive file
+#'  information, making it an ideal input for the `mod_file_picker_server()`
+#'  function.
 #' @param selection A string specifying the selection mode. Can be either
 #'  'single' for single file selection or 'multiple' for multiple file
 #'   selection. The default value is 'single'.
@@ -145,7 +150,6 @@ mod_file_picker_server <- function(id,
                                    guide_content = "default",
                                    ...) {
   # Checks the function arguments using checkmate
-  checkmate::assert_data_frame(files_df, min.cols = 1)
   checkmate::assert_choice(selection, c("single", "multiple"))
   checkmate::assert_character(file_identifier_column)
   checkmate::assert_character(guide_content)
@@ -156,10 +160,11 @@ mod_file_picker_server <- function(id,
     module_output_files <- reactiveVal(NULL)
 
     observeEvent(input$select_file, {
-      if (nrow(files_df) == 0) {
+      files_df <- check_and_transform_files_df(files_df)
+      if (is.null(files_df) || nrow(files_df) == 0) {
         shinyalert::shinyalert(
-          title = "Empty project",
-          text = "The project doesn't contain any files. Please add files to your project.", # nolint
+          title = "Files not found.",
+          text = "Please check if you've loaded your files correctly first.",
           type = "warning"
         )
       } else {
@@ -179,6 +184,7 @@ mod_file_picker_server <- function(id,
     selected <- reactive({
       selected_indices <- getReactableState("table", "selected")
       if (length(selected_indices) > 0) {
+        files_df <- check_and_transform_files_df(files_df)
         selected_data <- files_df[selected_indices, file_identifier_column]
         return(selected_data)
       } else {
@@ -186,11 +192,14 @@ mod_file_picker_server <- function(id,
       }
     })
 
-    # Create a named list of column definitions
-    column_defs <- lapply(files_df, create_col_def)
-    names(column_defs) <- names(files_df)
 
     output$table <- reactable::renderReactable({
+      files_df <- check_and_transform_files_df(files_df)
+
+      # Create a named list of column definitions
+      column_defs <- lapply(files_df, create_col_def)
+      names(column_defs) <- names(files_df)
+
       reactable::reactable(files_df,
         selection = selection,
         onClick = "select",
@@ -211,7 +220,6 @@ mod_file_picker_server <- function(id,
           style = list(whiteSpace = "nowrap"),
           width = 400
         ),
-        elementId = "file-picker-list",
         columns = c(
           list(
             .selection = reactable::colDef(
