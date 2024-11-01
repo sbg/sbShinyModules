@@ -227,11 +227,13 @@ testthat::test_that("check_and_transform_files_df throws an error for non-data-f
   # Expect errors
   testthat::expect_error(
     check_and_transform_files_df(invalid_input1),
-    "Must be of type 'data.frame', not 'list'."
+    fixed = TRUE,
+    "Assertion on 'files_df' failed: Must be of type 'data.frame' (or 'NULL'), not 'list'." # nolint
   )
   testthat::expect_error(
     check_and_transform_files_df(invalid_input2),
-    "Must be of type 'data.frame', not 'character'."
+    fixed = TRUE,
+    "Assertion on 'files_df' failed: Must be of type 'data.frame' (or 'NULL'), not 'character'." # nolint
   )
 })
 

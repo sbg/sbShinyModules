@@ -161,10 +161,10 @@ mod_file_picker_server <- function(id,
 
     observeEvent(input$select_file, {
       files_df <- check_and_transform_files_df(files_df)
-      if (nrow(files_df) == 0) {
+      if (is.null(files_df) || nrow(files_df) == 0) {
         shinyalert::shinyalert(
-          title = "Empty project.",
-          text = "The project doesn't contain any files. Please add files to your project.", # nolint
+          title = "Files not found.",
+          text = "Please check if you've loaded your files correctly first.",
           type = "warning"
         )
       } else {

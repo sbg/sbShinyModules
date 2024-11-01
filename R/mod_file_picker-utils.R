@@ -686,10 +686,10 @@ sanitize_html <- function(html_content) {
 #' @noRd
 check_and_transform_files_df <- function(files_df) {
   if (is.reactive(files_df)) {
-    checkmate::assert_data_frame(files_df(), min.cols = 1)
+    checkmate::assert_data_frame(files_df(), min.cols = 1, null.ok = TRUE)
     return(files_df())
   } else {
-    checkmate::assert_data_frame(files_df, min.cols = 1)
+    checkmate::assert_data_frame(files_df, min.cols = 1, null.ok = TRUE)
     return(files_df)
   }
 }
