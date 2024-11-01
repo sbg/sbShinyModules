@@ -6,6 +6,7 @@
 \usage{
 mod_file_picker_ui(
   id,
+  button_label = "Add files",
   button_icon = icon("circle-plus"),
   button_width = "100\%"
 )
@@ -13,7 +14,10 @@ mod_file_picker_ui(
 \arguments{
 \item{id}{Module ID.}
 
-\item{button_icon}{An optional icon to appear on the button. Defaults to `icon('circle-plus')`.}
+\item{button_label}{Custom button label. Default to `Add files`.}
+
+\item{button_icon}{An optional icon to appear on the button.
+Defaults to `icon('circle-plus')`.}
 
 \item{button_width}{The width of the button. Defaults to `100\%`.}
 }

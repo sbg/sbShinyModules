@@ -1,6 +1,6 @@
 Package: sbShinyModules
 Title: Reusable Shiny Modules for Easy Integration on Seven Bridges Platforms
-Version: 0.0.0.9000
+Version: 0.1.0
 Authors@R: c(
     person("Marko", "Trifunovic", email = "marko.trifunovic@velsera.com", role = c("cre", "aut")),
     person("Marija", "Gacic", email = "marija.jovanovic@velsera.com", role = "aut"),

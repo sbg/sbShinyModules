@@ -19,7 +19,9 @@
 #'  }
 #'
 #' @param id Module ID.
-#' @param button_icon An optional icon to appear on the button. Defaults to `icon('circle-plus')`.
+#' @param button_label Custom button label. Default to `Add files`.
+#' @param button_icon An optional icon to appear on the button.
+#'  Defaults to `icon('circle-plus')`.
 #' @param button_width The width of the button. Defaults to `100\%`.
 # nolint end
 #'
@@ -30,11 +32,12 @@
 #'
 #' @export
 mod_file_picker_ui <- function(id,
+                               button_label = "Add files",
                                button_icon = icon("circle-plus"),
                                button_width = "100%") {
   ns <- NS(id)
   actionButton(ns("select_file"),
-    label = "Add files",
+    label = button_label,
     icon = button_icon,
     width = button_width
   )
@@ -160,7 +163,7 @@ mod_file_picker_server <- function(id,
       files_df <- check_and_transform_files_df(files_df)
       if (nrow(files_df) == 0) {
         shinyalert::shinyalert(
-          title = "Empty project",
+          title = "Empty project.",
           text = "The project doesn't contain any files. Please add files to your project.", # nolint
           type = "warning"
         )
@@ -217,7 +220,6 @@ mod_file_picker_server <- function(id,
           style = list(whiteSpace = "nowrap"),
           width = 400
         ),
-        elementId = "file-picker-list",
         columns = c(
           list(
             .selection = reactable::colDef(
