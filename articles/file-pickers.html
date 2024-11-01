@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">sbShinyModules</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -60,7 +60,7 @@
 
       <h1>File Picker Module: Integration and Examples</h1>
             
-            <h4 data-toc-skip class="date">2024-10-22</h4>
+            <h4 data-toc-skip class="date">2024-11-01</h4>
       
 
       <div class="d-none name"><code>file-pickers.Rmd</code></div>
@@ -90,10 +90,10 @@ dialog for file selection.</p>
 </div>
 </center>
 <p><br></p>
-<p>The UI function also allows you to customize the action button icon
-(<code>button_icon</code> parameter) and width
-(<code>button_width</code> parameter) to suit the needs of your
-application.</p>
+<p>The UI function also allows you to customize the action button label
+(<code>button_label</code> parameter), icon (<code>button_icon</code>
+parameter) and width (<code>button_width</code> parameter) to suit the
+needs of your application.</p>
 <div class="section level4">
 <h4 id="ui-function-call">UI Function Call<a class="anchor" aria-label="anchor" href="#ui-function-call"></a>
 </h4>
@@ -114,9 +114,11 @@ file paths and other relevant metadata.</p>
 <ul>
 <li><p><strong>id</strong>: A unique identifier for the module
 instance.</p></li>
-<li><p><strong>files_df</strong>: A data frame containing the file
-information. This is the most important argument, and it must include
-columns for the file paths and any other relevant metadata.</p></li>
+<li><p><strong>files_df</strong>: A data frame or reactive expression
+returning a data frame, containing the files information. This is the
+most important argument, and it must include columns for the file paths
+and any other relevant metadata. If provided as a reactive expression,
+ensure it returns a data frame in the required format.</p></li>
 <li><p><strong>selection</strong>: Specifies the selection mode
 (‘single’ or ‘multiple’). Defaults to ‘single’.</p></li>
 <li><p><strong>file_identifier_column</strong>: The column in files_df
